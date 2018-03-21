@@ -12,9 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tm.AlohonadesTransactionManager;
-import tm.ParranderosTransactionManager;
-import vos.Bebedor;
-import vos.Habitacion;
+
+
 import vos.Vivienda;
 
 @Path("viviendas")

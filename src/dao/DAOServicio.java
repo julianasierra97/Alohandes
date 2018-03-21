@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import vos.Bebedor;
 import vos.Seguro;
 import vos.Servicio;
 

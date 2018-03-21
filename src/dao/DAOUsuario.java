@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
-import vos.Bebedor;
 import vos.Contrato;
 import vos.Usuario;
 

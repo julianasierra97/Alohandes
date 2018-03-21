@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import vos.Bebedor;
 import vos.Habitacion;
 import vos.Operador;
 import vos.PersonaNatural;
@@ -180,7 +179,7 @@ public class DAOPersonaNatural {
 
 		PersonaNatural persona = null;
 
-		String sql = String.format("SELECT * FROM %1$s.PERSONANATURAL PN, %1$s.OPERADOR OPE  WHERE PN.DOCUMENTO = '%2$d' AND OPE.DOCUMENTO = '%2$d'", USUARIO, id); 
+		String sql = String.format("SELECT * FROM %1$s.PERSONANATURAL PN, %1$s.OPERADOR OPE  WHERE PN.DOCUMENTO = '%2$s' AND OPE.DOCUMENTO = '%2$s'", USUARIO, id); 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
@@ -188,7 +187,7 @@ public class DAOPersonaNatural {
 
 		//Segunda sentencia
 
-		String sql2 = String.format("SELECT * FROM %1$s.VIVIENDA  WHERE ID_PERSONA = '%2$d'", USUARIO, id); 
+		String sql2 = String.format("SELECT * FROM %1$s.VIVIENDA  WHERE ID_PERSONA = '%2$s'", USUARIO, id); 
 
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 		recursos.add(prepStmt2);
@@ -196,7 +195,7 @@ public class DAOPersonaNatural {
 
 		//Tercera sentencia
 
-		String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$d", USUARIO, rs2.getInt("ID")); 
+		String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
 
 		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 		recursos.add(prepStmt3);
@@ -204,7 +203,7 @@ public class DAOPersonaNatural {
 
 		//cuarta sentencia
 
-		String sql4 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID_VIVIENDA = %2$d", USUARIO, rs2.getInt("ID")); 
+		String sql4 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
 
 		PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
 		recursos.add(prepStmt4);
@@ -212,7 +211,7 @@ public class DAOPersonaNatural {
 
 		//quinta sentencia
 
-		String sql5 = String.format("SELECT * FROM %1$s.HABITACION WHERE ID_PERSONA = '%2$d'", USUARIO, id); 
+		String sql5 = String.format("SELECT * FROM %1$s.HABITACION WHERE ID_PERSONA = '%2$s'", USUARIO, id); 
 
 		PreparedStatement prepStmt5 = conn.prepareStatement(sql5);
 		recursos.add(prepStmt5);
@@ -220,7 +219,7 @@ public class DAOPersonaNatural {
 
 		//sexta sentencia
 
-		String sql6 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_HABITACION = %2$d", USUARIO, rs2.getInt("ID")); 
+		String sql6 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_HABITACION = %2$s", USUARIO, rs2.getInt("ID")); 
 
 		PreparedStatement prepStmt6 = conn.prepareStatement(sql6);
 		recursos.add(prepStmt6);

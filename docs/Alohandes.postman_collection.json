@@ -1,0 +1,363 @@
+{
+	"info": {
+		"name": "Alohandes",
+		"_postman_id": "189f2889-3d41-af4f-da8e-7e6482fbd1d2",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crea un usuario",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"login\": \"ubew0\",\n  \"contrasenha\": \"O0Or2Fz7QS\",\n  \"documento\": \"401795\",\n  \"tipoDocumento\": \"Cedula\",\n  \"edad\": 36,\n  \"genero\": false,\n  \"nombre\": \"Udale\",\n  \"correo\": \"e.Bw@uniandes.edu.co\",\n  \"tipo\": \"Estudiante\",\n  \"apellido\": \"Bew\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/TutorialParranderos/rest/usuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"TutorialParranderos",
+						"rest",
+						"usuario"
+					]
+				},
+				"description": "Crea un usuario en la base de datos "
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Vivienda",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"id\": 182303,\n  \"capacidad\": 14,\n  \"tipo\": \"Vivienda\",\n  \"direccion\": \"2 Bluejay Pointsdfg\",\n  \"numeroDeHabitaciones\": 4,\n  \"costo\": 1675550,\n  \"seguro\":{\n  \"costo\": \"88089\",\n  \"incendio\": true,\n  \"robo\": true,\n  \"inundaciones\": true,\n  \"id\": 1},\n\"servicios\":[]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/TutorialParranderos/rest/viviendas/persona?id_persona=28355090162964",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"TutorialParranderos",
+						"rest",
+						"viviendas",
+						"persona"
+					],
+					"query": [
+						{
+							"key": "id_persona",
+							"value": "28355090162964",
+							"equals": true
+						}
+					]
+				},
+				"description": "Crea una vivienda en la base de datos "
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar vivienda",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"id\": 1,\n  \"capacidad\": 14,\n  \"tipo\": \"Vivienda\",\n  \"direccion\": \"2 Bluejay Pointsdfg\",\n  \"numeroDeHabitaciones\": 4,\n  \"costo\": 1675550,\n  \"seguro\":{\n  \"costo\": \"88089\",\n  \"incendio\": true,\n  \"robo\": true,\n  \"inundaciones\": true,\n  \"id\": 1},\n\"servicios\":[]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						""
+					]
+				},
+				"description": "Borra una vivienda en la base de datos"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear empresa",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \n \"numRegistroSuperintendencia\": \"430261264564\",\n  \"numRegistroCamaraComercio\": \"2276341236890\",\n  \"ubicacion\": \"0 Glacier Hill Passii\",\n  \"tipo\": \"Hotel\",\n  \"horarioApertura\": \"NULL\",\n  \"horarioCierre\": \"NULL\",\n \"documento\": \"2647744299264802\",\n  \"login\": \"vgarrard2\",\n  \"contrasenha\": \"nOphKs\",\n  \"correo\": \"vbyres2@weather.com\",\n  \"tipoDocumento\": \"NIT\",\n  \"nombre\": \"Skajo\"\n  \n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/empresa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"empresa"
+					]
+				},
+				"description": "Crea una empresa en la base de datos "
+			},
+			"response": []
+		},
+		{
+			"name": "Top ofertas",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"login\": \"ubew0\",\n  \"contrasenha\": \"O0Or2Fz7QS\",\n  \"documento\": \"401795\",\n  \"tipoDocumento\": \"Cedula\",\n  \"edad\": 36,\n  \"genero\": false,\n  \"nombre\": \"Udale\",\n  \"correo\": \"e.Bw@uniandes.edu.co\",\n  \"tipo\": \"Estudiante\",\n  \"apellido\": \"Bew\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/contrato/TopContratos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"contrato",
+						"TopContratos"
+					]
+				},
+				"description": "Top ofertas"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear persona natural",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"documento\": \"30578816568992\",\n  \"tipo\": \"Padre\",\n  \"edad\": 22,\n  \"genero\": true,\n  \"apellido\": \"Noyes\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/personaNatural",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"personaNatural"
+					]
+				},
+				"description": "Crea una persona natural en la base de datos"
+			},
+			"response": []
+		},
+		{
+			"name": "Da todas las habitaciones registradas en la base de datos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"login\": \"ubew0\",\n  \"contrasenha\": \"O0Or2Fz7QS\",\n  \"documento\": \"401795\",\n  \"tipoDocumento\": \"Cedula\",\n  \"edad\": 36,\n  \"genero\": false,\n  \"nombre\": \"Udale\",\n  \"correo\": \"e.Bw@uniandes.edu.co\",\n  \"tipo\": \"Estudiante\",\n  \"apellido\": \"Bew\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/habitaciones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"habitaciones"
+					]
+				},
+				"description": "Crea un usuario en la base de datos "
+			},
+			"response": []
+		},
+		{
+			"name": "Registra una habitacion en la base de datos",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8b71049f-05a5-4bb9-9a27-337c523ca35d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"id\": 1,\n  \"capacidad\": 7,\n  \"tipo\": \"Habitacion de Hotel\",\n  \"ubicacion\": \"68 Corben Lane\",\n  \"precio\": 95357\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/viviendas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"viviendas"
+					]
+				},
+				"description": "Crea la habitacion en la base de datos"
+			},
+			"response": []
+		}
+	]
+}
