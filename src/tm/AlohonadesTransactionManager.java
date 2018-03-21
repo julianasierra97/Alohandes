@@ -357,10 +357,10 @@ public class AlohonadesTransactionManager {
 			this.conn = darConexion();
 			// Requerimiento 3E: Establezca la conexion en el objeto DAOBebedor (revise los metodos de la clase DAOBebedor)
 			daoContrato.setConn(conn);
-			if(contrato.getIdHabitacion()!=="" && contrato.getIdVivienda()=="")
+			if(contrato.getIdHabitacion()!=-1 && contrato.getIdVivienda()!=-1)
 			{
 				DAOHabitacion daohabitacion= new DAOHabitacion();
-				Habitacion laHabitacion=daohabitacion.findHabitacionById((Integer.parseInt(contrato.getIdHabitacion())));
+				Habitacion laHabitacion=daohabitacion.findHabitacionById((contrato.getIdHabitacion()));
 				if(laHabitacion==null)
 				{
 					throw new Exception("la habitacion que quieres reservar no esta en la base de datos");
@@ -426,7 +426,7 @@ public class AlohonadesTransactionManager {
 					}
 				}
 			}
-			else if(contrato.getHabitacion()=="" && contrato.getIdVivienda()!=null)
+			else if(contrato.getHabitacion()==-1 && contrato.getIdVivienda()!=null)
 
 			{
 				DAOVivienda daoVivienda= new DAOVivienda();
