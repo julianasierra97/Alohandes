@@ -151,7 +151,7 @@ public class DAOContrato
 
 		return contrato;
 	}
-	public ArrayList<Contrato> getContratoByidViviendaEnFechas(String id, Date fechaInicio, Date fechaFin) throws SQLException
+	public ArrayList<Contrato> getContratoByidViviendaEnFechas(Integer id, Date fechaInicio, Date fechaFin) throws SQLException
 	{
 		ArrayList<Contrato> contrato = new ArrayList<>();
 

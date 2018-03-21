@@ -733,14 +733,14 @@ public class AlohonadesTransactionManager {
 
 	}
 
-	public void agregarVivienda(Vivienda vivienda, String idPersona, Integer idSeguro) throws Exception
+	public void agregarVivienda(Vivienda vivienda, String idPersona) throws Exception
 	{
 		DAOVivienda daoVivienda = new DAOVivienda();
 		try
 		{
 			this.conn = darConexion();
 			daoVivienda.setConn(conn);
-			daoVivienda.addVivienda(vivienda, idPersona, idSeguro);
+			daoVivienda.addVivienda(vivienda, idPersona);
 
 		}
 		catch (SQLException sqlException) {
@@ -1431,12 +1431,12 @@ public class AlohonadesTransactionManager {
 	public void deleteHabitacionPersona(Integer idHabitacion) throws Exception
 	{
 		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
-		
+
 		if(habitacion == null)
 		{
 			throw new Exception("La habitacion a eliminar no existe");
 		}
-		
+
 		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
 		{
 			throw new Exception("La habitacion tiene reservas.");
@@ -1444,7 +1444,7 @@ public class AlohonadesTransactionManager {
 
 	}
 
-	
+
 
 	public List<Habitacion> getAllHabitaciones() {
 		// TODO Auto-generated method stub
@@ -1453,14 +1453,14 @@ public class AlohonadesTransactionManager {
 
 	public void deleteVivienda(Vivienda vivienda) throws Exception {
 
-		
+
 		DAOVivienda daoVivienda = new DAOVivienda( );
-		
+
 		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
 		{
 			throw new Exception("La vivienda a eliminar tiene reservas");
 		}
-		
+
 		try
 		{
 			this.conn = darConexion();
@@ -1500,42 +1500,86 @@ public class AlohonadesTransactionManager {
 		}
 
 	}
+	private ArrayList<Contrato> getContratosByIdVivienda(int idHabitacion) throws Exception {
+
+		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
+		if(habitacion == null)
+		{
+			throw new Exception("La habitacion no existe");
+		}
+
+		DAOContrato daoContrato= new DAOContrato();
+		ArrayList<Contrato> contratos = new ArrayList<>();
+		try 
+		{
+			this.conn = darConexion();
+			daoContrato.setConn(conn);
+			contratos = daoContrato.getContratoByidViviendaEnFechas(idHabitacion, new Date(), new Date(Long.MAX_VALUE));
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daoContrato.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return contratos;
+
+	}
+
 	public List<Empresa> getAllEmpresas() throws Exception{
 		// TODO Auto-generated method stub
 		DAOEmpresa daoEmpresa = new DAOEmpresa();
 		List<Empresa> bebedores;
 		try 
 		{
-		this.conn = darConexion();
-		daoEmpresa.setConn(conn);
+			this.conn = darConexion();
+			daoEmpresa.setConn(conn);
 
-		//Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
-		bebedores = daoEmpresa.getEmpresas();
+			//Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
+			bebedores = daoEmpresa.getEmpresas();
 		}
 		catch (SQLException sqlException) {
-		System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
-		sqlException.printStackTrace();
-		throw sqlException;
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
 		} 
 		catch (Exception exception) {
-		System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
-		exception.printStackTrace();
-		throw exception;
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
 		} 
 		finally {
-		try {
-		daoEmpresa.cerrarRecursos();
-		if(this.conn!=null){
-		this.conn.close();
-		}
-		}
-		catch (SQLException exception) {
-		System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
-		exception.printStackTrace();
-		throw exception;
-		}
+			try {
+				daoEmpresa.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
 		}
 		return bebedores;
-		}
+	}
 
 }

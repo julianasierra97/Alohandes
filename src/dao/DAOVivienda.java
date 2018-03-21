@@ -184,10 +184,10 @@ public class DAOVivienda {
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public void addVivienda(Vivienda vivienda, String idPersona, Integer idSeguro) throws SQLException, Exception {
+	public void addVivienda(Vivienda vivienda, String idPersona) throws SQLException, Exception {
 
 		contadorNumeroVivivendas++;
-		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, NUMEROHABITACIONES, COSTO, IDPERSONA, IDSEGURO) VALUES (%2$s, %3$s, '%4$s', '%5$s', %6$s, %7$s, '%8$s', %9$s)", 
+		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, NUMEROHABITACIONES, COSTO, ID_PERSONA, ID_SEGURO) VALUES (%2$s, %3$s, '%4$s', '%5$s', %6$s, %7$s, '%8$s', %9$s)", 
 				USUARIO, 
 				contadorNumeroVivivendas, 
 				vivienda.getCapacidad(),
@@ -196,7 +196,7 @@ public class DAOVivienda {
 				vivienda.getNumeroDeHabitaciones(),
 				vivienda.getCosto(),
 				idPersona,
-				idSeguro);
+				vivienda.getSeguro().getId());
 		System.out.println(sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);

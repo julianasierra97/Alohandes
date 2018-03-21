@@ -96,13 +96,12 @@ public class PersonaNaturalService
 			@POST
 			@Path("agregarVivienda")
 			@Produces( { MediaType.APPLICATION_JSON } )
-			public Response addViviendaParaPersona(@QueryParam("id_persona")String id_persona,
-					@QueryParam("id_seguro")Integer id_seguro, Vivienda vivienda)
+			public Response addViviendaParaPersona(@QueryParam("id_persona")String id_persona, Vivienda vivienda)
 			{
 				try{
 					AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-					tm.agregarVivienda(vivienda, id_persona, id_seguro);
+					tm.agregarVivienda(vivienda, id_persona);
 					return Response.status( 200 ).entity( vivienda ).build( );			
 				}
 				catch( Exception e )

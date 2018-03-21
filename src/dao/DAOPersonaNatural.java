@@ -316,38 +316,14 @@ public class DAOPersonaNatural {
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
 	public void addPersonaNatural(PersonaNatural persona) throws SQLException, Exception {
-
-		//		//Condicion que verifica el tipo de persona natural a registrar.
-		//		if(persona.getTipo().equals(ESTUDIANTE) || persona.getTipo().equals(EGRESADO) || persona.getTipo().equals(PROFESOR) || persona.getTipo().equals(EMPLEADO))
-		//		{
-		//			String correo = persona.getCorreo();
-		//			if(!correo.contains("@uniandes.edu.co"))
-		//			{
-		//				throw new Exception("El correo no es valido");
-		//			}
-		//		}
-		//		else{
-		//			String sql = String.format("SELECT id_usuario FROM %1$s.FAMILIAUSUARIO WHERE id_familia = %2$s )", 
-		//					USUARIO,  
-		//					persona.getDocumento());
-		//
-		//			System.out.println(sql);
-		//
-		//			PreparedStatement prepStmt = conn.prepareStatement(sql);
-		//			ResultSet r = prepStmt.executeQuery();
-		//			if(!r.next())
-		//			{
-		//				throw new Exception("El usuario a agregar no tiene vinculos con la institucion");
-		//			}
-		//		}
-
+		
 		char genero = 'F';
 		if(persona.isGenero())
 		{
 			genero = 'M';
 		}
 
-		String sql = String.format("INSERT INTO %1$s.PERSONANATURAL (DOCUMENTO, TIPO, EDAD, GENERO, APELLIDO) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s')", 
+		String sql = String.format("INSERT INTO %1$s.PERSONANATURAL (DOCUMENTO, TIPO, EDAD, GENERO, APELLIDO) VALUES ('%2$s', '%3$s', %4$s, '%5$s', '%6$s')", 
 				USUARIO,  
 				persona.getDocumento(), 
 				persona.getTipo(),

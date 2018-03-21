@@ -60,7 +60,7 @@ public class ViviendaService {
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-			tm.agregarVivienda(vivienda, idPersona, vivienda.getSeguro().getId());
+			tm.agregarVivienda(vivienda, idPersona);
 			
 			return Response.status( 200 ).entity( vivienda ).build( );			
 		}
