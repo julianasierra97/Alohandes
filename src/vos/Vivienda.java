@@ -128,7 +128,6 @@ public class Vivienda
 		this.id = id;
 		this.direccion = direccion;
 		this.servicios = servicios;
-		this.seguro = seguro;
 	}
 
 

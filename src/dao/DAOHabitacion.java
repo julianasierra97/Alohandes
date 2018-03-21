@@ -111,7 +111,7 @@ public class DAOHabitacion {
 		Habitacion habitacion = null;
 
 		//Primera sentencia
-		String sql = String.format("SELECT * FROM %1$s.HABITACION WHERE ID = %2$d ;", USUARIO, id);
+		String sql = String.format("SELECT * FROM %1$s.HABITACION WHERE ID = %2$d ", USUARIO, id);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
@@ -121,7 +121,7 @@ public class DAOHabitacion {
 		{
 
 			//Segudna sentencia
-			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_HABITACION = %2$d ;", USUARIO, rs.getInt("ID"));
+			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_HABITACION = %2$d ", USUARIO, rs.getInt("ID"));
 
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
@@ -158,7 +158,7 @@ public class DAOHabitacion {
 			compartida = 'F';
 		}
 
-		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, PRECIO, ID_EMPRESA, ESCOMPARTIDA, ID_PERSONA) VALUES (%2$d, %3$d, '%4$s', '%5$s', %6$d, '%7$s', '%8$s', '%9$s') ;", 
+		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, PRECIO, ID_EMPRESA, ESCOMPARTIDA, ID_PERSONA) VALUES (%2$d, %3$d, '%4$s', '%5$s', %6$d, '%7$s', '%8$s', '%9$s') ", 
 				USUARIO, 
 				numeroHabitaciones, 
 				habitacion.getCapacidad(),
@@ -184,7 +184,7 @@ public class DAOHabitacion {
 			compartida = 'F';
 		}
 
-		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, PRECIO, ID_EMPRESA, ESCOMPARTIDA, ID_PERSONA) VALUES (%2$d, %3$d, '%4$s', '%5$s', %6$d, '%7$s', '%8$s', '%9$s') ;", 
+		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, PRECIO, ID_EMPRESA, ESCOMPARTIDA, ID_PERSONA) VALUES (%2$d, %3$d, '%4$s', '%5$s', %6$d, '%7$s', '%8$s', '%9$s') ", 
 				USUARIO, 
 				habitacion.getId(), 
 				habitacion.getCapacidad(),
@@ -217,7 +217,7 @@ public class DAOHabitacion {
 	 */
 	public void deleteHabitacion(Habitacion habitacion) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.HABITACIONES WHERE ID = %2$d ;", USUARIO, habitacion.getId());
+		String sql = String.format("DELETE FROM %1$s.HABITACIONES WHERE ID = %2$d ", USUARIO, habitacion.getId());
 
 		System.out.println(sql);
 

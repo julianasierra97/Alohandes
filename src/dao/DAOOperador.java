@@ -60,7 +60,7 @@ public class DAOOperador
 
 		
 		
-		String sql = String.format("INSERT INTO %1$s.BEBEDORES (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+		String sql = String.format("INSERT INTO %1$s.OPERADOR (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
 									USUARIO,  
 									operador.getDocumento(), 
 									operador.getLogin(),

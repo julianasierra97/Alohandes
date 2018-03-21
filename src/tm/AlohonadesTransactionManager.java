@@ -580,6 +580,7 @@ public class AlohonadesTransactionManager {
 			// Requerimiento 3E: Establezca la conexion en el objeto DAOBebedor (revise los metodos de la clase DAOBebedor)
 
 			daoEmpresa.setConn(conn);
+			
 			if(empresa.getTipo().equals(Empresa.HOSTAL))
 			{
 				if(empresa.getHorarioApertura()=="" && empresa.getHorarioCierre()=="")
@@ -588,6 +589,9 @@ public class AlohonadesTransactionManager {
 				}
 				else
 				{
+					DAOOperador  daoOperador=  new DAOOperador();
+					daoOperador.setConn(conn);
+					daoOperador.addOperador(empresa);
 					daoEmpresa.addEmpresa(empresa);	
 				}
 			}
@@ -606,6 +610,9 @@ public class AlohonadesTransactionManager {
 				}
 				if(contador==Empresa.NUM_SERVICIO_SOBLIGATORIOS_VIVIENDA_UNIVERSITARIA)
 				{
+					DAOOperador  daoOperador=  new DAOOperador();
+					daoOperador.setConn(conn);
+					daoOperador.addOperador(empresa);
 					daoEmpresa.addEmpresa(empresa);
 				}
 				else
@@ -615,6 +622,9 @@ public class AlohonadesTransactionManager {
 			}
 			else
 			{
+				DAOOperador  daoOperador=  new DAOOperador();
+				daoOperador.setConn(conn);
+				daoOperador.addOperador(empresa);
 				daoEmpresa.addEmpresa(empresa);
 			}
 
@@ -1384,6 +1394,44 @@ public class AlohonadesTransactionManager {
 		}
 		return habitacion;
 	}
+	public Vivienda buscarViviendaPorId(Integer idVivienda) throws Exception {
+		DAOVivienda daoVivienda = new DAOVivienda();
+		Vivienda habitacion = null;
+		try 
+		{
+			this.conn = darConexion();
+			daoVivienda.setConn(conn);
+			habitacion = daoVivienda.findViviendaById(idVivienda);
+			if(habitacion == null)
+			{
+				throw new Exception("La vivienda con el id = " + idVivienda + " no se encuentra persistido en la base de datos.");				
+			}
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daoVivienda.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return habitacion;
+	}
 
 	public ArrayList<Contrato> getContratosByIdHabitacionEntreFechas(Integer idHabitacion) throws Exception
 	{
@@ -1580,6 +1628,47 @@ public class AlohonadesTransactionManager {
 			}
 		}
 		return bebedores;
+	}
+	/**
+	 * Metodo que modela la transaccion que busca el bebedor en la base de datos que tiene el ID dado por parametro. <br/>
+	 * @param name -id del bebedor a buscar. id != null
+	 * @return Bebedor - Bebedor que se obtiene como resultado de la consulta.
+	 * @throws Exception -  cualquier error que se genere durante la transaccion
+	 */
+	public ArrayList<Contrato> getTo20Contratos() throws Exception {
+		DAOContrato daocontrato = new DAOContrato();
+		ArrayList<Contrato> contratos = new ArrayList<>();
+		try 
+		{
+			this.conn = darConexion();
+			daocontrato.setConn(conn);
+			contratos = daocontrato.selectTop20();
+		
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daocontrato.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return contratos;
 	}
 
 }

@@ -55,7 +55,8 @@ public class ViviendaService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addVivienda(@QueryParam("id_operador")String idPersona, Vivienda vivienda) {
+	@Path("/persona")
+	public Response addVivienda(@QueryParam("id_persona")String idPersona, Vivienda vivienda) {
 
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
@@ -74,6 +75,8 @@ public class ViviendaService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteVivienda(Vivienda vivienda) {
+		
+	
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 			tm.deleteVivienda(vivienda);

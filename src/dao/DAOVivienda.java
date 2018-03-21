@@ -60,7 +60,7 @@ public class DAOVivienda {
 
 		//Aclaracion: Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
 		//Primera sentencia
-		String sql = String.format("SELECT * FROM %1$s.VIVIENDA;", USUARIO);
+		String sql = String.format("SELECT * FROM %1$s.VIVIENDA", USUARIO);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
@@ -70,7 +70,7 @@ public class DAOVivienda {
 		{
 
 			//Segudna sentencia
-			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$d ;", USUARIO, rs.getInt("ID"));
+			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$d ", USUARIO, rs.getInt("ID"));
 
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
@@ -78,7 +78,7 @@ public class DAOVivienda {
 
 
 			//tercera sentencia
-			String sql3 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID = %2$d ;", USUARIO, rs.getInt("ID_SEGURO"));
+			String sql3 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID = %2$d ", USUARIO, rs.getInt("ID_SEGURO"));
 
 			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
@@ -131,7 +131,7 @@ public class DAOVivienda {
 		Vivienda vivienda = null;
 
 		//Primera sentencia
-		String sql = String.format("SELECT * FROM %1$s.VIVIENDA WHERE ID = %2$d ;", USUARIO, id);
+		String sql = String.format("SELECT * FROM %1$s.VIVIENDA WHERE ID = %2$d ", USUARIO, id);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
@@ -141,14 +141,14 @@ public class DAOVivienda {
 		{
 
 			//Segudna sentencia
-			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$d ;", USUARIO, rs.getInt("ID"));
+			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$d ", USUARIO, rs.getInt("ID"));
 
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
 			ResultSet rs2 = prepStmt2.executeQuery();
 
 			//tercera sentencia
-			String sql3 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID = %2$d ;", USUARIO, rs.getInt("ID_SEGURO"));
+			String sql3 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID = %2$d ", USUARIO, rs.getInt("ID_SEGURO"));
 
 			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
@@ -196,16 +196,18 @@ public class DAOVivienda {
 	public void addVivienda(Vivienda vivienda, String idPersona) throws SQLException, Exception {
 
 		contadorNumeroVivivendas++;
-		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, TIPO, UBICACION, NUMEROHABITACIONES, COSTO, ID_PERSONA, ID_SEGURO) VALUES (%2$d, %3$d, '%4$s', '%5$s', %6$d, %7$d, '%8$s', %9$d) ;", 
+		String sql = String.format("INSERT INTO %1$s.Vivienda(id,capacidad,tipo,direccion,numeroHabitaciones,costo,id_seguro,id_persona) VALUES (%2$s, %3$s, '%4$s', '%5$s', %6$s, %7$s, %8$s, '%9$s') ", 
 				USUARIO, 
-				contadorNumeroVivivendas, 
+				vivienda.getId(), 
+				
 				vivienda.getCapacidad(),
 				vivienda.getTipo(), 
 				vivienda.getDireccion(),
 				vivienda.getNumeroDeHabitaciones(),
 				vivienda.getCosto(),
-				idPersona,
-				vivienda.getSeguro().getId());
+				1,
+				idPersona
+				);
 		System.out.println(sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -223,7 +225,7 @@ public class DAOVivienda {
 	 */
 	public void deleteVivienda(Vivienda vivienda) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d ;", USUARIO, vivienda.getId());
+		String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d", USUARIO, vivienda.getId());
 
 		System.out.println(sql);
 
@@ -283,7 +285,7 @@ public class DAOVivienda {
 	public String getIdPersonaByIdVivienda(Integer idVivienda) throws SQLException  {
 
 		//Primera sentencia
-		String sql = String.format("SELECT ID_PERSONA FROM %1$s.VIVIENDA WHERE ID = %2$d ;", USUARIO, idVivienda);
+		String sql = String.format("SELECT ID_PERSONA FROM %1$s.VIVIENDA WHERE ID = %2$d ", USUARIO, idVivienda);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);

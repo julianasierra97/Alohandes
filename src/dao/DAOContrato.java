@@ -248,6 +248,22 @@ public class DAOContrato
 
 		return contrato;
 	}
+	public ArrayList<Contrato> selectTop20() throws SQLException, Exception 
+	{
+		ArrayList<Contrato> contrato = new ArrayList<>();
+
+		String sql = String.format("WITH Q1 AS(SELECT ID_VIVIENDA AS id, COUNT(ID_VIVIENDA) as cuenta FROM %1$s.CONTRATO GROUP BY ID_VIVIENDA order by COUNT(ID_VIVIENDA) DESC) select  *  from q1 inner join %1$s.contrato on contrato.ID=q1.id where rownum<=20 ", USUARIO); 
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		if(rs.next()) {
+			contrato.add(convertResultSetToContrato(rs));
+		}
+
+		return contrato;
+	}
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS AUXILIARES
 	//----------------------------------------------------------------------------------------------------------------------------------
@@ -290,7 +306,7 @@ public class DAOContrato
 
 
 		String fechaInicio = resultSet.getString("FECHAINICIO");
-		String[] dias=fechaInicio.split("-");
+		String[] dias=fechaInicio.split("/");
 		Date laFechaInicio= new Date();
 		laFechaInicio.setYear(Integer.parseInt(dias[0]));
 		laFechaInicio.setMonth(Integer.parseInt(dias[1]));
@@ -298,21 +314,21 @@ public class DAOContrato
 
 
 		String fechaFin = resultSet.getString("FECHAFIN");
-		String[] dias2=fechaFin.split("-");
+		String[] dias2=fechaFin.split("/");
 		Date laFechaFin= new Date();
 		laFechaFin.setYear(Integer.parseInt(dias2[0]));
 		laFechaFin.setMonth(Integer.parseInt(dias2[1]));
 		laFechaFin.setDate(Integer.parseInt(dias2[2]));
 
 		String fechaCreacion = resultSet.getString("FECHACREACION");
-		String[] dias3=fechaCreacion.split("-");
+		String[] dias3=fechaCreacion.split("/");
 		Date laFechaCreacion= new Date();
 		laFechaCreacion.setYear(Integer.parseInt(dias3[0]));
 		laFechaCreacion.setMonth(Integer.parseInt(dias3[1]));
 		laFechaCreacion.setDate(Integer.parseInt(dias3[2]));
 
 		String tipo = resultSet.getString("TIPO");
-		double costo = Double.parseDouble(resultSet.getString("costo"));
+		double costo = Double.parseDouble(resultSet.getString("COSTO"));
 		Integer id = Integer.parseInt(resultSet.getString("ID"));
 		int vivienda = resultSet.getInt("ID_VIVIENDA");
 		int habitacion = resultSet.getInt("ID_HABITACION");

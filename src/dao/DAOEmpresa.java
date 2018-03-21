@@ -71,14 +71,16 @@ public class DAOEmpresa {
 			
 			if(empresa.getTipo().equals(Empresa.HOSTAL))
 			{
-				String sql = String.format("INSERT INTO %1$s.EMPRESA (UBICACION, TIPO, HORARIOAPERTURA, HORARIOCIERRE, NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARACOMERCIO) VALUES (%2$s, '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+
+				String sql = String.format("INSERT INTO %1$s.EMPRESA (UBICACION, TIPO, HORARIOAPERTURA, HORARIOCIERRE, NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s','%8$s')", 
 						USUARIO,  
 						empresa.getUbicacion(), 
 						empresa.getTipo(),
 						tiempo1, 
 						tiempo2,
 						NUMREGISTROSUPERINTENDENCIA,
-						NUMREGISTROCAMARACOMERCIO);
+						NUMREGISTROCAMARACOMERCIO,
+						empresa.getDocumento());
 				System.out.println(sql);
 
 				PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -87,14 +89,16 @@ public class DAOEmpresa {
 			}
 			else if(empresa.getTipo().equals(Empresa.VIVIENDA_UNIVERSITARIA) ||empresa.getTipo().equals(Empresa.HOTEL ))
 			{
-				String sql = String.format("INSERT INTO %1$s.EMPRESA (UBICACION, TIPO, HORARIOAPERTURA, HORARIOCIERRE, NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARACOMERCIO) VALUES (%2$s, '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+				String sql = String.format("INSERT INTO %1$s.EMPRESA ( UBICACION, TIPO, HORARIOAPERTURA, HORARIOCIERRE, NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s','%8$s')", 
 						USUARIO,  
+						
 						empresa.getUbicacion(), 
 						empresa.getTipo(),
 						"NULL", 
 						"NULL",
 						NUMREGISTROSUPERINTENDENCIA,
-						NUMREGISTROCAMARACOMERCIO);
+						NUMREGISTROCAMARACOMERCIO,
+						empresa.getDocumento());
 				System.out.println(sql);
 
 				PreparedStatement prepStmt = conn.prepareStatement(sql);
