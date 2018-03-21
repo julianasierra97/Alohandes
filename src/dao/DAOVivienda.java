@@ -271,7 +271,7 @@ public class DAOVivienda {
 		return vivienda;
 	}
 
-	public String getIdPersonaByIdVivienda(String idVivienda) throws SQLException  {
+	public String getIdPersonaByIdVivienda(Integer idVivienda) throws SQLException  {
 		
 		//Primera sentencia
 		String sql = String.format("SELECT ID FROM %1$s.VIVIENDA WHERE ID = %2$s", USUARIO, idVivienda);
