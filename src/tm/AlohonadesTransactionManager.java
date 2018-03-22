@@ -1,15 +1,4 @@
-/**-------------------------------------------------------------------
- * ISIS2304 - Sistemas Transaccionales
- * Departamento de Ingenieria de Sistemas
- * Universidad de los Andes
- * Bogota, Colombia
- * 
- * Actividad: Tutorial Parranderos: Arquitectura
- * Autores:
- * 			Santiago Cortes Fernandez	-	s.cortes@uniandes.edu.co
- * 			Juan David Vega Guzman		-	jd.vega11@uniandes.edu.co
- * -------------------------------------------------------------------
- */
+
 package tm;
 
 import java.io.File;
@@ -42,8 +31,7 @@ import vos.Usuario;
 import vos.Vivienda;
 
 /**
- * @author Santiago Cortes Fernandez 	- 	s.cortes@uniandes.edu.co
- * @author Juan David Vega Guzman		-	jd.vega11@uniandes.edu.co
+ * 
  * 
  * Clase que representa al Manejador de Transacciones de la Aplicacion (Fachada en patron singleton de la aplicacion)
  * Responsabilidades de la clase: 
@@ -840,14 +828,14 @@ public class AlohonadesTransactionManager {
 				{
 					int daysApart = (int)((contrato.getFechaFin().getTime() - contrato.getFechaInicio().getTime()) / (1000*60*60*24l));
 					int tiempoLimite=3;
-					if(daysApart>7)
+					if(tiempoLimite>7)
 					{
 						tiempoLimite=8;
 					}
 					Date hoy= new Date();
 					int daysApart2 = (int)((contrato.getFechaCreacion().getTime() - hoy.getTime()) / (1000*60*60*24l));
 					double porcentajeRecargo=0.1;
-					if(daysApart2>30)
+					if(tiempoLimite>30)
 					{
 						porcentajeRecargo=0.3;
 					}
