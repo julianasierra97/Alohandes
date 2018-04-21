@@ -194,7 +194,7 @@ public class DAOPersonaNatural {
 		ResultSet rs2 = prepStmt2.executeQuery();
 
 		//Tercera sentencia
-
+		rs2.next();
 		String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
 
 		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);

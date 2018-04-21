@@ -62,21 +62,26 @@ public class DAOEmpresa {
 
 			
 			
-			
-			String tiempo1=empresa.getHorarioApertura()+"";
-			String tiempo2=empresa.getHorarioCierre()+"";
 			String NUMREGISTROSUPERINTENDENCIA= empresa.getNumRegistroSuperintendencia()+"";
 			String NUMREGISTROCAMARACOMERCIO=empresa.getNumRegistroCamaraComercio()+"";
 			
-			if(empresa.getTipo().equals(Empresa.HOSTAL))
-			{
+			
+			String sql0 = String.format("INSERT INTO %1$s.OPERADOR (DOCUMENTO,LOGIN,CONTRASENHA,CORREO,TIPODOCUMENTO,NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+					USUARIO,  
+					empresa.getDocumento(), 
+					empresa.getLogin(),
+					empresa.getContrasenha(),
+					empresa.getCorreo(),
+					empresa.getTipoDocumento(),
+					empresa.getNombre());
+			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+			recursos.add(prepStmt0);
+			prepStmt0.executeQuery();
+			System.out.println(sql0);
 
-				String sql = String.format("INSERT INTO %1$s.EMPRESA (UBICACION, TIPO, HORARIOAPERTURA, HORARIOCIERRE, NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s','%8$s')", 
+				String sql = String.format("INSERT INTO %1$s.EMPRESA (DIRECCION,NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s')", 
 						USUARIO,  
 						empresa.getUbicacion(), 
-						empresa.getTipo(),
-						tiempo1, 
-						tiempo2,
 						NUMREGISTROSUPERINTENDENCIA,
 						NUMREGISTROCAMARACOMERCIO,
 						empresa.getDocumento());
@@ -85,29 +90,20 @@ public class DAOEmpresa {
 				PreparedStatement prepStmt = conn.prepareStatement(sql);
 				recursos.add(prepStmt);
 				prepStmt.executeQuery();
-			}
-			else if(empresa.getTipo().equals(Empresa.VIVIENDA_UNIVERSITARIA) ||empresa.getTipo().equals(Empresa.HOTEL ))
-			{
-				String sql = String.format("INSERT INTO %1$s.EMPRESA ( UBICACION, TIPO, HORARIOAPERTURA, HORARIOCIERRE, NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s','%8$s')", 
-						USUARIO,  
-						
-						empresa.getUbicacion(), 
-						empresa.getTipo(),
-						"NULL", 
-						"NULL",
-						NUMREGISTROSUPERINTENDENCIA,
-						NUMREGISTROCAMARACOMERCIO,
-						empresa.getDocumento());
-				System.out.println(sql);
-
-				PreparedStatement prepStmt = conn.prepareStatement(sql);
-				recursos.add(prepStmt);
-				prepStmt.executeQuery();
-			}
-			else
-			{
-				throw new Exception("El tipo de la empresa se tiene que poner en el formato indicado");
-			}
+				
+				String sql2 = String.format("INSERT INTO %1$s.TIPOEMPRESA (ID,TIPO) VALUES ('%2$s', '%3$s')", 
+						USUARIO,  empresa.getDocumento(),empresa.getTipo());
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				prepStmt2.executeQuery();
+				System.out.println(sql2);
+				
+				String sql3 = String.format("INSERT INTO %1$s.HORARIOEMPRESA (ID,HORARIOAPERTURA,HORARIOCIERRE) VALUES ('%2$s', '%3$s', '%4$s')", 
+						USUARIO,  empresa.getDocumento(), empresa.getHorarioApertura(),empresa.getHorarioCierre());
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				prepStmt3.executeQuery();
+			
 			
 
 		}

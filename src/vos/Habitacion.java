@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 public class Habitacion
 {
-	public final static String HABITACION_HOTEL="Habitacion de Hotel";
+
 
 	public final static String HABITACION_HOSTAL="Habitacion de Hostal";
 	

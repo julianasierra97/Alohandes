@@ -1,6 +1,7 @@
 
 package tm;
 
+import java.io.Console;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -411,7 +412,7 @@ public class AlohonadesTransactionManager {
 				{
 					DAOOperador  daoOperador=  new DAOOperador();
 					daoOperador.setConn(conn);
-					daoOperador.addOperador(empresa);
+					
 					daoEmpresa.addEmpresa(empresa);	
 				}
 			}
@@ -432,7 +433,7 @@ public class AlohonadesTransactionManager {
 				{
 					DAOOperador  daoOperador=  new DAOOperador();
 					daoOperador.setConn(conn);
-					daoOperador.addOperador(empresa);
+					
 					daoEmpresa.addEmpresa(empresa);
 				}
 				else
@@ -444,7 +445,7 @@ public class AlohonadesTransactionManager {
 			{
 				DAOOperador  daoOperador=  new DAOOperador();
 				daoOperador.setConn(conn);
-				daoOperador.addOperador(empresa);
+				
 				daoEmpresa.addEmpresa(empresa);
 			}
 
@@ -937,6 +938,7 @@ public class AlohonadesTransactionManager {
 
 			//Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
 			usuarios = daoUsuario.getUsuarios();
+			System.out.println("Entro al gel all");
 		}
 		catch (SQLException sqlException) {
 			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
