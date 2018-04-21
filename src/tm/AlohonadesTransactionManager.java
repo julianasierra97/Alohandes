@@ -21,6 +21,7 @@ import dao.DAOOperador;
 import dao.DAOPersonaNatural;
 import dao.DAOUsuario;
 import dao.DAOVivienda;
+import dao.RFC5DAO;
 import sun.security.util.DisabledAlgorithmConstraints;
 import vos.Contrato;
 import vos.Empresa;
@@ -1337,5 +1338,44 @@ public class AlohonadesTransactionManager {
 		}
 		return contratos;
 	}
+	
+	
+	public String darUso() throws Exception
+	{
+		String rta = "";
+		RFC5DAO dao5 = new RFC5DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao5.setConn(conn);
+			rta = dao5.RFC5();
+		
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao5.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
 
 }
