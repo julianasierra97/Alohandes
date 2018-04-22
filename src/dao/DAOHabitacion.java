@@ -218,6 +218,13 @@ public class DAOHabitacion {
 				prepStmt3.executeQuery();
 			}
 			
+			String sql4 = String.format("INSERT INTO %1$s.OPERADORHABITACION (ID, ID_OPERADOR) VALUES (%2$d, '%3$s')", USUARIO, habitacion.getId(), idOperador);
+
+			PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
+			recursos.add(prepStmt4);
+			prepStmt4.executeQuery();
+			
+			
 			conn.commit();
 		}
 		catch(Exception e)
