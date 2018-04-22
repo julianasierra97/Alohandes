@@ -163,6 +163,7 @@ public class AlohonadesTransactionManager {
 
 
 
+
 	/**
 	 * Metodo que modela la transaccion que agrega un contrato a la base de datos. <br/>
 	 * <b> post: </b> se ha agregado el contrato que entra como parametro <br/>
@@ -182,6 +183,7 @@ public class AlohonadesTransactionManager {
 			if(contrato.getIdHabitacion()!=-1 && contrato.getIdVivienda()!=-1)
 			{
 				DAOHabitacion daohabitacion= new DAOHabitacion();
+				daohabitacion.setConn(conn);
 				Habitacion laHabitacion=daohabitacion.findHabitacionById((contrato.getIdHabitacion()));
 				if(laHabitacion==null)
 				{
@@ -252,8 +254,10 @@ public class AlohonadesTransactionManager {
 
 			{
 				DAOVivienda daoVivienda= new DAOVivienda();
+				daoVivienda.setConn(conn);
 				String idPersona= daoVivienda.getIdPersonaByIdVivienda(contrato.getIdVivienda());
 				DAOPersonaNatural daoPersonaNatural= new DAOPersonaNatural();
+				daoPersonaNatural.setConn(conn);
 				PersonaNatural persona= daoPersonaNatural.findPersonaById((idPersona));
 
 				if (persona.getTipo().equals(PersonaNatural.VECINO))

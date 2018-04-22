@@ -16,7 +16,7 @@ public class DAOUsuario {
 	 * Constante para indicar el usuario Oracle del estudiante
 	 */
 	//Requerimiento 1H: Modifique la constante, reemplazando al ususario PARRANDEROS por su ususario de Oracle
-	public final static String USUARIO = "ISIS2304A631810";
+	public final static String USUARIO = "ISIS2304A671810";
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// ATRIBUTOS
@@ -87,8 +87,8 @@ public class DAOUsuario {
 
 					Date fechaInicio = new Date(rs2.getString("FECHAINICIO"));
 					Date fechaFin = new Date(rs2.getString("FECHAFIN"));
-
-					contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA"), rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION")));
+					String estado = rs2.getString("ESTADO");
+					contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA"), rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION"), estado));
 				}
 				usuarios.add(convertResultSetToUsuario(rs, contratos));
 			
@@ -131,8 +131,8 @@ public class DAOUsuario {
 				
 				Date fechaInicio = new Date(rs2.getString("FECHAINICIO"));
 				Date fechaFin = new Date(rs2.getString("FECHAFIN"));
-
-				contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA") , rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION")));
+				String estado = rs2.getString("ESTADO");
+				contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA") , rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION"), estado));
 			}
 			usuario = convertResultSetToUsuario(rs, contratos);
 		}

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -69,26 +71,40 @@ public class DAOContrato
 
 
 		Date ahora=new Date();
-		String fecha= (ahora.getYear()+"")+"-"+(ahora.getMonth()+"")+"-"+(ahora.getDate()+"");
 		contadorNumeroContratos++;
-		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, TIPO, COSTO, ID,ID_VIVIENDA, ID_HABITACION, NUMERODEPERSONAS,ID_CLIENTE,FECHACREACION) VALUES (%2$s, '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+		String fecha= (ahora.getYear()+"")+"-"+(ahora.getMonth()+"")+"-"+(ahora.getDate()+"");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
+		String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
+		String fechaCreacion = "'"+dateFormat.format(fecha)+"'";
+		
+		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMERODEPERSONAS,ID_CLIENTE,FECHACREACION) VALUES (%2$s, '%3$s', '%4$s', '%5$s', '%6$s', '%7$s','%8$s')", 
 				USUARIO,
-				contrato.getFechaInicio(),
-				contrato.getFechaFin(), 
-				contrato.getTipo(), 
+				fechaInicio,
+				fechaFin, 
 				contrato.getCosto(),
 				contadorNumeroContratos,
-				"NULL",
-				contrato.getHabitacion(), 
 				contrato.getNumeroDePersonas(),
 				contrato.getIdCliente(),
-				fecha);
-
+				fechaCreacion);
 		System.out.println(sql);
 
 		PreparedStatement prepStmt6 = conn.prepareStatement(sql);
 		recursos.add(prepStmt6);
 		prepStmt6.executeQuery();
+		
+		String sql2 = String.format("INSERT INTO %1$s.CONTRATOHABITACION (ID_CONTRATO, ID_HABITACION) VALUES (%2$s, '%3$s')", 
+				USUARIO,
+				contadorNumeroContratos,
+				contrato.getIdHabitacion());
+			
+		System.out.println(sql2);
+
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		recursos.add(prepStmt2);
+		prepStmt2.executeQuery();
+		cerrarRecursos();
+		contadorNumeroContratos++;
 
 
 
@@ -99,23 +115,39 @@ public class DAOContrato
 		Date ahora=new Date();
 		contadorNumeroContratos++;
 		String fecha= (ahora.getYear()+"")+"-"+(ahora.getMonth()+"")+"-"+(ahora.getDate()+"");
-		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, TIPO, COSTO, ID,ID_VIVIENDA, ID_HABITACION, NUMERODEPERSONAS,ID_CLIENTE,FECHACREACION) VALUES (%2$s, '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
+		String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
+		String fechaCreacion = "'"+dateFormat.format(fecha)+"'";
+		
+		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMERODEPERSONAS,ID_CLIENTE,FECHACREACION) VALUES (%2$s, '%3$s', '%4$s', '%5$s', '%6$s', '%7$s','%8$s')", 
 				USUARIO,
-				contrato.getFechaInicio(),
-				contrato.getFechaFin(), 
-				contrato.getTipo(), 
+				fechaInicio,
+				fechaFin, 
 				contrato.getCosto(),
 				contadorNumeroContratos,
-				contrato.getIdVivienda(),
-				"NULL", 
 				contrato.getNumeroDePersonas(),
 				contrato.getIdCliente(),
-				fecha);
+				fechaCreacion);
 		System.out.println(sql);
 
 		PreparedStatement prepStmt6 = conn.prepareStatement(sql);
 		recursos.add(prepStmt6);
 		prepStmt6.executeQuery();
+		
+		String sql2 = String.format("INSERT INTO %1$s.CONTRATOVIVIENDA (ID_CONTRATO, ID_VIVIENDA) VALUES (%2$s, '%3$s')", 
+				USUARIO,
+				contadorNumeroContratos,
+				contrato.getIdVivienda());
+			
+		System.out.println(sql2);
+
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		recursos.add(prepStmt2);
+		prepStmt2.executeQuery();
+		
+		contadorNumeroContratos++;
+		
 	}
 	public int darUsoEnEsteAno(Contrato contrato) throws SQLException
 	{
@@ -333,55 +365,109 @@ public class DAOContrato
 		int habitacion = resultSet.getInt("ID_HABITACION");
 		int numeroDePersonas = Integer.parseInt(resultSet.getString("NUMERO_DE_PERSONAS"));
 		String idCliente = resultSet.getString("ID_CLIENTE");
+		String estado = resultSet.getString("ESTADO");
 
 
 
 
-		Contrato co= new Contrato(laFechaInicio, laFechaFin, tipo, costo, id, vivienda, habitacion, numeroDePersonas, idCliente, laFechaCreacion);
+		Contrato co= new Contrato(laFechaInicio, laFechaFin, tipo, costo, id, vivienda, habitacion, numeroDePersonas, idCliente, laFechaCreacion, estado);
 		return co;
 	}
-	public Contrato convertResultSetToContrato(ResultSet resultSet, String idHab) throws SQLException {
+	public Contrato convertResultSetToContratoHabitacion(ResultSet resultSetContrato, Integer idHab) throws SQLException {
 		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
 		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
 
 
+		String fechaInicio = resultSetContrato.getString("FECHA_INICIO");
+		String fif = fechaInicio.substring(2, 10);
+		String [] array = fif.split("-");
+		int anho = Integer.parseInt(array[0])+100;
+		int mes = Integer.parseInt(array[1])-1;
+		int dia = Integer.parseInt(array[2]);
+		Date date1 = new Date(anho, mes, dia);
 
-		String fechaInicio = resultSet.getString("FECHAINICIO");
-		String[] dias=fechaInicio.split("/");
-		Date laFechaInicio= new Date();
-		laFechaInicio.setYear(Integer.parseInt(dias[0]));
-		laFechaInicio.setMonth(Integer.parseInt(dias[1]));
-		laFechaInicio.setDate(Integer.parseInt(dias[2]));
 
+		String fechaFin = resultSetContrato.getString("FECHAFIN");
+		String fif2 = fechaFin.substring(2, 10);
+		String [] array2 = fif.split("-");
+		int anho2 = Integer.parseInt(array2[0])+100;
+		int mes2 = Integer.parseInt(array2[1])-1;
+		int dia2 = Integer.parseInt(array2[2]);
+		Date date2 = new Date(anho2, mes2, dia2);
 
-		String fechaFin = resultSet.getString("FECHAFIN");
-		String[] dias2=fechaFin.split("/");
-		Date laFechaFin= new Date();
-		laFechaFin.setYear(Integer.parseInt(dias2[0]));
-		laFechaFin.setMonth(Integer.parseInt(dias2[1]));
-		laFechaFin.setDate(Integer.parseInt(dias2[2]));
-
-		String fechaCreacion = resultSet.getString("FECHACREACION");
+		String fechaCreacion = resultSetContrato.getString("FECHACREACION");
 		String[] dias3=fechaCreacion.split("/");
 		Date laFechaCreacion= new Date();
 		laFechaCreacion.setYear(Integer.parseInt(dias3[0]));
 		laFechaCreacion.setMonth(Integer.parseInt(dias3[1]));
 		laFechaCreacion.setDate(Integer.parseInt(dias3[2]));
 
-		String tipo = resultSet.getString("TIPO");
-		double costo = Double.parseDouble(resultSet.getString("COSTO"));
-		Integer id = Integer.parseInt(resultSet.getString("ID"));
-		int vivienda = resultSet.getInt("ID_VIVIENDA");
-		int habitacion = resultSet.getInt("ID_HABITACION");
-		int numeroDePersonas = Integer.parseInt(resultSet.getString("NUMERO_DE_PERSONAS"));
-		String idCliente = resultSet.getString("ID_CLIENTE");
+		String tipo = resultSetContrato.getString("TIPO");
+		double costo = Double.parseDouble(resultSetContrato.getString("COSTO"));
+		long id = Integer.parseInt(resultSetContrato.getString("ID"));
+		
+		
+		Integer vivienda = resultSetContrato.getInt("ID_VIVIENDA");
+		
+		
+		
+		int numeroDePersonas = Integer.parseInt(resultSetContrato.getString("NUMERO_DE_PERSONAS"));
+		String idCliente = resultSetContrato.getString("ID_CLIENTE");
+		String estado = resultSetContrato.getString("ESTADO");
 
 
 
-
-		Contrato co= new Contrato(laFechaInicio, laFechaFin, tipo, costo, id, vivienda, idHab, numeroDePersonas, idCliente, laFechaCreacion);
+		Contrato co= new Contrato(date1, date2, tipo, costo, id, null, idHab, numeroDePersonas, idCliente, laFechaCreacion, estado);
 		return co;
 	}
 
+	public Contrato convertResultSetToContratoVivivenda(ResultSet resultSetContrato, Integer idViv) throws SQLException {
+		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
+		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
+
+
+		String fechaInicio = resultSetContrato.getString("FECHA_INICIO");
+		String fif = fechaInicio.substring(2, 10);
+		String [] array = fif.split("-");
+		int anho = Integer.parseInt(array[0])+100;
+		int mes = Integer.parseInt(array[1])-1;
+		int dia = Integer.parseInt(array[2]);
+		Date date1 = new Date(anho, mes, dia);
+
+
+		String fechaFin = resultSetContrato.getString("FECHAFIN");
+		String fif2 = fechaFin.substring(2, 10);
+		String [] array2 = fif.split("-");
+		int anho2 = Integer.parseInt(array2[0])+100;
+		int mes2 = Integer.parseInt(array2[1])-1;
+		int dia2 = Integer.parseInt(array2[2]);
+		Date date2 = new Date(anho2, mes2, dia2);
+
+		String fechaCreacion = resultSetContrato.getString("FECHACREACION");
+		String[] dias3=fechaCreacion.split("/");
+		Date laFechaCreacion= new Date();
+		laFechaCreacion.setYear(Integer.parseInt(dias3[0]));
+		laFechaCreacion.setMonth(Integer.parseInt(dias3[1]));
+		laFechaCreacion.setDate(Integer.parseInt(dias3[2]));
+
+		String tipo = resultSetContrato.getString("TIPO");
+		double costo = Double.parseDouble(resultSetContrato.getString("COSTO"));
+		long id = Integer.parseInt(resultSetContrato.getString("ID"));
+		
+		
+		Integer vivienda = resultSetContrato.getInt("ID_VIVIENDA");
+		
+		
+		
+		int numeroDePersonas = Integer.parseInt(resultSetContrato.getString("NUMERO_DE_PERSONAS"));
+		String idCliente = resultSetContrato.getString("ID_CLIENTE");
+		String estado = resultSetContrato.getString("ESTADO");
+
+
+
+
+		Contrato co= new Contrato(date1, date2, tipo, costo, id, idViv, null, numeroDePersonas, idCliente, laFechaCreacion, estado);
+		return co;
+	}
 
 }

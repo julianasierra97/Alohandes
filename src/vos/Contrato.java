@@ -36,6 +36,9 @@ public class Contrato
 	@JsonProperty(value="numeroDePersonas")
 	private int numeroDePersonas;
 	
+	@JsonProperty(value="estado")
+	private String estado;
+	
 	@JsonProperty(value="idCliente")
 	private String idCliente;
 
@@ -49,13 +52,14 @@ public class Contrato
 			@JsonProperty(value="fechaFin")Date fechaFin, 
 			@JsonProperty(value="tipo")String tipo, 
 			@JsonProperty(value="costo")double costo,
-			@JsonProperty(value="id")Integer id, 
+			@JsonProperty(value="id")long id, 
 			@JsonProperty(value="idVivienda")Integer vivienda,
 			@JsonProperty(value="idHabitacion")Integer habitacion, 
 			@JsonProperty(value="numeroDePersonas") int numeroDePersonas,
 			@JsonProperty(value="idCliente") String idCliente,
-			@JsonProperty(value="fechaCreacion")
-			 Date fechaCreacion) {
+			@JsonProperty(value="fechaCreacion") Date fechaCreacion,
+			@JsonProperty(value="estado") String estado) 
+	{
 		super();
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
@@ -67,6 +71,7 @@ public class Contrato
 		this.numeroDePersonas = numeroDePersonas;
 		this.idCliente=idCliente;
 		this.fechaCreacion=fechaCreacion;
+		this.estado=estado;
 	}
 
 	

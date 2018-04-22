@@ -101,7 +101,7 @@ public class RF9DAO
 			{
 				String[] sirven=daoRFC4.RFC4("", rs2.getString("FECHAINICIO"), rs2.getString("FECHAFIN")).split(" ,");
 				
-				daoContrato.addContratoHabitacion(daoContrato.convertResultSetToContrato(rs2, sirven[0]));
+				daoContrato.addContratoHabitacion(daoContrato.convertResultSetToContratoHabitacion(rs2, Integer.parseInt(sirven[0])));
 				conn.commit();
 				tm.deleteReserva(daoContrato.convertResultSetToContrato(rs2));
 				conn.commit();
