@@ -177,7 +177,8 @@ public class DAOHabitacion {
 
 
 
-	public void addHabitacion(Habitacion habitacion, String idOperador) throws SQLException, Exception {
+	public void addHabitacion(Habitacion habitacion, String idOperador) throws SQLException, Exception 
+	{
 
 		char compartida = 'T';
 		if(!habitacion.isCompartida())
@@ -185,26 +186,45 @@ public class DAOHabitacion {
 			compartida = 'F';
 		}
 
+		conn.setAutoCommit(false);
 
+		try{
 
-		String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, UBICACION, PRECIO, ESCOMPARTIDA) VALUES (%2$d, %3$d, '%4$s', '%5$s') ", 
-				USUARIO, 
-				habitacion.getId(),
-				habitacion.getCapacidad(),
-				habitacion.getUbicacion(),
-				habitacion.getPrecio(),
-				compartida);
-		System.out.println(sql);
+			String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, UBICACION, PRECIO, ESCOMPARTIDA) VALUES (%2$d, %3$d, '%4$s', '%5$s') ", 
+					USUARIO, 
+					habitacion.getId(),
+					habitacion.getCapacidad(),
+					habitacion.getUbicacion(),
+					habitacion.getPrecio(),
+					compartida);
+			System.out.println(sql);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
 
-		String sql2 = String.format("INSERT INTO %1$s.TIPOHABITACION (ID, TIPO) VALUES (%2$d, %3$s)", USUARIO, habitacion.getId(), habitacion.getTipo());
+			String sql2 = String.format("INSERT INTO %1$s.TIPOHABITACION (ID, TIPO) VALUES (%2$d, '%3$s')", USUARIO, habitacion.getId(), habitacion.getTipo());
 
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		prepStmt2.executeQuery();
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			prepStmt2.executeQuery();
+
+			for (Servicio servicio : habitacion.getServicios()) {
+				String sql3 = String.format("INSERT INTO %1$s.SERVICIOHABITACION (IDSERVICIO, ID_HABITACION, COSTO) VALUES (%2$d, %3$d, %4$d)", 
+						USUARIO, servicio.getId(),habitacion.getId() , servicio.getCosto());
+
+				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+				recursos.add(prepStmt3);
+				prepStmt3.executeQuery();
+			}
+			
+			conn.commit();
+		}
+		catch(Exception e)
+		{
+			conn.rollback();
+		}
+
 
 
 	}
@@ -231,7 +251,7 @@ public class DAOHabitacion {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
-		
+
 		String sql2 = String.format("DELETE FROM %1$s.TIPOHABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
 
 		System.out.println(sql2);
