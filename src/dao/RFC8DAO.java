@@ -12,7 +12,7 @@ import vos.Empresa;
 import vos.Operador;
 import vos.Usuario;
 
-public class RFC6DAO 
+public class RFC8DAO 
 {
 
 
@@ -49,7 +49,7 @@ public class RFC6DAO
 	/**
 	 * Metodo constructor de la clase DAOBebedor <br/>
 	 */
-	public RFC6DAO() {
+	public RFC8DAO() {
 		recursos = new ArrayList<Object>();
 		
 	}

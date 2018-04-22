@@ -4,15 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import oracle.net.aso.s;
 import vos.Contrato;
 import vos.Empresa;
 import vos.Operador;
 import vos.Usuario;
 
-public class RFC6DAO 
+public class RFC4DAO 
 {
 
 
@@ -40,7 +43,7 @@ public class RFC6DAO
 	 */
 	private Connection conn;
 
-	
+
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS DE INICIALIZACION
@@ -49,9 +52,9 @@ public class RFC6DAO
 	/**
 	 * Metodo constructor de la clase DAOBebedor <br/>
 	 */
-	public RFC6DAO() {
+	public RFC4DAO() {
 		recursos = new ArrayList<Object>();
-		
+
 	}
 
 	//----------------------------------------------------------------------------------------------------------------------------------
@@ -64,14 +67,21 @@ public class RFC6DAO
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public String RFC6( String id) throws SQLException, Exception {
+	public String RFC4(String servicios, String fechaComienzo, String fechaFin) throws SQLException, Exception {
 
-		String rpta="";
-		rpta+="El uso para el usuario con el id " +id +"\n";
+		String rpta="Las ofertas que cumples con los parametros dados son: ";
+		
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		String fecha1 = "'"+dateFormat.format(fechaComienzo)+"'";
+		
+		
+		String fecha2 = "'"+dateFormat.format(fechaFin)+"'";
+		
 
 
-		String sql1 = String.format("SELECT  TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY') AS DIAS FROM %1$s.CONTRATO WHERE ID_CLIENTE='%2$s' AND ESTADO ='Activo')" ,
-				USUARIO,id);
+
+		String sql1 = String.format("WITH Q1 AS(SELECT %1$s.CONTRATO.ID AS %1$s.CONTRATO FROM %1$s.CONTRATO WHERE '%2$s' < FECHAINICIO AND FECHAFIN < '%2$s' OR FECHAINICIO > '%3$s' AND FECHAFIN > '%3$s')SELECT * FROM  %1$s.CONTRATOHABITACION LEFT OUTER JOIN Q1 ON %1$s.CONTRATOHABITACION.ID_CONTRATO  = Q1.CONTRATO WHERE Q1.CONTRATO IS NULL;",
+				USUARIO);
 
 		System.out.println(sql1);
 
@@ -79,56 +89,88 @@ public class RFC6DAO
 		recursos.add(prepStmt1);
 
 		ResultSet rs1=prepStmt1.executeQuery();
+		String[] losServicios= servicios.split(",");
+		while(rs1.next())
+		{
 
-		String sql2 = String.format("SELECT  SUM(COSTO) AS GASTOTOTAL FROM %1$s.CONTRATO WHERE ID_CLIENTE='%2$s' AND ESTADO ='Activo'" ,
+			String sql2 = String.format("SELECT NOMBRE FROM %1$s.SERVICIOHABITACION LEFT OUTER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID= %1$s.SERVICIOHABITACION.ID_HABITACION  WHERE %1$s.SERVICIOHABITACION.ID_HABITACION='%2$s';" ,
+
+					USUARIO,
+					rs1.getString("ID_HABITACION"));
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+
+
+			int contador=0;
+			ResultSet rs2=prepStmt2.executeQuery();
+			String palabra="";
+			while(rs2.next())
+			{
+				palabra+=rs2.getString("NOMBRE");
+
+			}
+			for(String s:losServicios)
+			{
+				if(palabra.contains(s))
+				{
+					contador++;
+				}
+			}
+			if(losServicios.length==contador)
+			{
+				rpta+=rs1.getString("ID_HABITACION")+" ,";
+			}
+
+
+		}
+
+
+		String sql3 = String.format("WITH Q1 AS(SELECT %1$s.CONTRATO.ID AS %1$s.CONTRATO FROM %1$s.CONTRATO WHERE '%2$s' < FECHAINICIO AND FECHAFIN < '%2$s' OR FECHAINICIO > '%3$s' AND FECHAFIN > '%3$s')SELECT * FROM  %1$s.CONTRATOHABITACION LEFT OUTER JOIN Q1 ON %1$s.CONTRATOHABITACION.ID_CONTRATO  = Q1.CONTRATO WHERE Q1.CONTRATO IS NULL;",
 				USUARIO,
-				id);
-
-		System.out.println(sql2);
-
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-
-		ResultSet rs2=prepStmt2.executeQuery();
-
-		
-		
-		String sql3 = String.format("SELECT NOMBRE FROM (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.contrato.id= %1$s.CONTRATOVIVIENDA.ID_CONTRATO)INNER JOIN %1$s.SERVICIOVIVIENDA ON %1$s.CONTRATOVIVIENDA.ID_VIVIENDA=%1$s.SERVICIOVIVIENDA.ID_VIVIENDA INNER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID=SERVICIOVIVIENDA.IDSERVICIO WHERE ID_CLIENTE='%2$s' GROUP BY NOMBRE;",
-				USUARIO,id);
+				fechaComienzo,
+				fechaFin);
 
 		System.out.println(sql3);
 
 		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 		recursos.add(prepStmt3);
 
-		ResultSet rs3=prepStmt3.executeQuery();
+		ResultSet rs3=prepStmt1.executeQuery();
 
-		
-		String sql4 = String.format("SELECT NOMBRE FROM (%1$s.SERVICIO INNER JOIN (%1$s.CONTRATOHABITACION INNER JOIN %1$s.SERVICIOHABITACION ON %1$s.CONTRATOHABITACION.ID_HABITACION=%1$s.SERVICIOHABITACION.ID_HABITACION) ON %1$s.SERVICIOHABITACION.IDSERVICIO=%1$s.SERVICIO.ID) INNER JOIN %1$s.CONTRATO ON %1$s.CONTRATO.ID=%1$s.CONTRATOHABITACION.ID_CONTRATO WHERE %1$s.ID_CLIENTE='%2$s' GROUP BY %1$s.NOMBRE; ",
-				USUARIO,id);
-
-		System.out.println(sql4);
-
-		PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
-		recursos.add(prepStmt4);
-
-		ResultSet rs4=prepStmt4.executeQuery();
-		
-		
-		if(rs1.next() && rs2.next())
+		while(rs3.next())
 		{
-			String valor=rs1.getDouble("COUNT (ID)")+"";
-			rpta+= "Dias: "+ valor +"\n" ;
-			
-			rpta+= "Gasto: "+ rs2.getDouble("COUNT (ID)")+"";
-			
-			rpta+=convertResultSet(rs3, rs4);
-				
+			String sql2 = String.format("SELECT NOMBRE FROM %1$s.SERVICIOVIVIENDA LEFT OUTER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID= %1$s.SERVICIOVIVENDA.ID_VIVIENDA  WHERE %1$s.SERVICIOVIVIENDA.ID_VIVIENDA='%2$s';" ,
+
+					USUARIO,
+					rs1.getString("ID_VIVIENDA"));
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+
+
+			int contador=0;
+			ResultSet rs2=prepStmt2.executeQuery();
+			String palabra="";
+			while(rs2.next())
+			{
+				palabra+=rs2.getString("NOMBRE");
+
+			}
+			for(String s:losServicios)
+			{
+				if(palabra.contains(s))
+				{
+					contador++;
+				}
+			}
+			if(losServicios.length==contador)
+			{
+				rpta+=rs1.getString("ID_VIVIENDA")+" ,";
+			}
 		}
-		cerrarRecursos();
-		
-		
+
+
 		return rpta;
+
 
 
 	}
@@ -137,28 +179,38 @@ public class RFC6DAO
 
 
 
-	public String convertResultSet(ResultSet resultSet1,ResultSet resultSet2) throws SQLException {
+	public String convertResultSetActualToString(ResultSet resultSet, ResultSet resultSet2) throws SQLException {
 		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
 		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
-		String rpta="Cacteristicas: ";
-		
-		while(resultSet1.next())
-		{
-			rpta+=resultSet1.getString("NOMBRE")+", ";
-		}
-		
-		while(resultSet2.next())
-		{
-			rpta+=resultSet2.getString("NOMBRE")+", ";
-		}
-		
+		int numero= resultSet.getInt("GananciaActualHabitacion");
+		resultSet.getString("ID");
 
-		return rpta;
+		int numero2=resultSet2.getInt("GananciaActualVivienda");
+		resultSet.getString("ID");
+
+		numero+= numero2;
+		return "El usuario con el ID "+ 	resultSet.getString("ID")+ "gano "+ numero+""+ " en este año ";
+
 
 
 
 	}
+	public String convertResultSetPasadoToString(ResultSet resultSet, ResultSet resultSet2) throws SQLException {
+		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
+		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
+		int numero= resultSet.getInt("GananciaPasadalHabitacion");
+		resultSet.getString("ID");
 
+		int numero2=resultSet2.getInt("GananciaPasadaVivienda");
+		resultSet.getString("ID");
+
+		numero+= numero2;
+		return "El usuario con el ID "+ 	resultSet.getString("ID")+ "gano "+ numero+""+ " en este año ";
+
+
+
+
+	}
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS AUXILIARES

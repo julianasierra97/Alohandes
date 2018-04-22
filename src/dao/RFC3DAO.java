@@ -86,7 +86,7 @@ public class RFC3DAO
 		System.out.println(sql2);
 
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt1);
+		recursos.add(prepStmt2);
 
 		ResultSet rs2=prepStmt2.executeQuery();
 
