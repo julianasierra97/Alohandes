@@ -78,24 +78,14 @@ public class HabitacionService {
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-			if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
-					habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
-					habitacion.getTipo().equals(Habitacion.SUITES) ||
-					habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
-			{
-
-				tm.agregarHabitacionEmpresa(habitacion, idOperador);
-				return Response.status( 200 ).entity( habitacion ).build( );
-			}
-			else{
-				tm.agregarHabitacionPersona(habitacion, idOperador);
-				return Response.status( 200 ).entity( habitacion ).build( );
-			}
+			tm.agregarHabitacion(habitacion.getId(), idOperador);
+			return Response.status(200).entity(habitacion).build();
 		}
 		catch( Exception e )
 		{
 			return Response.status( 500 ).entity( doErrorMessage( e ) ).build( );
 		}
+		
 	}
 
 	@DELETE
@@ -104,20 +94,8 @@ public class HabitacionService {
 	public Response deleteHabitacion(Habitacion habitacion) {
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
-			if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
-					habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
-					habitacion.getTipo().equals(Habitacion.SUITES) ||
-					habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
-			{
-				tm.deleteHabitacionEmpresa(habitacion.getId());
-				return Response.status( 200 ).entity( habitacion ).build( );			
-			}
-			else{
-				tm.deleteHabitacionEmpresa(habitacion.getId());
-				return Response.status( 200 ).entity( habitacion ).build( );			
-			}
-
-
+			tm.deleteHabitacion(habitacion.getId());
+			return Response.status(200).entity(habitacion).build();
 		}
 		catch( Exception e )
 		{

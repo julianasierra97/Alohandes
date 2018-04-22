@@ -155,13 +155,13 @@ public class AlohonadesTransactionManager {
 	// METODOS TRANSACCIONALES
 	//----------------------------------------------------------------------------------------------------------------------------------
 
-	
 
 
-	
 
 
-	
+
+
+
 
 	/**
 	 * Metodo que modela la transaccion que agrega un contrato a la base de datos. <br/>
@@ -402,7 +402,7 @@ public class AlohonadesTransactionManager {
 			// Requerimiento 3E: Establezca la conexion en el objeto DAOBebedor (revise los metodos de la clase DAOBebedor)
 
 			daoEmpresa.setConn(conn);
-			
+
 			if(empresa.getTipo().equals(Empresa.HOSTAL))
 			{
 				if(empresa.getHorarioApertura()=="" && empresa.getHorarioCierre()=="")
@@ -413,7 +413,7 @@ public class AlohonadesTransactionManager {
 				{
 					DAOOperador  daoOperador=  new DAOOperador();
 					daoOperador.setConn(conn);
-					
+
 					daoEmpresa.addEmpresa(empresa);	
 				}
 			}
@@ -434,7 +434,7 @@ public class AlohonadesTransactionManager {
 				{
 					DAOOperador  daoOperador=  new DAOOperador();
 					daoOperador.setConn(conn);
-					
+
 					daoEmpresa.addEmpresa(empresa);
 				}
 				else
@@ -446,7 +446,7 @@ public class AlohonadesTransactionManager {
 			{
 				DAOOperador  daoOperador=  new DAOOperador();
 				daoOperador.setConn(conn);
-				
+
 				daoEmpresa.addEmpresa(empresa);
 			}
 
@@ -602,7 +602,26 @@ public class AlohonadesTransactionManager {
 	}
 
 
-	public void agregarHabitacionPersona(Habitacion habitacion, String idPersona) throws Exception
+
+	public void agregarHabitacion(Integer idHabitacion, String idOperador) throws Exception
+	{
+		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
+		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
+				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
+				habitacion.getTipo().equals(Habitacion.SUITES) ||
+				habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
+		{
+			agregarHabitacionEmpresa(habitacion, idOperador);
+		}
+		else{
+			agregarHabitacionPersona(habitacion, idOperador);
+		}
+	}
+
+
+
+
+	private void agregarHabitacionPersona(Habitacion habitacion, String idPersona) throws Exception
 	{
 		PersonaNatural persona = getPersonaNaturalById(idPersona);
 
@@ -616,7 +635,7 @@ public class AlohonadesTransactionManager {
 		{
 			this.conn = darConexion();
 			daoHabitacion.setConn(conn);
-			daoHabitacion.addHabitacionPersona(habitacion, idPersona);
+			daoHabitacion.addHabitacion(habitacion, idPersona);
 		}
 		catch (SQLException sqlException) {
 			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
@@ -683,7 +702,7 @@ public class AlohonadesTransactionManager {
 
 	}
 
-	public void agregarHabitacionEmpresa(Habitacion habitacion, String idEmpresa) throws Exception
+	private void agregarHabitacionEmpresa(Habitacion habitacion, String idEmpresa) throws Exception
 	{
 		Empresa empresa = findEmpresaById(idEmpresa);
 
@@ -733,7 +752,7 @@ public class AlohonadesTransactionManager {
 		{
 			this.conn = darConexion();
 			daoHabitacion.setConn(conn);
-			daoHabitacion.addHabitacionEmpresa(habitacion, idEmpresa);
+			daoHabitacion.addHabitacion(habitacion, idEmpresa);
 
 
 		}
@@ -804,11 +823,11 @@ public class AlohonadesTransactionManager {
 
 	}
 
-	
 
 
-	
-	
+
+
+
 	/**
 	 * Metodo que modela la transaccion que elimina de la base de datos al bebedor que entra por parametro. <br/>
 	 * Solamente se actualiza si existe el bebedor en la Base de Datos <br/>
@@ -967,7 +986,29 @@ public class AlohonadesTransactionManager {
 		return usuarios;
 	}
 
-	public void deleteHabitacionEmpresa(Integer idHabitacion) throws Exception
+
+
+	public void deleteHabitacion(Integer idHabitacion) throws Exception
+	{
+
+		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
+		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
+				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
+				habitacion.getTipo().equals(Habitacion.SUITES) ||
+				habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
+		{
+			deleteHabitacionEmpresa(idHabitacion);
+		}
+		else{
+			deleteHabitacionPersona(idHabitacion);
+		}
+
+
+	}
+
+
+
+	private void deleteHabitacionEmpresa(Integer idHabitacion) throws Exception
 	{
 		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
 		if(habitacion == null)
@@ -984,9 +1025,7 @@ public class AlohonadesTransactionManager {
 		{
 			this.conn = darConexion();
 			daoHabitacion.setConn( conn );
-			//Requerimiento 6D: Utilizando los Metodos de DaoBebedor, verifique que exista el bebedor con el ID dado en el parametro. 
-			//						 Si no existe un bebedor con el ID ingresado, lance una excepcion en donde se explique lo sucedido
-			//						 De lo contrario, se elimina la informacion del bebedor de la Base de Datos
+
 			if(daoHabitacion.findHabitacionById(habitacion.getId())!=null)
 			{
 				daoHabitacion.deleteHabitacion(habitacion);
@@ -1144,7 +1183,7 @@ public class AlohonadesTransactionManager {
 		return contratos;
 	}
 
-	public void deleteHabitacionPersona(Integer idHabitacion) throws Exception
+	private void deleteHabitacionPersona(Integer idHabitacion) throws Exception
 	{
 		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
 
@@ -1156,6 +1195,46 @@ public class AlohonadesTransactionManager {
 		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
 		{
 			throw new Exception("La habitacion tiene reservas.");
+		}
+
+		DAOHabitacion daoHabitacion = new DAOHabitacion();
+		try
+		{
+			this.conn = darConexion();
+			daoHabitacion.setConn( conn );
+
+			if(daoHabitacion.findHabitacionById(habitacion.getId())!=null)
+			{
+				daoHabitacion.deleteHabitacion(habitacion);
+			}
+			else
+			{
+				throw new Exception("No existe una habitacion con ese id");
+			}
+
+		}
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try {
+				daoHabitacion.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
 		}
 
 	}
@@ -1311,7 +1390,7 @@ public class AlohonadesTransactionManager {
 			this.conn = darConexion();
 			daocontrato.setConn(conn);
 			contratos = daocontrato.selectTop20();
-		
+
 		} 
 		catch (SQLException sqlException) {
 			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
@@ -1338,8 +1417,8 @@ public class AlohonadesTransactionManager {
 		}
 		return contratos;
 	}
-	
-	
+
+
 	public String darUso() throws Exception
 	{
 		String rta = "";
@@ -1349,7 +1428,7 @@ public class AlohonadesTransactionManager {
 			this.conn = darConexion();
 			dao5.setConn(conn);
 			rta = dao5.RFC5();
-		
+
 		} 
 		catch (SQLException sqlException) {
 			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
@@ -1376,6 +1455,6 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 
 }
