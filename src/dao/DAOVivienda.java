@@ -290,7 +290,8 @@ public class DAOVivienda {
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
-		return rs.getInt("ID") + "";
+		rs.next();
+		return rs.getString("ID_PERSONA") + "";
 	}
 
 
