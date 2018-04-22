@@ -11,7 +11,6 @@ import java.util.List;
 import vos.Empresa;
 import vos.Operador;
 
-
 public class DAOEmpresa {
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// CONSTANTES
@@ -121,7 +120,7 @@ public class DAOEmpresa {
 		{
 			Empresa empresa = null;
 
-			String sql = String.format("SELECT * FROM %1$s.OPERADOR op INNER JOIN %1$s.EMPRESA em ON OP.DOCUMENTO=EM.ID WHERE EM.ID=%2$d;", USUARIO);
+			String sql = String.format("SELECT op.LOGIN as login, op.contrasenha as contrasenha, op.documento as documento, op.correo as correo,op.TIPODOCUMENTO as tipodocumento, op.nombre as nombre, em.DIRECCION as ubicacion, he.HORARIOAPERTURA as horarioapertura, he.HORARIOCIERRE as horariocierre, em.NUMREGISTROCAMARADECOMERCIO as numregisc, em.NUMREGISTROSUPERINTENDENCIA as numregiss, te.tipo as tipo FROM OPERADOR op, EMPRESA em, HORARIOEMPRESA he, SERVICIOEMPRESA se, TIPOEMPRESA te WHERE OP.DOCUMENTO=EM.ID AND EM.ID='%2$s'  AND se.ID_EMPRESA ='%2$s' AND te.ID = '%2$s' " , USUARIO, id);
 			
 
 			PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -195,8 +194,8 @@ public class DAOEmpresa {
 		String tipo = resultSetEmpresa.getString("TIPO");
 		String horarioApertura =resultSetEmpresa.getString("HORARIOAPERTURA");
 		String horarioCierre=resultSetEmpresa.getString("HORARIOCIERRE");
-		long numRegistroSuperintendencia=Long.parseLong(resultSetEmpresa.getString("NUMREGISTROSUPERINTENDENCIA"));
-		long numRegistroCamaraComercio=Long.parseLong(resultSetEmpresa.getString("NUMREGISTROCAMARACOMERCIO"));
+		long numRegistroSuperintendencia=Long.parseLong(resultSetEmpresa.getString("NUMREGISC"));
+		long numRegistroCamaraComercio=Long.parseLong(resultSetEmpresa.getString("NUMREGISC"));
 
 		String login= resultSetEmpresa.getString("LOGIN");
 		String contrasenha= resultSetEmpresa.getString("CONTRASENHA");
