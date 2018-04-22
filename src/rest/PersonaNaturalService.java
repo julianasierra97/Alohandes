@@ -124,7 +124,7 @@ public class PersonaNaturalService
 				try{
 					AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-					tm.agregarHabitacionPersona(habitacion, id_persona);
+					tm.agregarHabitacion(habitacion.getId(), id_persona);
 					return Response.status( 200 ).entity( habitacion ).build( );			
 				}
 				catch( Exception e )
