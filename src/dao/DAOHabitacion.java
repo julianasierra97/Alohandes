@@ -186,9 +186,9 @@ public class DAOHabitacion {
 			compartida = 'F';
 		}
 
-		conn.setAutoCommit(false);
 
 		try{
+			conn.setAutoCommit(false);
 
 			String sql = String.format("INSERT INTO %1$s.HABITACION (ID, CAPACIDAD, UBICACION, PRECIO, ESCOMPARTIDA) VALUES (%2$d, %3$d, '%4$s', '%5$s') ", 
 					USUARIO, 
