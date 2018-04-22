@@ -2,12 +2,14 @@ package rest;
 
 import java.util.List;
 
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -73,12 +75,12 @@ public class HabitacionService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addHabitacion(@QueryParam("id_operador")String idOperador, Habitacion habitacion) {
+	public Response addHabitacion(Habitacion habitacion) {
 
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-			tm.agregarHabitacion(habitacion.getId(), idOperador);
+			tm.agregarHabitacion(habitacion, "3332963235175607");
 			return Response.status(200).entity(habitacion).build();
 		}
 		catch( Exception e )

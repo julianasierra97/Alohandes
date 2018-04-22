@@ -141,7 +141,7 @@ public class DAOHabitacion {
 		Habitacion habitacion = null;
 
 		//Primera sentencia
-		String sql = String.format("SELECT habitacion.escompartida as escompartida, HABITACION.id as ID, HABITACION.capacidad as capacidad, HABITACION.UBICACION as ubicacion, HABITACION.PRECIO, TIPOHABITACION.TIPO from HABITACION, TIPOHABITACION where HABITACION.ID = TIPOHABITACION.ID where id = %2$d " , USUARIO, id);
+		String sql = String.format("SELECT habitacion.escompartida as escompartida, HABITACION.id as ID, HABITACION.capacidad as capacidad, HABITACION.UBICACION as ubicacion, HABITACION.PRECIO, TIPOHABITACION.TIPO from HABITACION, TIPOHABITACION where HABITACION.ID = TIPOHABITACION.ID AND HABITACION.id = %2$d " , USUARIO, id);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);

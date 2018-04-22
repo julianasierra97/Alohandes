@@ -603,9 +603,8 @@ public class AlohonadesTransactionManager {
 
 
 
-	public void agregarHabitacion(Integer idHabitacion, String idOperador) throws Exception
+	public void agregarHabitacion(Habitacion habitacion, String idOperador) throws Exception
 	{
-		Habitacion habitacion = buscarHabitacionPorId(idHabitacion);
 		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
 				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
 				habitacion.getTipo().equals(Habitacion.SUITES) ||
@@ -715,13 +714,15 @@ public class AlohonadesTransactionManager {
 			throw new Exception("No se puede agregar una habitacion de hostal que no sea compartida");
 		}
 
-		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
-				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
-				habitacion.getTipo().equals(Habitacion.SUITES) &&
-				habitacion.isCompartida())
-		{
-			throw new Exception("Una habitacion de un hotel no puede ser compartida");
-		}
+//		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
+//				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
+//				habitacion.getTipo().equals(Habitacion.SUITES))
+//		{
+//
+//			if(habitacion.isCompartida())
+//				
+//				throw new Exception("Una habitacion de un hotel no puede ser compartida");
+//		}
 
 		if(habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
 		{

@@ -94,7 +94,7 @@ public class EmpresaService
 				try{
 					AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-					tm.agregarHabitacion(habitacion.getId(), id_empresa);
+					tm.agregarHabitacion(habitacion, id_empresa);
 					return Response.status( 200 ).entity( habitacion ).build( );			
 				}
 				catch( Exception e )
