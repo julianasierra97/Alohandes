@@ -12,7 +12,7 @@ import vos.Empresa;
 import vos.Operador;
 import vos.Usuario;
 
-public class RFC8DAO 
+public class RFC9DAO 
 {
 
 
@@ -51,7 +51,7 @@ public class RFC8DAO
 	/**
 	 * Metodo constructor de la clase DAOBebedor <br/>
 	 */
-	public RFC8DAO() {
+	public RFC9DAO() {
 		recursos = new ArrayList<Object>();
 
 	}
@@ -66,13 +66,13 @@ public class RFC8DAO
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public ArrayList<Usuario> RFC8( String id) throws SQLException, Exception {
+	public String RFC9() throws SQLException, Exception {
 
-		ArrayList<Usuario> rpta= new ArrayList<Usuario>();
+		String rpta="Las ofertas con poca demanda son:";
 
 
-		String sql1 = String.format("SELECT * FROM %1$s.USUARIO INNER JOIN (SELECT COUNT (%1$s.CONTRATO.ID_CLIENTE) as NumVisitas , %1$s.CONTRATO.ID_CLIENTE as IDCLIENTE FROM %1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID=%1$s.CONTRATOVIVIENDA.ID_CONTRATO WHERE %1$s.CONTRATOVIVIENDA.ID_VIVIENDA='%2$s'GROUP BY %1$s.CONTRATO.ID_CLIENTE HAVING COUNT(%1$s.CONTRATO.ID_CLIENTE)>3 ) ON IDCLIENTE= %1$s.USUARIO.DOCUMENTO;",  
-				USUARIO,id);
+		String sql1 = String.format("SELECT  TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY') AS DIAS, %1$s.VIVIENDA.ID FROM %1$s.VIVIENDA LEFT OUTER JOIN (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID=%1$s.CONTRATOVIVIENDA.ID_CONTRATO) ON %1$s.VIVIENDA.ID= %1$s.CONTRATOVIVIENDA.ID_VIVIENDA WHERE TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY') <30;",  
+				USUARIO);
 
 		System.out.println(sql1);
 
@@ -82,18 +82,18 @@ public class RFC8DAO
 		ResultSet rs1=prepStmt1.executeQuery();
 		while(rs1.next())
 		{
-			rpta.add(DaoUsuario.convertResultSetToUsuario(rs1, new ArrayList<Contrato>()));
+			rpta+=rs1.getString("ID")+" ,";
 		}
 
 
 
 
 
-		String sql2 = String.format("SELECT  * from %1$s.usuario INNER JOIN(SELECT SUM(TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY')) AS DIAS, ID_CLIENTE as IDCLIENTE FROM %1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID= %1$s.CONTRATOVIVIENDA.ID_CONTRATO WHERE %1$s.CONTRATOVIVIENDA.ID_VIVIENDA=%2$s GROUP BY ID_CLIENTE HAVING SUM(TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY'))>15) on IDCLIENTE= %1$s.USUARIO.DOCUMENTO ;" ,
-				USUARIO,
-				id);
+		String sql2 = String.format("SELECT  TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY') AS DIAS, %1$s.HABITACION.ID FROM %1$s.HABITACION LEFT OUTER JOIN (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOHABITACION ON %1$s.CONTRATO.ID=%1$s.CONTRATOHABITACION.ID_CONTRATO) ON %1$s.HABITACION.ID= %1$s.CONTRATOHABITACION.ID_HABITACION WHERE TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY') <30;" ,
+				USUARIO);
 
 		System.out.println(sql2);
+
 
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 		recursos.add(prepStmt2);
@@ -101,42 +101,8 @@ public class RFC8DAO
 		ResultSet rs2=prepStmt2.executeQuery();
 		while(rs2.next())
 		{
-			rpta.add(DaoUsuario.convertResultSetToUsuario(rs2, new ArrayList<Contrato>()));
+			rpta+=rs2.getString("ID")+" ,";
 		}
-
-		String sql3 = String.format("SELECT * FROM %1$s.USUARIO INNER JOIN (SELECT COUNT (%1$s.CONTRATO.ID_CLIENTE) as NumVisitas , %1$s.CONTRATO.ID_CLIENTE as IDCLIENTE FROM %1$s.CONTRATO INNER JOIN %1$s.CONTRATOHABITACION ON %1$s.CONTRATO.ID=%1$s.CONTRATOHABITACION.ID_CONTRATO WHERE %1$s.CONTRATOHABITACION.ID_HABITACION='%2$s'GROUP BY %1$s.CONTRATO.ID_CLIENTE HAVING COUNT(%1$s.CONTRATO.ID_CLIENTE)>3 ) ON IDCLIENTE= %1$s.USUARIO.DOCUMENTO; ",  
-				USUARIO,id);
-
-		System.out.println(sql3);
-
-		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-		recursos.add(prepStmt3);
-
-		ResultSet rs3=prepStmt3.executeQuery();
-		while(rs3.next())
-		{
-			rpta.add(DaoUsuario.convertResultSetToUsuario(rs3, new ArrayList<Contrato>()));
-		}
-
-
-
-
-
-		String sql4 = String.format("SELECT  * from %1$s.usuario INNER JOIN(SELECT SUM(TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY')) AS DIAS, ID_CLIENTE as IDCLIENTE FROM %1$s.CONTRATO INNER JOIN %1$s.CONTRATOHABITACION ON %1$s.CONTRATO.ID= %1$s.CONTRATOHABITACION.ID_CONTRATO WHERE %1$s.CONTRATOHABITACION.ID_HABITACION='%2$s' GROUP BY ID_CLIENTE HAVING SUM(TO_DATE(FECHAFIN, 'DD/MM/YYYY')-TO_DATE(FECHAINICIO, 'DD/MM/YYYY'))>15) on IDCLIENTE= %1$s.USUARIO.DOCUMENTO ;" ,
-				USUARIO,
-				id);
-
-		System.out.println(sql4);
-
-		PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
-		recursos.add(prepStmt4);
-
-		ResultSet rs4=prepStmt4.executeQuery();
-		while(rs4.next())
-		{
-			rpta.add(DaoUsuario.convertResultSetToUsuario(rs4, new ArrayList<Contrato>()));
-		}
-
 
 		cerrarRecursos();
 
@@ -150,27 +116,11 @@ public class RFC8DAO
 
 
 
-	public String convertResultSet(ResultSet resultSet1,ResultSet resultSet2) throws SQLException {
-		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
-		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
-		String rpta="Cacteristicas: ";
-
-		while(resultSet1.next())
-		{
-			rpta+=resultSet1.getString("NOMBRE")+", ";
-		}
-
-		while(resultSet2.next())
-		{
-			rpta+=resultSet2.getString("NOMBRE")+", ";
-		}
-
-
-		return rpta;
+	
 
 
 
-	}
+
 
 
 	//----------------------------------------------------------------------------------------------------------------------------------
