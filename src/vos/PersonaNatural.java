@@ -26,11 +26,11 @@ public class PersonaNatural extends Operador
 	private String tipo;
 
 	@JsonProperty(value="habitaciones")
-	public ArrayList<Habitacion> habitaciones;
+	private ArrayList<Habitacion> habitaciones;
 
 
 	@JsonProperty(value="vivienda")
-	public ArrayList<Vivienda> vivienda;
+	private ArrayList<Vivienda> vivienda;
 
 	@JsonProperty(value="edad")
 	protected int edad;

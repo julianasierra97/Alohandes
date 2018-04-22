@@ -175,109 +175,132 @@ public class DAOPersonaNatural {
 
 	public PersonaNatural findPersonaById(String id) throws SQLException, Exception
 	{
-		//Primera sentencia
-
 		PersonaNatural persona = null;
 
-		String sql = String.format("SELECT * FROM %1$s.PERSONANATURAL PN, %1$s.OPERADOR OPE  WHERE PN.DOCUMENTO = '%2$s' AND OPE.DOCUMENTO = '%2$s'", USUARIO, id); 
+		//Primera sentencia 
+		String sql1 = String.format("SELECT op.LOGIN as login, op.contrasenha as contrasenha, op.documento as documento, op.correo as correo,op.TIPODOCUMENTO as tipodocumento, op.nombre as nombre, pn.APELLIDO as apellido, pn.EDAD as edad, pn.GENERO as genero, pn.TIPO as tipo, pn.tipo as tipo, oh.ID as idHabitacion, VIV.ID as idVivienda  FROM OPERADOR op, PERSONANATURAL pn, OPERADORHABITACION OH, VIVIENDA VIV WHERE OP.DOCUMENTO=pn.DOCUMENTO AND pn.DOCUMENTO='%2$s' AND OH.ID_OPERADOR = pn.DOCUMENTO AND pn.DOCUMENTO = VIV.ID_PERSONA ", USUARIO, id);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		ResultSet rs = prepStmt.executeQuery();
+		PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+		recursos.add(prepStmt1);
+		ResultSet rs1 = prepStmt1.executeQuery();
 
-		//Segunda sentencia
-
-		String sql2 = String.format("SELECT * FROM %1$s.VIVIENDA  WHERE ID_PERSONA = '%2$s'", USUARIO, id); 
-
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		ResultSet rs2 = prepStmt2.executeQuery();
-
-		//Tercera sentencia
-		rs2.next();
-		String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
-
-		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-		recursos.add(prepStmt3);
-		ResultSet rs3 = prepStmt3.executeQuery();
-
-		//cuarta sentencia
-
-		String sql4 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
-
-		PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
-		recursos.add(prepStmt4);
-		ResultSet rs4 = prepStmt4.executeQuery();
-
-		//quinta sentencia
-
-		String sql5 = String.format("SELECT * FROM %1$s.HABITACION WHERE ID_PERSONA = '%2$s'", USUARIO, id); 
-
-		PreparedStatement prepStmt5 = conn.prepareStatement(sql5);
-		recursos.add(prepStmt5);
-		ResultSet rs5 = prepStmt5.executeQuery();
-
-		//sexta sentencia
-
-		String sql6 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_HABITACION = %2$s", USUARIO, rs2.getInt("ID")); 
-
-		PreparedStatement prepStmt6 = conn.prepareStatement(sql6);
-		recursos.add(prepStmt6);
-		ResultSet rs6 = prepStmt6.executeQuery();
-
-		ArrayList<Vivienda> viviendas = new ArrayList<>();
-		while(rs2.next())
+		while(rs1.next())
 		{
-			ArrayList<Servicio> servicios = new ArrayList<>();
-			while(rs3.next())
-			{
-				servicios.add(new Servicio(rs3.getDouble("COSTO"), rs3.getString("NOMBRE"), rs3.getInt("ID")));
-			}
+			ArrayList<Habitacion> habitaciones = new ArrayList<>();
+			ArrayList<Vivienda> viviendas = new ArrayList<>();
 
-			boolean incendio = false;
+			//segunda sentencia
 
-			boolean robo = false;
 
-			boolean inundaciones = false;
-
-			if(rs4.next())
-			{
-				if(rs4.getString("INCENDIO").charAt(0) == 'T')
-				{
-					incendio = true;
-				}
-				if(rs4.getString("ROBO").charAt(0) == 'T')
-				{
-					robo = true;
-				}
-				if(rs4.getString("INUNDACION").charAt(0) == 'T')
-				{
-					inundaciones = true;
-				}
-			}
-			viviendas.add(new Vivienda(rs2.getInt("CAPACIDAD"), rs2.getString("TIPO"), rs2.getInt("NUMEROHABITACIONES"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getString("DIRECCION"), servicios, new Seguro(rs4.getDouble("COSTO"), incendio, robo, inundaciones, rs4.getInt("ID"))));
+			persona = convertResultSetToPersonaNatural(rs1, habitaciones, viviendas);
 		}
 
-		ArrayList<Habitacion> habitaciones = new ArrayList<>();
-		while(rs5.next())
-		{
-			ArrayList<Servicio> servicios = new ArrayList<>();
-			while(rs6.next())
-			{
-				servicios.add(new Servicio(rs6.getDouble("COSTO"), rs6.getString("NOMBRE"), rs6.getInt("ID")));
-			}
-			boolean compartida = false;
-			if(rs5.next()&&rs5.getString("ESCOMPARTIDA").charAt(0) == 'T')
-			{
-				compartida = true;
-			}
-			habitaciones.add(new Habitacion(rs5.getInt("CAPACIDAD"), rs5.getString("TIPO"), rs5.getDouble("PRECIO"), rs5.getString("UBICACION"), compartida, servicios, rs5.getInt("ID")));
-		}
+		return persona;
 
-		if(rs.next())
-		{
-			persona = convertResultSetToPersonaNatural(rs, habitaciones, viviendas);
-		}
+
+		//		//Primera sentencia
+		//
+		//		PersonaNatural persona = null;
+		//
+		//		String sql = String.format("SELECT * FROM %1$s.PERSONANATURAL PN, %1$s.OPERADOR OPE  WHERE PN.DOCUMENTO = '%2$s' AND OPE.DOCUMENTO = '%2$s'", USUARIO, id); 
+		//
+		//		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		//		recursos.add(prepStmt);
+		//		ResultSet rs = prepStmt.executeQuery();
+		//
+		//		//Segunda sentencia
+		//
+		//		String sql2 = String.format("SELECT * FROM %1$s.VIVIENDA  WHERE ID_PERSONA = '%2$s'", USUARIO, id); 
+		//
+		//		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		//		recursos.add(prepStmt2);
+		//		ResultSet rs2 = prepStmt2.executeQuery();
+		//
+		//		//Tercera sentencia
+		//		rs2.next();
+		//		String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
+		//
+		//		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+		//		recursos.add(prepStmt3);
+		//		ResultSet rs3 = prepStmt3.executeQuery();
+		//
+		//		//cuarta sentencia
+		//
+		//		String sql4 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID_VIVIENDA = %2$s", USUARIO, rs2.getInt("ID")); 
+		//
+		//		PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
+		//		recursos.add(prepStmt4);
+		//		ResultSet rs4 = prepStmt4.executeQuery();
+		//
+		//		//quinta sentencia
+		//
+		//		String sql5 = String.format("SELECT * FROM %1$s.HABITACION WHERE ID_PERSONA = '%2$s'", USUARIO, id); 
+		//
+		//		PreparedStatement prepStmt5 = conn.prepareStatement(sql5);
+		//		recursos.add(prepStmt5);
+		//		ResultSet rs5 = prepStmt5.executeQuery();
+		//
+		//		//sexta sentencia
+		//
+		//		String sql6 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_HABITACION = %2$s", USUARIO, rs2.getInt("ID")); 
+		//
+		//		PreparedStatement prepStmt6 = conn.prepareStatement(sql6);
+		//		recursos.add(prepStmt6);
+		//		ResultSet rs6 = prepStmt6.executeQuery();
+		//
+		//		ArrayList<Vivienda> viviendas = new ArrayList<>();
+		//		while(rs2.next())
+		//		{
+		//			ArrayList<Servicio> servicios = new ArrayList<>();
+		//			while(rs3.next())
+		//			{
+		//				servicios.add(new Servicio(rs3.getDouble("COSTO"), rs3.getString("NOMBRE"), rs3.getInt("ID")));
+		//			}
+		//
+		//			boolean incendio = false;
+		//
+		//			boolean robo = false;
+		//
+		//			boolean inundaciones = false;
+		//
+		//			if(rs4.next())
+		//			{
+		//				if(rs4.getString("INCENDIO").charAt(0) == 'T')
+		//				{
+		//					incendio = true;
+		//				}
+		//				if(rs4.getString("ROBO").charAt(0) == 'T')
+		//				{
+		//					robo = true;
+		//				}
+		//				if(rs4.getString("INUNDACION").charAt(0) == 'T')
+		//				{
+		//					inundaciones = true;
+		//				}
+		//			}
+		//			viviendas.add(new Vivienda(rs2.getInt("CAPACIDAD"), rs2.getString("TIPO"), rs2.getInt("NUMEROHABITACIONES"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getString("DIRECCION"), servicios, new Seguro(rs4.getDouble("COSTO"), incendio, robo, inundaciones, rs4.getInt("ID"))));
+		//		}
+		//
+		//		ArrayList<Habitacion> habitaciones = new ArrayList<>();
+		//		while(rs5.next())
+		//		{
+		//			ArrayList<Servicio> servicios = new ArrayList<>();
+		//			while(rs6.next())
+		//			{
+		//				servicios.add(new Servicio(rs6.getDouble("COSTO"), rs6.getString("NOMBRE"), rs6.getInt("ID")));
+		//			}
+		//			boolean compartida = false;
+		//			if(rs5.next()&&rs5.getString("ESCOMPARTIDA").charAt(0) == 'T')
+		//			{
+		//				compartida = true;
+		//			}
+		//			habitaciones.add(new Habitacion(rs5.getInt("CAPACIDAD"), rs5.getString("TIPO"), rs5.getDouble("PRECIO"), rs5.getString("UBICACION"), compartida, servicios, rs5.getInt("ID")));
+		//		}
+		//
+		//		if(rs.next())
+		//		{
+		//			persona = convertResultSetToPersonaNatural(rs, habitaciones, viviendas);
+		//		}
 
 		//		String sql = String.format("SELECT * FROM %1$s.PERSONANATURAL PN , %1$s.VIVIENDA VIV    WHERE PN.DOCUMENTO = %2$d AND VIV.ID_PERSONA = %2$d", USUARIO, id); 
 		//
@@ -304,7 +327,6 @@ public class DAOPersonaNatural {
 		//			persona = convertResultSetToPersonaNatural(rs, , viviendas);
 		//		}
 
-		return persona;
 	}
 
 	/**
@@ -315,26 +337,61 @@ public class DAOPersonaNatural {
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
 	public void addPersonaNatural(PersonaNatural persona) throws SQLException, Exception {
-		
+
 		char genero = 'F';
 		if(persona.isGenero())
 		{
 			genero = 'M';
 		}
 
-		String sql = String.format("INSERT INTO %1$s.PERSONANATURAL (DOCUMENTO, TIPO, EDAD, GENERO, APELLIDO) VALUES ('%2$s', '%3$s', %4$s, '%5$s', '%6$s')", 
+
+		//Segunda sentencia
+
+		String sql2 = String.format("INSERT INTO %1$s.OPERADOR (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s)", 
+				USUARIO,  
+				persona.getDocumento(), 
+				persona.getLogin(),
+				persona.getContrasenha(), 
+				persona.getCorreo(),
+				persona.getTipoDocumento(),
+				persona.getNombre());
+
+		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		recursos.add(prepStmt2);
+		prepStmt2.executeQuery();
+
+		//Primera sentencia
+		String sql = String.format("INSERT INTO %1$s.PERSONANATURAL (DOCUMENTO, TIPO, EDAD, GENERO, APELLIDO) VALUES ('%2$s', '%3$s', %4$d, '%5$s', '%6$s')", 
 				USUARIO,  
 				persona.getDocumento(), 
 				persona.getTipo(),
 				persona.getEdad(), 
 				genero,
-				persona.getTipoDocumento());
+				persona.getApellido());
 
-		System.out.println(sql);
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+
+
+
+
+		//		for (Habitacion habitacion : persona.getHabitaciones()) {
+		//			String sql2 = String.format("INSERT INTO %1$s.OPERADORHABITACION (ID, ID_OPERADOR) VALUES (%2$d, '%3$s')", USUARIO, habitacion.getId(), persona.getDocumento());
+		//
+		//			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		//			recursos.add(prepStmt2);
+		//			prepStmt2.executeQuery();
+		//		}
+		//		
+		//		for (Vivienda vivienda : persona.getVivienda()) {
+		//			String sql3 = String.format("INSERT INTO %1$s.OPERADORHABITACION (ID, ID_OPERADOR) VALUES (%2$d, '%3$s')", USUARIO, habitacion.getId(), persona.getDocumento());
+		//
+		//			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+		//			recursos.add(prepStmt3);
+		//			prepStmt3.executeQuery();
+		//		}
 
 	}
 
