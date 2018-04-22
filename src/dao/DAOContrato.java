@@ -340,6 +340,48 @@ public class DAOContrato
 		Contrato co= new Contrato(laFechaInicio, laFechaFin, tipo, costo, id, vivienda, habitacion, numeroDePersonas, idCliente, laFechaCreacion);
 		return co;
 	}
+	public Contrato convertResultSetToContrato(ResultSet resultSet, String idHab) throws SQLException {
+		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
+		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
+
+
+
+		String fechaInicio = resultSet.getString("FECHAINICIO");
+		String[] dias=fechaInicio.split("/");
+		Date laFechaInicio= new Date();
+		laFechaInicio.setYear(Integer.parseInt(dias[0]));
+		laFechaInicio.setMonth(Integer.parseInt(dias[1]));
+		laFechaInicio.setDate(Integer.parseInt(dias[2]));
+
+
+		String fechaFin = resultSet.getString("FECHAFIN");
+		String[] dias2=fechaFin.split("/");
+		Date laFechaFin= new Date();
+		laFechaFin.setYear(Integer.parseInt(dias2[0]));
+		laFechaFin.setMonth(Integer.parseInt(dias2[1]));
+		laFechaFin.setDate(Integer.parseInt(dias2[2]));
+
+		String fechaCreacion = resultSet.getString("FECHACREACION");
+		String[] dias3=fechaCreacion.split("/");
+		Date laFechaCreacion= new Date();
+		laFechaCreacion.setYear(Integer.parseInt(dias3[0]));
+		laFechaCreacion.setMonth(Integer.parseInt(dias3[1]));
+		laFechaCreacion.setDate(Integer.parseInt(dias3[2]));
+
+		String tipo = resultSet.getString("TIPO");
+		double costo = Double.parseDouble(resultSet.getString("COSTO"));
+		Integer id = Integer.parseInt(resultSet.getString("ID"));
+		int vivienda = resultSet.getInt("ID_VIVIENDA");
+		int habitacion = resultSet.getInt("ID_HABITACION");
+		int numeroDePersonas = Integer.parseInt(resultSet.getString("NUMERO_DE_PERSONAS"));
+		String idCliente = resultSet.getString("ID_CLIENTE");
+
+
+
+
+		Contrato co= new Contrato(laFechaInicio, laFechaFin, tipo, costo, id, vivienda, idHab, numeroDePersonas, idCliente, laFechaCreacion);
+		return co;
+	}
 
 
 }
