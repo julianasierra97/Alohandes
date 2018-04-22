@@ -33,13 +33,13 @@ public class PersonaNatural extends Operador
 	private ArrayList<Vivienda> vivienda;
 
 	@JsonProperty(value="edad")
-	protected int edad;
+	private int edad;
 
 	@JsonProperty(value="genero")
-	protected boolean genero;
+	private boolean genero;
 	
 	@JsonProperty(value = "apellido")
-	protected String apellido;
+	private String apellido;
 
 	public String getApellido() {
 		return apellido;

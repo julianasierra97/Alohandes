@@ -486,7 +486,7 @@ public class AlohonadesTransactionManager {
 		DAOPersonaNatural daoPersona = new DAOPersonaNatural();
 		if(pn.getTipo().equals(PersonaNatural.EGRESADO) || pn.getTipo().equals(PersonaNatural.ESTUDIANTE) || pn.getTipo().equals(PersonaNatural.PROFESOR) || pn.getTipo().equals(PersonaNatural.EMPLEADO))
 		{
-			if(pn.getCorreo().contains("@uniandes.edu.co"))
+			if(!pn.getCorreo().contains("@uniandes.edu.co"))
 				throw new Exception("El usuario no hace parte de la comunidad de uniandes");
 		}
 		else{
