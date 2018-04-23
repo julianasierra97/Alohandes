@@ -26,7 +26,6 @@ import dao.RFC3DAO;
 import dao.RFC4DAO;
 import dao.RFC5DAO;
 import dao.RFC6DAO;
-import dao.RFC7DAO;
 import dao.RFC8DAO;
 import dao.RFC9DAO;
 import sun.security.util.DisabledAlgorithmConstraints;
@@ -181,14 +180,17 @@ public class AlohonadesTransactionManager {
 	{
 
 		DAOContrato daoContrato = new DAOContrato( );
+
 		try
 		{
 			// Requerimiento 3D: Obtenga la conexion a la Base de Datos (revise los metodos de la clase)
 			this.conn = darConexion();
 			// Requerimiento 3E: Establezca la conexion en el objeto DAOBebedor (revise los metodos de la clase DAOBebedor)
 			daoContrato.setConn(conn);
-			if(contrato.getIdHabitacion()!=-1 && contrato.getIdVivienda()!=-1)
+			if(contrato.getIdHabitacion()!=null && contrato.getIdVivienda()==null)
 			{
+
+				//caso habitacion
 				DAOHabitacion daohabitacion= new DAOHabitacion();
 				daohabitacion.setConn(conn);
 				Habitacion laHabitacion=daohabitacion.findHabitacionById((contrato.getIdHabitacion()));
@@ -257,7 +259,7 @@ public class AlohonadesTransactionManager {
 					}
 				}
 			}
-			else if(contrato.getHabitacion()==-1 && contrato.getIdVivienda()!=null)
+			else if(contrato.getHabitacion()==null && contrato.getIdVivienda()!=null)
 
 			{
 				DAOVivienda daoVivienda= new DAOVivienda();
@@ -267,62 +269,68 @@ public class AlohonadesTransactionManager {
 				daoPersonaNatural.setConn(conn);
 				PersonaNatural persona= daoPersonaNatural.findPersonaById((idPersona));
 
-				if (persona.getTipo().equals(PersonaNatural.VECINO))
+				if (persona== null )
 				{
-
-					int daysApart = (int)((contrato.getFechaFin().getTime() - contrato.getFechaInicio().getTime()) / (1000*60*60*24l));
-					if(daoContrato.darUsoEnEsteAno(contrato)>30 ||daoContrato.darUsoEnEsteAno(contrato)+daysApart>30 )
-					{
-						throw new Exception("La vivienda no puede rentarse por mas de 30 dias por anio");
-					}
-					DAOUsuario daoUsuario= new DAOUsuario();
-					Usuario elUsuario=daoUsuario.findUsuarioById(contrato.getIdCliente());
-					if(elUsuario==null)
-					{
-						throw new Exception("No eres un usuario habilitado para el uso de viviendas universitarias");
-					}
-					else
-					{
-						Date ahora= new Date();
-						boolean hayEnLaFecha=false;
-						ArrayList<Contrato> contratos =daoContrato.getContratoByidCliente(contrato.getIdCliente());
-						for(int i=0;i<contratos.size() && !hayEnLaFecha; i++)
-						{
-							if(contratos.get(i).getFechaCreacion().getDate()==ahora.getDate() && contratos.get(i).getFechaCreacion().getMonth()==ahora.getMonth()&& ahora.getYear()==contratos.get(i).getFechaCreacion().getYear())
-							{
-								hayEnLaFecha=true;
-							}
-						}
-
-
-						if(hayEnLaFecha!=true)
-						{
-							daoContrato.addContratoHabitacion(contrato);		
-							elUsuario.getContratos().add(contrato);
-						}
-						else
-						{
-							throw new Exception("No se pueden generar mas de una reserva en un dia");
-						}
-
-					}
+					throw new Exception ("El cliente con ese id no esta registrado en la base de datos");
 				}
 				else
 				{
-					int daysApart = (int)((contrato.getFechaFin().getTime() - contrato.getFechaInicio().getTime()) / (1000*60*60*24l));
-					if(daysApart<30)
+
+
+					if (persona.getTipo().equals(PersonaNatural.VECINO))
 					{
-						throw new Exception("La vivienda solo se puede tomar por mas de 30 dias");
+
+						int daysApart = (int)((contrato.getFechaFin().getTime() - contrato.getFechaInicio().getTime()) / (1000*60*60*24l));
+						if(daoContrato.darUsoEnEsteAno(contrato)>30 ||daoContrato.darUsoEnEsteAno(contrato)+daysApart>30 )
+						{
+							throw new Exception("La vivienda no puede rentarse por mas de 30 dias por anio");
+						}
+						DAOUsuario daoUsuario= new DAOUsuario();
+						Usuario elUsuario=daoUsuario.findUsuarioById(contrato.getIdCliente());
+						if(elUsuario==null)
+						{
+							throw new Exception("No eres un usuario habilitado para el uso de viviendas universitarias");
+						}
+						else
+						{
+							Date ahora= new Date();
+							boolean hayEnLaFecha=false;
+							ArrayList<Contrato> contratos =daoContrato.getContratoByidCliente(contrato.getIdCliente());
+							for(int i=0;i<contratos.size() && !hayEnLaFecha; i++)
+							{
+								if(contratos.get(i).getFechaCreacion().getDate()==ahora.getDate() && contratos.get(i).getFechaCreacion().getMonth()==ahora.getMonth()&& ahora.getYear()==contratos.get(i).getFechaCreacion().getYear())
+								{
+									hayEnLaFecha=true;
+								}
+							}
+
+
+							if(hayEnLaFecha!=true)
+							{
+								daoContrato.addContratoHabitacion(contrato);		
+								elUsuario.getContratos().add(contrato);
+							}
+							else
+							{
+								throw new Exception("No se pueden generar mas de una reserva en un dia");
+							}
+
+						}
 					}
 					else
 					{
-						daoContrato.addContratoVivienda(contrato);
+						int daysApart = (int)((contrato.getFechaFin().getTime() - contrato.getFechaInicio().getTime()) / (1000*60*60*24l));
+						if(daysApart<30)
+						{
+							throw new Exception("La vivienda solo se puede tomar por mas de 30 dias");
+						}
+						else
+						{
+							daoContrato.addContratoVivienda(contrato);
+						}
 					}
 				}
-			}
-			else
-			{
-				throw new Exception("Se tiene que indicar el id de la vivienda o el de la habitacion");
+
 			}
 
 
@@ -725,15 +733,15 @@ public class AlohonadesTransactionManager {
 			throw new Exception("No se puede agregar una habitacion de hostal que no sea compartida");
 		}
 
-//		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
-//				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
-//				habitacion.getTipo().equals(Habitacion.SUITES))
-//		{
-//
-//			if(habitacion.isCompartida())
-//				
-//				throw new Exception("Una habitacion de un hotel no puede ser compartida");
-//		}
+		//		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
+		//				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
+		//				habitacion.getTipo().equals(Habitacion.SUITES))
+		//		{
+		//
+		//			if(habitacion.isCompartida())
+		//				
+		//				throw new Exception("Una habitacion de un hotel no puede ser compartida");
+		//		}
 
 		if(habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
 		{
@@ -1027,10 +1035,10 @@ public class AlohonadesTransactionManager {
 		{
 			throw new Exception("No se existe la habitacion que se quiere eliminar");
 		}
-//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
-//		{
-//			throw new Exception("La habitacion que se quiere eliminar esta reservada");
-//		}
+		//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
+		//		{
+		//			throw new Exception("La habitacion que se quiere eliminar esta reservada");
+		//		}
 
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		try
@@ -1204,10 +1212,10 @@ public class AlohonadesTransactionManager {
 			throw new Exception("La habitacion a eliminar no existe");
 		}
 
-//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
-//		{
-//			throw new Exception("La habitacion tiene reservas.");
-//		}
+		//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
+		//		{
+		//			throw new Exception("La habitacion tiene reservas.");
+		//		}
 
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		try
@@ -1263,10 +1271,10 @@ public class AlohonadesTransactionManager {
 
 		DAOVivienda daoVivienda = new DAOVivienda( );
 
-//		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
-//		{
-//			throw new Exception("La vivienda a eliminar tiene reservas");
-//		}
+		//		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
+		//		{
+		//			throw new Exception("La vivienda a eliminar tiene reservas");
+		//		}
 
 		try
 		{
@@ -1467,7 +1475,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String RFC1() throws Exception
 	{
 		String rta = "";
@@ -1504,7 +1512,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String RFC3() throws Exception
 	{
 		String rta = "";
@@ -1541,7 +1549,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String RFC4(String servicios, String fechaComienzo, String fechaFin) throws Exception
 	{
 		String rta = "";
@@ -1578,7 +1586,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String RFC6(String id) throws Exception
 	{
 		String rta = "";
@@ -1615,7 +1623,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public ArrayList<Usuario> RFC8(String id) throws Exception
 	{
 		ArrayList<Usuario> rta = new ArrayList<>();
@@ -1652,7 +1660,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String RFC9() throws Exception
 	{
 		String rta = "";

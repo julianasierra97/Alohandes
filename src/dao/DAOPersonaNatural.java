@@ -178,19 +178,48 @@ public class DAOPersonaNatural {
 		PersonaNatural persona = null;
 
 		//Primera sentencia 
-		String sql1 = String.format("SELECT op.LOGIN as login, op.contrasenha as contrasenha, op.documento as documento, op.correo as correo,op.TIPODOCUMENTO as tipodocumento, op.nombre as nombre, pn.APELLIDO as apellido, pn.EDAD as edad, pn.GENERO as genero, pn.TIPO as tipo, pn.tipo as tipo, oh.ID as idHabitacion, VIV.ID as idVivienda  FROM OPERADOR op, PERSONANATURAL pn, OPERADORHABITACION OH, VIVIENDA VIV WHERE OP.DOCUMENTO=pn.DOCUMENTO AND pn.DOCUMENTO='%2$s' AND OH.ID_OPERADOR = pn.DOCUMENTO AND pn.DOCUMENTO = VIV.ID_PERSONA ", USUARIO, id);
+		
+		DAOHabitacion habitacion= new DAOHabitacion();
+		
+		DAOVivienda vivienda= new DAOVivienda();
+		
+		
+		
+		
+		String sql1 = String.format("SELECT * FROM PERSONANATURAL FULL OUTER JOIN OPERADOR ON PERSONANATURAL.DOCUMENTO= OPERADOR.DOCUMENTO  WHERE OPERADOR.DOCUMENTO='%2$s'", USUARIO, id);
 
 		PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 		recursos.add(prepStmt1);
 		ResultSet rs1 = prepStmt1.executeQuery();
 
-		while(rs1.next())
+		
+		
+		if(rs1.next())
 		{
 			ArrayList<Habitacion> habitaciones = new ArrayList<>();
 			ArrayList<Vivienda> viviendas = new ArrayList<>();
 
-			//segunda sentencia
+			
+			String sql2 = String.format("select * from OPERADORHABITACION full outer join habitacion on habitacion.ID=OPERADORHABITACION.ID where ID_OPERADOR='%2$s'", USUARIO, id);
 
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			ResultSet rs2 = prepStmt2.executeQuery();
+			while(rs2.next())
+			{
+				habitaciones.add(habitacion.convertResultSetToHabitacion(rs2, new ArrayList<Servicio>()));
+			}
+			
+			String sql3 = String.format("select * from vivienda where ID_PERSONA='%2$s'", USUARIO, id);
+
+			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			recursos.add(prepStmt3);
+			ResultSet rs3 = prepStmt2.executeQuery();
+			while(rs3.next())
+			{
+				viviendas.add(vivienda.convertResultSetToVivienda(rs3, new ArrayList<Servicio>(), null));
+			}
+			
 
 			persona = convertResultSetToPersonaNatural(rs1, habitaciones, viviendas);
 		}
