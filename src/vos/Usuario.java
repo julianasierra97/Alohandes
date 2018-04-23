@@ -17,8 +17,10 @@ public class Usuario
 	public final static String PADRE= "Padre";
 	public final static String PROFESOR_INVITADO= "Profesor Invitado";
 	public final static String EMPLEADO= "Empleado";
-	@JsonProperty(value="login")
+	
+	@JsonProperty(value="usuario")
 	private String login;
+	
 
 	@JsonProperty(value="correo")
 	private String correo;
@@ -189,7 +191,6 @@ public class Usuario
 //			@JsonProperty(value="hijos")ArrayList<Usuario> hijos,
 //			@JsonProperty(value="padres")ArrayList<Usuario> padres
 			) {
-		super();
 		this.login = login;
 		this.contrasenha = contrasenha;
 		this.documento = documento;
