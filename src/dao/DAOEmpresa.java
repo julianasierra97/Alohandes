@@ -134,6 +134,9 @@ public class DAOEmpresa {
 
 			return empresa;
 		}
+		
+		
+		
 		public List<Empresa> getEmpresas() throws SQLException, Exception {
 			ArrayList<Empresa> empresas = new ArrayList<Empresa>();
 
