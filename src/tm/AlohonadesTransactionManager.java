@@ -21,7 +21,14 @@ import dao.DAOOperador;
 import dao.DAOPersonaNatural;
 import dao.DAOUsuario;
 import dao.DAOVivienda;
+import dao.RFC1DAO;
+import dao.RFC3DAO;
+import dao.RFC4DAO;
 import dao.RFC5DAO;
+import dao.RFC6DAO;
+import dao.RFC7DAO;
+import dao.RFC8DAO;
+import dao.RFC9DAO;
 import sun.security.util.DisabledAlgorithmConstraints;
 import vos.Contrato;
 import vos.Empresa;
@@ -1251,7 +1258,7 @@ public class AlohonadesTransactionManager {
 		return null;
 	}
 
-	public void deleteVivienda(Vivienda vivienda) throws Exception {
+	public void deleteVivienda(Vivienda vivienda, String id) throws Exception {
 
 
 		DAOVivienda daoVivienda = new DAOVivienda( );
@@ -1267,7 +1274,7 @@ public class AlohonadesTransactionManager {
 			daoVivienda.setConn( conn );
 			if(daoVivienda.findViviendaById(vivienda.getId())!=null)
 			{
-				daoVivienda.deleteVivienda(vivienda);
+				daoVivienda.deleteVivienda(vivienda, id);
 			}
 			else
 			{
@@ -1448,6 +1455,228 @@ public class AlohonadesTransactionManager {
 		finally {
 			try { 
 				dao5.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String RFC1() throws Exception
+	{
+		String rta = "";
+		RFC1DAO dao1 = new RFC1DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao1.setConn(conn);
+			rta = dao1.RFC1();
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao1.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String RFC3() throws Exception
+	{
+		String rta = "";
+		RFC3DAO dao3 = new RFC3DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao3.setConn(conn);
+			rta = dao3.RFC3();
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao3.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String RFC4(String servicios, String fechaComienzo, String fechaFin) throws Exception
+	{
+		String rta = "";
+		RFC4DAO dao4 = new RFC4DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao4.setConn(conn);
+			rta = dao4.RFC4(servicios,fechaComienzo, fechaFin);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao4.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String RFC6(String id) throws Exception
+	{
+		String rta = "";
+		RFC6DAO dao6 = new RFC6DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao6.setConn(conn);
+			rta = dao6.RFC6(id);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao6.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public ArrayList<Usuario> RFC8(String id) throws Exception
+	{
+		ArrayList<Usuario> rta = new ArrayList<>();
+		RFC8DAO dao8 = new RFC8DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao8.setConn(conn);
+			rta = dao8.RFC8(id);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao8.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String RFC9() throws Exception
+	{
+		String rta = "";
+		RFC9DAO dao9 = new RFC9DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao9.setConn(conn);
+			rta = dao9.RFC9();
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao9.cerrarRecursos();
 				if(this.conn!=null){
 					this.conn.close();					
 				}

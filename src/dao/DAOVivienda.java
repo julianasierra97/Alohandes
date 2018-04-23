@@ -249,9 +249,9 @@ public class DAOVivienda {
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public void deleteVivienda(Vivienda vivienda) throws SQLException, Exception {
+	public void deleteVivienda(Vivienda vivienda, String idVivienda) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d", USUARIO, vivienda.getId());
+		String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d", USUARIO, idVivienda);
 
 		System.out.println(sql);
 

@@ -24,7 +24,7 @@ public class RFC3DAO
 	 * Constante para indicar el usuario Oracle del estudiante
 	 */
 	//Requerimiento 1H: Modifique la constante, reemplazando al ususario PARRANDEROS por su ususario de Oracle
-	public final static String USUARIO = "ISIS2304A631810";
+	public final static String USUARIO = "ISIS2304A671810";
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// ATRIBUTOS
