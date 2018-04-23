@@ -64,13 +64,13 @@ public class RFC {
 		
 		@GET
 		@Path("RFC2")
-		@Produces({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.TEXT_PLAIN })
 		public Response getTop20Contratos() {
 
 			try {
 				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				List<Contrato> contratos;
+				String contratos;
 				//Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
 				contratos = tm.getTo20Contratos();
 				return Response.status(200).entity(contratos).build();

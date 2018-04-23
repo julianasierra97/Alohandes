@@ -121,16 +121,16 @@ public class ContratoService
 		 */			
 		@GET
 		@Path("/TopContratos")
-		@Produces({ MediaType.APPLICATION_JSON })
+		@Produces({ MediaType.TEXT_PLAIN })
 		public Response getTop20Contratos() {
 
 			try {
 				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				List<Contrato> bebedores;
+				String rpta=tm.getTo20Contratos();
 				//Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
-				bebedores = tm.getTo20Contratos();
-				return Response.status(200).entity(bebedores).build();
+				
+				return Response.status(200).entity(rpta).build();
 			} 
 			catch (Exception e) {
 				return Response.status(500).entity(doErrorMessage(e)).build();

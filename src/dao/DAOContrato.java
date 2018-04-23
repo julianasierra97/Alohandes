@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.PriorityQueue;
 
 import vos.Contrato;
 import vos.Empresa;
@@ -76,7 +78,7 @@ public class DAOContrato
 		String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
 		String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
 		String fechaCreacion = "'"+dateFormat.format(contrato.getFechaCreacion())+"'";
-		
+
 		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMEROPERSONAS,ID_CLIENTE,FECHACREACION,TIPO,ESTADO) VALUES (%2$s, %3$s, '%4$s', '%5$s', '%6$s', '%7$s',%8$s,'%9$s','%10$s')", 
 				USUARIO,
 				fechaInicio,
@@ -93,12 +95,12 @@ public class DAOContrato
 		PreparedStatement prepStmt6 = conn.prepareStatement(sql);
 		recursos.add(prepStmt6);
 		prepStmt6.executeQuery();
-		
+
 		String sql2 = String.format("INSERT INTO %1$s.CONTRATOHABITACION (ID_CONTRATO, ID_HABITACION) VALUES (%2$s, '%3$s')", 
 				USUARIO,
 				contadorNumeroContratos,
 				contrato.getIdHabitacion());
-			
+
 		System.out.println(sql2);
 
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
@@ -113,13 +115,13 @@ public class DAOContrato
 	}
 	public void addContratoVivienda(Contrato contrato) throws SQLException, Exception
 	{
-	
+
 		contadorNumeroContratos++;
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
 		String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
 		String fechaCreacion = "'"+dateFormat.format(contrato.getFechaCreacion())+"'";
-		
+
 		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMEROPERSONAS,ID_CLIENTE,FECHACREACION,TIPO,ESTADO) VALUES (%2$s, %3$s, '%4$s', '%5$s', '%6$s', '%7$s',%8$s, '%9$s','%10$s')", 
 				USUARIO,
 				fechaInicio,
@@ -136,20 +138,20 @@ public class DAOContrato
 		PreparedStatement prepStmt6 = conn.prepareStatement(sql);
 		recursos.add(prepStmt6);
 		prepStmt6.executeQuery();
-		
+
 		String sql2 = String.format("INSERT INTO %1$s.CONTRATOVIVIENDA (ID_CONTRATO, ID_VIVIENDA) VALUES (%2$s, '%3$s')", 
 				USUARIO,
 				contadorNumeroContratos,
 				contrato.getIdVivienda());
-			
+
 		System.out.println(sql2);
 
 		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 		recursos.add(prepStmt2);
 		prepStmt2.executeQuery();
-		
+
 		contadorNumeroContratos++;
-		
+
 	}
 	public int darUsoEnEsteAno(Contrato contrato) throws SQLException
 	{
@@ -173,7 +175,7 @@ public class DAOContrato
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String fecha1 = "'"+dateFormat.format(fechaInicio)+"'";
 		String fecha2 = "'"+dateFormat.format(fechaFin)+"'";
-		
+
 		String sql = String.format("SELECT * FROM CONTRATO INNER JOIN CONTRATOHABITACION ON CONTRATO.ID= CONTRATOHABITACION.ID_CONTRATO WHERE ID_HABITACION ='%3$s' AND  %2$s < FECHAFIN AND  %2$s< FECHAINICIO AND ESTADO='Activo'",fecha1, fecha2, id ); 
 
 		System.out.println(sql);
@@ -222,7 +224,7 @@ public class DAOContrato
 
 		return contrato;
 	}
-	
+
 	/**
 	 * Metodo que actualiza la informacion del contrato en la Base de Datos que tiene el identificador dado por parametro<br/>
 	 * <b>Precondicion: </b> la conexion a sido inicializadoa <br/>  
@@ -283,32 +285,30 @@ public class DAOContrato
 
 		return contrato;
 	}
-	public ArrayList<Contrato> selectTop20() throws SQLException, Exception 
+	public String selectTop20() throws SQLException, Exception 
 	{
-		ArrayList<Contrato> contrato = new ArrayList<>();
-		/**
-		select id_habitacion, count(id_contrato) as cuenta from contratoHabitacion group by ID_HABITACION;
+		String contrato = "Las mejores 20 ofertas son: \n";
 
-		select id_vivienda, count(id_contrato) as cuenta from contratoVivienda group by id_vivienda;
+		
 
-		String sql = String.format("WITH Q1 AS(SELECT ID_VIVIENDA AS id, COUNT(ID_VIVIENDA) as cuenta FROM %1$s.CONTRATO GROUP BY ID_VIVIENDA order by COUNT(ID_VIVIENDA) DESC) select  *  from q1 inner join %1$s.contrato on contrato.ID=q1.id where rownum<=20 ", USUARIO); 
 
-		 **/
-		
-		
-		
-		//String sql = String.format("WITH Q1 AS(SELECT ID_VIVIENDA AS id, COUNT(ID_VIVIENDA) as cuenta FROM %1$s.CONTRATO GROUP BY ID_VIVIENDA order by COUNT(ID_VIVIENDA) DESC) select  *  from q1 inner join %1$s.contrato on contrato.ID=q1.id where rownum<=20 ", USUARIO); 
+		String sql = String.format("SELECT  COUNT(ID_VIVIENDA) AS CUENTA, ID_VIVIENDA FROM CONTRATOVIVIENDA INNER JOIN CONTRATO ON CONTRATOVIVIENDA.ID_CONTRATO=CONTRATO.ID GROUP BY ID_VIVIENDA ORDER BY COUNT(ID_VIVIENDA) DESC", USUARIO); 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
 
-		if(rs.next()) {
-			contrato.add(convertResultSetToContrato(rs));
+		int contador=0;
+		while(rs.next() && contador<20) {
+			contrato+=rs.getInt("ID_VIVIENDA") +" con " + rs.getInt("CUENTA") +" contratos"+ "\n";
+		contador++;
 		}
+		
+//
 
 		return contrato;
 	}
+
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS AUXILIARES
 	//----------------------------------------------------------------------------------------------------------------------------------
@@ -377,7 +377,7 @@ public class DAOContrato
 		String tipo = resultSet.getString("TIPO");
 		double costo = Double.parseDouble(resultSet.getString("COSTO"));
 		Integer id = Integer.parseInt(resultSet.getString("ID"));
-		
+
 		int numeroDePersonas = Integer.parseInt(resultSet.getString("NUMEROPERSONAS"));
 		String idCliente = resultSet.getString("ID_CLIENTE");
 		String estado = resultSet.getString("ESTADO");
@@ -420,12 +420,12 @@ public class DAOContrato
 		String tipo = resultSetContrato.getString("TIPO");
 		double costo = Double.parseDouble(resultSetContrato.getString("COSTO"));
 		long id = Integer.parseInt(resultSetContrato.getString("ID"));
-		
-		
+
+
 		Integer vivienda = resultSetContrato.getInt("ID_VIVIENDA");
-		
-		
-		
+
+
+
 		int numeroDePersonas = Integer.parseInt(resultSetContrato.getString("NUMERO_DE_PERSONAS"));
 		String idCliente = resultSetContrato.getString("ID_CLIENTE");
 		String estado = resultSetContrato.getString("ESTADO");
@@ -468,12 +468,12 @@ public class DAOContrato
 		String tipo = resultSetContrato.getString("TIPO");
 		double costo = Double.parseDouble(resultSetContrato.getString("COSTO"));
 		long id = Integer.parseInt(resultSetContrato.getString("ID"));
-		
-		
+
+
 		Integer vivienda = resultSetContrato.getInt("ID_VIVIENDA");
-		
-		
-		
+
+
+
 		int numeroDePersonas = Integer.parseInt(resultSetContrato.getString("NUMERO_DE_PERSONAS"));
 		String idCliente = resultSetContrato.getString("ID_CLIENTE");
 		String estado = resultSetContrato.getString("ESTADO");

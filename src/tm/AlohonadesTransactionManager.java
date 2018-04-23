@@ -1430,15 +1430,15 @@ public class AlohonadesTransactionManager {
 	 * @return Bebedor - Bebedor que se obtiene como resultado de la consulta.
 	 * @throws Exception -  cualquier error que se genere durante la transaccion
 	 */
-	public ArrayList<Contrato> getTo20Contratos() throws Exception {
+	public String getTo20Contratos() throws Exception {
 		DAOContrato daocontrato = new DAOContrato();
-		ArrayList<Contrato> contratos = new ArrayList<>();
+		String contratos = ""; 
 		try 
 		{
 			this.conn = darConexion();
 			daocontrato.setConn(conn);
 			contratos = daocontrato.selectTop20();
-
+  
 		} 
 		catch (SQLException sqlException) {
 			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
