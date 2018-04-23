@@ -64,13 +64,13 @@ public class RFC3DAO
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public String RFC3() throws SQLException, Exception {
+	public String RFC3(String fechaP) throws SQLException, Exception {
 
 		String rpta="";
 		rpta+="El indice de ocupacion de las ofertas es de ";
 
 
-		String sql1 = String.format("SELECT COUNT (ID) FROM %1$s.HABITACION;" ,
+		String sql1 = String.format("SELECT COUNT (ID) as cuenta FROM HABITACION " ,
 				USUARIO);
 
 		System.out.println(sql1);
@@ -80,7 +80,7 @@ public class RFC3DAO
 
 		ResultSet rs1=prepStmt1.executeQuery();
 
-		String sql2 = String.format("SELECT SUM (ID) FROM %1$s.VIVIENDA;" ,
+		String sql2 = String.format("SELECT SUM (ID) as cuenta FROM %1$s.VIVIENDA " ,
 				USUARIO);
 
 		System.out.println(sql2);
@@ -93,8 +93,8 @@ public class RFC3DAO
 		Date fechaActual= new Date();
 		String fecha= fechaActual.getDay()+"/"+fechaActual.getMonth()+"/"+fechaActual.getYear();
 		
-		String sql3 = String.format("SELECT COUNT (ID) FROM %1$s.CONTRATO WHERE ESTADO='Activo' AND '%2$s' between  FECHAINICIO AND FECHAFIN;" ,
-				USUARIO,fecha);
+		String sql3 = String.format("SELECT COUNT (ID) as cuenta FROM %1$s.CONTRATO WHERE ESTADO='Activo' AND '%2$s' between  FECHAINICIO AND FECHAFIN " ,
+				USUARIO,fechaP);
 
 		System.out.println(sql3);
 
@@ -106,24 +106,33 @@ public class RFC3DAO
 		double cuenta=0;
 		double division=0;
 		double indice=0;
-		if(rs1.next() && rs2.next()&& rs3.next() )
+//		if(rs1.next() && rs2.next()&& rs3.next() )
+//		{
+//			cuenta+=rs1.getDouble("cuenta");
+//			cuenta+=rs2.getDouble("cuenta");
+//			division=rs3.getDouble("cuenta");
+//				
+//		}
+		
+		while(rs1.next())
 		{
-			cuenta+=rs1.getDouble("COUNT (ID)");
-			cuenta+=rs2.getDouble("COUNT (ID)");
-			division=rs3.getDouble("COUNT (ID)");
-				
+			cuenta+=rs1.getDouble("cuenta");
+		}
+		
+		while(rs2.next())
+		{
+			cuenta+=rs2.getDouble("cuenta");
+		}
+		
+		while(rs3.next())
+		{
+			division+=rs3.getDouble("cuenta");
 		}
 		cerrarRecursos();
 		
 		indice= cuenta/division;
-		return rpta+= (indice*100)+"" +"%";
+		return rpta+= (indice)+"" +"%";
 			
-
-
-		
-
-
-
 	}
 
 

@@ -286,8 +286,18 @@ public class DAOContrato
 	public ArrayList<Contrato> selectTop20() throws SQLException, Exception 
 	{
 		ArrayList<Contrato> contrato = new ArrayList<>();
+		/**
+		select id_habitacion, count(id_contrato) as cuenta from contratoHabitacion group by ID_HABITACION;
+
+		select id_vivienda, count(id_contrato) as cuenta from contratoVivienda group by id_vivienda;
 
 		String sql = String.format("WITH Q1 AS(SELECT ID_VIVIENDA AS id, COUNT(ID_VIVIENDA) as cuenta FROM %1$s.CONTRATO GROUP BY ID_VIVIENDA order by COUNT(ID_VIVIENDA) DESC) select  *  from q1 inner join %1$s.contrato on contrato.ID=q1.id where rownum<=20 ", USUARIO); 
+
+		 **/
+		
+		
+		
+		//String sql = String.format("WITH Q1 AS(SELECT ID_VIVIENDA AS id, COUNT(ID_VIVIENDA) as cuenta FROM %1$s.CONTRATO GROUP BY ID_VIVIENDA order by COUNT(ID_VIVIENDA) DESC) select  *  from q1 inner join %1$s.contrato on contrato.ID=q1.id where rownum<=20 ", USUARIO); 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);

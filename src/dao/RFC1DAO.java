@@ -67,16 +67,20 @@ public class RFC1DAO
 	public String RFC1() throws SQLException, Exception {
 
 		String rpta="";
-		rpta+="En el año actual:"+"\n";
-			
+		rpta+="En el anho actual:"+"\n";
+
 
 		Date fechaActual= new Date();
 		Integer elAnio= fechaActual.getYear();
 		String anio=elAnio+"";
-		
-	
 
-		String sql = String.format("SELECT SUM(COSTO) as GananciaActualHabitacion,  %1$s.OPERADORHABITACION.ID_OPERADOR as ID FROM (%1$s.CONTRATOHABITACION INNER JOIN %1$s.CONTRATO ON %1$s.CONTRATOHABITACION.ID_CONTRATO=%1$s.CONTRATO.ID)  INNER JOIN %1$s.OPERADORHABITACION ON %1$s.CONTRATOHABITACION.ID_HABITACION= %1$s.OPERADORHABITACION.ID WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.OPERADORHABITACION.ID_OPERADOR" ,
+
+
+//		String sql = String.format("SELECT SUM(COSTO) as GananciaActualHabitacion,  %1$s.OPERADORHABITACION.ID_OPERADOR as ID FROM (%1$s.CONTRATOHABITACION INNER JOIN %1$s.CONTRATO ON %1$s.CONTRATOHABITACION.ID_CONTRATO=%1$s.CONTRATO.ID)  INNER JOIN %1$s.OPERADORHABITACION ON %1$s.CONTRATOHABITACION.ID_HABITACION= %1$s.OPERADORHABITACION.ID WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.OPERADORHABITACION.ID_OPERADOR" ,
+//				USUARIO,
+//				anio);
+		
+		String sql = String.format("select sum(CONTRATO.costo) as GananciaActualHabitacion, OPERADOR.NOMBRE as nombre from CONTRATO, OPERADOR, OPERADORHABITACION, CONTRATOHABITACION WHERE CONTRATO.ID = CONTRATOHABITACION.ID_CONTRATO AND OPERADORHABITACION.ID_OPERADOR = OPERADOR.DOCUMENTO AND CONTRATO.FECHAFIN< '31/12/2020' AND CONTRATO.FECHAINICIO> '31/12/2016' GROUP BY OPERADOR.NOMBRE" ,
 				USUARIO,
 				anio);
 
@@ -84,9 +88,14 @@ public class RFC1DAO
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-
 		ResultSet rs=prepStmt.executeQuery();
-		String sql2 = String.format("SELECT SUM(%1$s.CONTRATO.COSTO) as GananciaActualVivienda, %1$s.VIVIENDA.ID_PERSONA as ID FROM (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID=%1$s.CONTRATOVIVIENDA.ID_CONTRATO) INNER JOIN %1$s.VIVIENDA ON %1$s.CONTRATOVIVIENDA.ID_VIVIENDA= %1$s.VIVIENDA.ID WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.VIVIENDA.ID_PERSONA " ,
+
+//		ResultSet rs=prepStmt.executeQuery();
+//		String sql2 = String.format("SELECT SUM(%1$s.CONTRATO.COSTO) as GananciaActualVivienda, %1$s.VIVIENDA.ID_PERSONA as ID FROM (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID=%1$s.CONTRATOVIVIENDA.ID_CONTRATO) INNER JOIN %1$s.VIVIENDA ON %1$s.CONTRATOVIVIENDA.ID_VIVIENDA= %1$s.VIVIENDA.ID WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.VIVIENDA.ID_PERSONA " ,
+//				USUARIO,
+//				anio);
+		
+		String sql2 = String.format("select sum(CONTRATO.costo) as GananciaActualvivienda, OPERADOR.NOMBRE as nombre from CONTRATO, OPERADOR, OPERADORHABITACION, CONTRATOHABITACION WHERE CONTRATO.ID = CONTRATOHABITACION.ID_CONTRATO AND OPERADORHABITACION.ID_OPERADOR = OPERADOR.DOCUMENTO AND CONTRATO.FECHAFIN< '31/12/2020' AND CONTRATO.FECHAINICIO> '31/12/2016' GROUP BY OPERADOR.NOMBRE " ,
 				USUARIO,
 				anio);
 
@@ -96,28 +105,53 @@ public class RFC1DAO
 		recursos.add(prepStmt2);
 
 		ResultSet rs2=prepStmt2.executeQuery();
-		while(rs.next()&& rs2.next() )
+		
+		int gAnhoPasado = 0;
+		
+		while(rs.next())
 		{
-			rpta+=convertResultSetActualToString(rs, rs2) +"\n";
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			gAnhoPasado += rs.getInt("GananciaActualHabitacion");
 		}
+		
+		while(rs2.next())
+		{
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			gAnhoPasado += rs2.getInt("GananciaActualvivienda");
+		}
+				
+
+					
+		rpta += "El operador" + rs.getString("nombre") + " gano " + gAnhoPasado + "\n" ;
 		cerrarRecursos();
-		
-		
+
+//		while(rs.next()&& rs2.next() )
+//		{
+//			rpta+=convertResultSetActualToString(rs, rs2) +"\n";
+//		}
+
+
 		String elAnioPasado= elAnio-1+"";
 
-		String sql3 = String.format("SELECT SUM(COSTO) as GananciaPasadaHabitacion,  %1$s.OPERADORHABITACION.ID_OPERADOR as ID FROM %1$s.CONTRATO  INNER JOIN %1$s.OPERADORHABITACION ON %1$s.CONTRATO.ID_HABITACION= %1$s.OPERADORHABITACION.ID  WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.OPERADORHABITACION.ID_OPERADOR" ,
-				USUARIO,
-				elAnioPasado);
-
+		//		String sql3 = String.format("SELECT SUM(COSTO) as GananciaPasadaHabitacion,  OPERADORHABITACION.ID_OPERADOR as ID FROM CONTRATO  INNER JOIN OPERADORHABITACION ON CONTRATO.ID_HABITACION = OPERADORHABITACION.ID  WHERE CONTRATO.FECHAFIN< '31/12/%2$s' AND CONTRATO.FECHAINICIO>'01/01/%2$s' AND CONTRATO.ESTADO='Activo' GROUP BY OPERADORHABITACION.ID_OPERADOR" ,
+		//				USUARIO,
+		//				elAnioPasado);
+		//TODO
+		String sql3 = String.format("select sum(CONTRATO.costo) as GananciaActualHabitacion, OPERADOR.NOMBRE as nombre from CONTRATO, OPERADOR, OPERADORHABITACION, CONTRATOHABITACION WHERE CONTRATO.ID = CONTRATOHABITACION.ID_CONTRATO AND OPERADORHABITACION.ID_OPERADOR = OPERADOR.DOCUMENTO AND CONTRATO.FECHAFIN< '31/12/2020' AND CONTRATO.FECHAINICIO> '31/12/2016' GROUP BY OPERADOR.NOMBRE" , 
+				USUARIO, elAnioPasado);
 		System.out.println(sql3);
 
 		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 		recursos.add(prepStmt3);
-
 		ResultSet rs3=prepStmt3.executeQuery();
-		String sql4 = String.format("SELECT SUM(%1$s.CONTRATO.COSTO) as GananciaActualVivienda, %1$s.VIVIENDA.ID_PERSONA as ID FROM (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID=%1$s.CONTRATOVIVIENDA.ID_CONTRATO) INNER JOIN %1$s.VIVIENDA ON %1$s.CONTRATOVIVIENDA.ID_VIVIENDA= %1$s.VIVIENDA.ID WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.VIVIENDA.ID_PERSONA " ,
-				USUARIO,
-				elAnioPasado);
+
+
+		String sql4 = String.format("select sum(CONTRATO.costo) as GananciaActualVivienda, OPERADOR.NOMBRE as nombre from PERSONANATURAL ,OPERADOR, CONTRATO, VIVIENDA, CONTRATOVIVIENDA WHERE CONTRATO.ID = CONTRATOVIVIENDA.ID_CONTRATO AND VIVIENDA.ID_PERSONA = PERSONANATURAL.DOCUMENTO AND CONTRATO.FECHAFIN< '31/12/2020' AND CONTRATO.FECHAINICIO> '31/12/2016' GROUP BY OPERADOR.NOMBRE", 
+				USUARIO, elAnioPasado);
+		
+		//		String sql4 = String.format("SELECT SUM(%1$s.CONTRATO.COSTO) as GananciaActualVivienda, %1$s.VIVIENDA.ID_PERSONA as ID FROM (%1$s.CONTRATO INNER JOIN %1$s.CONTRATOVIVIENDA ON %1$s.CONTRATO.ID=%1$s.CONTRATOVIVIENDA.ID_CONTRATO) INNER JOIN %1$s.VIVIENDA ON %1$s.CONTRATOVIVIENDA.ID_VIVIENDA= %1$s.VIVIENDA.ID WHERE %1$s.CONTRATO.FECHAFIN< '31/12/%2$s' AND %1$s.CONTRATO.FECHAINICIO>'01/01/%2$s' AND %1$s.CONTRATO.ESTADO='Activo' GROUP BY %1$s.VIVIENDA.ID_PERSONA " ,
+		//				USUARIO,
+		//				elAnioPasado);
 
 		System.out.println(sql4);
 
@@ -125,15 +159,37 @@ public class RFC1DAO
 		recursos.add(prepStmt4);
 
 		ResultSet rs4=prepStmt4.executeQuery();
-		while(rs3.next()&& rs4.next() )
-		{
-			rpta+=convertResultSetPasadoToString(rs3, rs4) +"\n";
-		}
-		cerrarRecursos();
 		
+		
+		
+		
+//		while(rs3.next()&& rs4.next() )
+//		{
+//			rpta+=convertResultSetPasadoToString(rs3, rs4) +"\n";
+//		}
+		
+		int gananciaAnhoActual = 0;
+		
+		while(rs3.next())
+		{
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			gananciaAnhoActual += rs3.getInt("GananciaActualHabitacion");
+		}
+		
+		while(rs4.next())
+		{
+			System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			gananciaAnhoActual += rs4.getInt("GananciaActualVivienda");
+
+		}
+
+		rpta += "El operador" + rs3.getString("nombre") + " gano " + gananciaAnhoActual ;
+
+		cerrarRecursos();
 
 
 		return rpta;
+
 
 
 

@@ -1,5 +1,7 @@
 package rest;
 
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -10,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import tm.AlohonadesTransactionManager;
+import vos.Contrato;
 
 @Path("RFC")
 public class RFC {
@@ -59,6 +62,24 @@ public class RFC {
 			}
 		}
 		
+		@GET
+		@Path("RFC2")
+		@Produces({ MediaType.APPLICATION_JSON })
+		public Response getTop20Contratos() {
+
+			try {
+				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
+
+				List<Contrato> contratos;
+				//Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
+				contratos = tm.getTo20Contratos();
+				return Response.status(200).entity(contratos).build();
+			} 
+			catch (Exception e) {
+				return Response.status(500).entity(doErrorMessage(e)).build();
+			}
+		}
+		
 		@GET 
 		@Path("RFC3")
 		@Produces({ MediaType.TEXT_PLAIN})
@@ -67,7 +88,7 @@ public class RFC {
 			try{
 				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				String rta = tm.RFC3();
+				String rta = tm.RFC3("31/12/2016");
 				return Response.status(200).entity(rta).build();
 			}
 			catch(Exception e){

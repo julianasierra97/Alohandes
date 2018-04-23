@@ -1541,7 +1541,7 @@ public class AlohonadesTransactionManager {
 		return rta;
 	}
 
-	public String RFC3() throws Exception
+	public String RFC3(String fechaP) throws Exception
 	{
 		String rta = "";
 		RFC3DAO dao3 = new RFC3DAO();
@@ -1549,7 +1549,7 @@ public class AlohonadesTransactionManager {
 		{
 			this.conn = darConexion();
 			dao3.setConn(conn);
-			rta = dao3.RFC3();
+			rta = dao3.RFC3(fechaP);
 
 		} 
 		catch (SQLException sqlException) {
