@@ -344,35 +344,40 @@ public class DAOPersonaNatural {
 			genero = 'M';
 		}
 
+		conn.setAutoCommit(false);
 
+		
+	
+		
 		//Segunda sentencia
 
-		String sql2 = String.format("INSERT INTO %1$s.OPERADOR (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s)", 
-				USUARIO,  
-				persona.getDocumento(), 
-				persona.getLogin(),
-				persona.getContrasenha(), 
-				persona.getCorreo(),
-				persona.getTipoDocumento(),
-				persona.getNombre());
+				String sql2 = String.format("INSERT INTO OPERADOR (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+						USUARIO,  
+						persona.getDocumento(), 
+						persona.getLogin(),
+						persona.getContrasenha(), 
+						persona.getCorreo(),
+						persona.getTipoDocumento(),
+						persona.getNombre());
 
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		prepStmt2.executeQuery();
+				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+				recursos.add(prepStmt2);
+				prepStmt2.executeQuery();
+				
+				//Primera sentencia
+				String sql = String.format("INSERT INTO PERSONANATURAL (DOCUMENTO, TIPO, EDAD, GENERO, APELLIDO) VALUES ('%2$s', '%3$s', %4$d, '%5$s', '%6$s')", 
+						USUARIO,  
+						persona.getDocumento(), 
+						persona.getTipo(),
+						persona.getEdad(), 
+						genero,
+						persona.getApellido());
 
-		//Primera sentencia
-		String sql = String.format("INSERT INTO %1$s.PERSONANATURAL (DOCUMENTO, TIPO, EDAD, GENERO, APELLIDO) VALUES ('%2$s', '%3$s', %4$d, '%5$s', '%6$s')", 
-				USUARIO,  
-				persona.getDocumento(), 
-				persona.getTipo(),
-				persona.getEdad(), 
-				genero,
-				persona.getApellido());
 
+				PreparedStatement prepStmt = conn.prepareStatement(sql);
+				recursos.add(prepStmt);
+				prepStmt.executeQuery();
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
 
 
 
