@@ -91,12 +91,12 @@ public class HabitacionService {
 	}
 
 	@DELETE
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteHabitacion(Habitacion habitacion) {
+	@Path("{id: \\d+}")
+	public Response deleteHabitacion(Habitacion habitacion , @PathParam("id") Integer id) {
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
-			tm.deleteHabitacion(habitacion.getId());
+			tm.deleteHabitacion(id);
 			return Response.status(200).entity(habitacion).build();
 		}
 		catch( Exception e )
