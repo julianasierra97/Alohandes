@@ -65,6 +65,8 @@ public class RFC7DAO {
 
 	public String reservaColectiva(int cantidad, String servicios, String tipoAlojamiento, String fechaInicio, String fechaFin) throws Exception
 	{
+		conn.setAutoCommit(false);
+		
 		RFC4DAO necesito = new RFC4DAO();
 
 		String rta = "";
@@ -85,6 +87,8 @@ public class RFC7DAO {
 		ResultSet rs2=prepStmt2.executeQuery();
 
 
+		
+		
 
 		if(rs1.next() && rs2.next())
 		{
@@ -93,6 +97,7 @@ public class RFC7DAO {
 			if(cantidadTotal < cantidad)
 			{
 				rta = "La cantidad especificada es mayor a la disponible";
+				conn.rollback();
 				return rta;
 			}
 
@@ -143,18 +148,16 @@ public class RFC7DAO {
 			if(alojamientos.size()<cantidad)
 			{
 				rta += "No es posible generar la reserva, la cantidad de alojamientos solicitado es menor que la cantidad de alojamientos disponibles.";
+				conn.rollback();
 				return rta;
 			}
 			else{
 				if(tipoAlojamiento.equals(Habitacion.ESTANDAR)||tipoAlojamiento.equals(Habitacion.SUITES)||tipoAlojamiento.equals(Habitacion.SEMI_SUITES))
 				{
 					DAOContrato daoContrato = new DAOContrato();
-					DAOHabitacion habitacion = new DAOHabitacion();
 					
-					conn.setAutoCommit(false);
 					conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 					for (String idAlojamiento : arregloIdAlojamientos) {
-						
 						//TODO
 					}
 				}

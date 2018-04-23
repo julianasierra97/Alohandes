@@ -43,25 +43,6 @@ public class RFC {
 		// METODOS REST
 		//----------------------------------------------------------------------------------------------------------------------------------
 
-
-		
-		
-		@GET 
-		@Path("RFC5")
-		@Produces({ MediaType.TEXT_PLAIN})
-		public Response getUso()
-		{
-			try{
-				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
-
-				String rta = tm.darUso();
-				return Response.status(200).entity(rta).build();
-			}
-			catch(Exception e){
-				return Response.status(500).entity(doErrorMessage(e)).build();
-			}
-		}
-		
 		@GET 
 		@Path("RFC1")
 		@Produces({ MediaType.TEXT_PLAIN})
@@ -110,6 +91,24 @@ public class RFC {
 				return Response.status(500).entity(doErrorMessage(e)).build();
 			}
 		}
+		
+		
+		@GET 
+		@Path("RFC5")
+		@Produces({ MediaType.TEXT_PLAIN})
+		public Response RFC5()
+		{
+			try{
+				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
+
+				String rta = tm.darUso();
+				return Response.status(200).entity(rta).build();
+			}
+			catch(Exception e){
+				return Response.status(500).entity(doErrorMessage(e)).build();
+			}
+		}
+		
 		
 		@GET 
 		@Path("RFC6")
