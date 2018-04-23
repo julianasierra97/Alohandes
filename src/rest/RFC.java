@@ -128,7 +128,7 @@ public class RFC {
 		}
 		
 		@GET 
-		@Path("RFC7")
+		@Path("RFC8")
 		@Produces({ MediaType.TEXT_PLAIN})
 		public Response RFC8( )
 		{

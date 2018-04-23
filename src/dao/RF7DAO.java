@@ -20,7 +20,7 @@ import vos.Habitacion;
 import vos.Servicio;
 
 @Path("RFC7")
-public class RFC7DAO {
+public class RF7DAO {
 
 
 
@@ -57,7 +57,7 @@ public class RFC7DAO {
 	/**
 	 * Metodo constructor de la clase DAOBebedor <br/>
 	 */
-	public RFC7DAO() {
+	public RF7DAO() {
 		recursos = new ArrayList<Object>();
 
 	}
