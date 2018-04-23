@@ -214,6 +214,7 @@ public class AlohonadesTransactionManager {
 							if(laHabitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
 							{
 								DAOUsuario daoUsuario= new DAOUsuario();
+								daoUsuario.setConn(conn);
 								Usuario elUsuario=daoUsuario.findUsuarioById(contrato.getIdCliente());
 								if(elUsuario==null)
 								{
@@ -253,6 +254,33 @@ public class AlohonadesTransactionManager {
 									}
 								}
 
+							}
+							else
+							{
+								Date ahora= new Date();
+								boolean hayEnLaFecha=false;
+								DAOUsuario daoUsuario= new DAOUsuario();
+								daoUsuario.setConn(conn);
+								Usuario elUsuario=daoUsuario.findUsuarioById(contrato.getIdCliente());
+								ArrayList<Contrato> contratos =daoContrato.getContratoByidCliente(contrato.getIdCliente());
+								for(int i=0;i<contratos.size() && !hayEnLaFecha; i++)
+								{
+									if(contratos.get(i).getFechaCreacion().getDate()==ahora.getDate() && contratos.get(i).getFechaCreacion().getMonth()==ahora.getMonth()&& ahora.getYear()==contratos.get(i).getFechaCreacion().getYear())
+									{
+										hayEnLaFecha=true;
+									}
+								}
+
+
+								if(hayEnLaFecha!=true)
+								{
+									daoContrato.addContratoHabitacion(contrato);		
+									elUsuario.getContratos().add(contrato);
+								}
+								else
+								{
+									throw new Exception("No se pueden generar mas de una reserva en un dia");
+								}
 							}
 
 						}
@@ -884,12 +912,12 @@ public class AlohonadesTransactionManager {
 					{
 						porcentajeRecargo=0.3;
 					}
-					daocontrato.deleteContrato(contrato);
+					
 					contrato.setCosto(contrato.getCosto()*porcentajeRecargo);
-					contrato.setFechaFin(null);
-					contrato.setFechaInicio(null);
+					contrato.setEstado("Cancelado");
+					daocontrato.cancelarReserva(contrato);
 
-					daocontrato.addContratoHabitacion(contrato);
+				
 
 
 				}

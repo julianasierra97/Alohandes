@@ -111,7 +111,7 @@ public class DAOUsuario {
 		Usuario usuario = null;
 
 		//Primera sentencia
-		String sql = String.format("SELECT * FROM %1$s.USUARIO WHERE ID = '%2$s'", USUARIO, id); 
+		String sql = String.format("SELECT * FROM %1$s.USUARIO WHERE DOCUMENTO = '%2$s'", USUARIO, id); 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);

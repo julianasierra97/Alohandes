@@ -178,6 +178,16 @@ public class Contrato
 	public void setIdCliente(String idCliente) {
 		this.idCliente = idCliente;
 	}
+	
+	public String getEstado() {
+		return estado;
+	}
+
+
+	public void setEstado(String idCliente) {
+		this.estado = idCliente;
+	}
+
 
 	
 

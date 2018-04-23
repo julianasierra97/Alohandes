@@ -495,7 +495,13 @@ public class DAOPersonaNatural {
 		String documento = resultSet.getString("DOCUMENTO");
 		String tipo = resultSet.getString("TIPO");
 		Integer edad =resultSet.getInt("EDAD");
-		Boolean genero=resultSet.getBoolean("GENERO");
+		Boolean genero=true;
+		
+		if(resultSet.getString("GENERO").equals("F"))
+		{
+			genero=false;
+		}
+
 		String apellido=resultSet.getString("APELLIDO");
 		String login = resultSet.getString("LOGIN");
 		String contrasenha = resultSet.getString("CONTRASENHA");
