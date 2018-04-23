@@ -251,13 +251,46 @@ public class DAOVivienda {
 	 */
 	public void deleteVivienda(Vivienda vivienda, String idVivienda) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d", USUARIO, idVivienda);
+		try {
+			conn.setAutoCommit(false);
+			
+			String sql2 = String.format("DELETE FROM %1$s.SERVICIOVIVIENDA WHERE ID_VIVIENDA = %2$d", USUARIO, idVivienda);
 
-		System.out.println(sql);
+			System.out.println(sql2);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			prepStmt2.executeQuery();
+			
+			
+			
+			String sql1 = String.format("DELETE FROM %1$s.CONTRATOVIVIENDA WHERE ID_VIVIENDA = %2$d", USUARIO, idVivienda);
+
+			System.out.println(sql1);
+
+			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
+			recursos.add(prepStmt1);
+			prepStmt1.executeQuery();
+			
+			
+			
+			String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d", USUARIO, idVivienda);
+
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+			
+		}
+		
+		catch(Exception e)
+		{
+			conn.rollback();
+			e.printStackTrace();
+			throw e;
+		}
+		
 	}
 
 

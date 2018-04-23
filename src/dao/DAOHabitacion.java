@@ -149,29 +149,30 @@ public class DAOHabitacion {
 
 		while(rs.next())
 		{
+			habitacion = convertResultSetToHabitacion(rs, new ArrayList<Servicio>());
 
-			//Segunda rentencia
-			String sql2 = String.format("SELECT * FROM %1$s.SERVICIOHABITACION WHERE ID_HABITACION = %2$d", USUARIO, rs.getInt("ID"));
-
-			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-			recursos.add(prepStmt2);
-			ResultSet rs2 = prepStmt.executeQuery();
-
-
-			//tercera sentencia
-			String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID = %2$d", USUARIO, rs2.getString("IDSERVICIO"));
-
-			System.out.println(sql3);
-			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt.executeQuery();
-			ArrayList<Servicio> servicios = new ArrayList<>();
-
-			while(rs3.next())
-			{
-				servicios.add(new Servicio(rs3.getDouble("COSTO"), rs3.getString("NOMBRE"), rs3.getInt("ID")));
-			}
-			habitacion = convertResultSetToHabitacion(rs, servicios);
+			//			//Segunda rentencia
+			//			String sql2 = String.format("SELECT * FROM %1$s.SERVICIOHABITACION WHERE ID_HABITACION = %2$d", USUARIO, rs.getInt("ID"));
+			//
+			//			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			//			recursos.add(prepStmt2);
+			//			ResultSet rs2 = prepStmt.executeQuery();
+			//
+			//
+			//			//tercera sentencia
+			//			String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID = %2$d", USUARIO, rs2.getString("ID"));
+			//
+			//			System.out.println(sql3);
+			//			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			//			recursos.add(prepStmt3);
+			//			ResultSet rs3 = prepStmt.executeQuery();
+			//			ArrayList<Servicio> servicios = new ArrayList<>();
+			//
+			//			while(rs3.next())
+			//			{
+			//				servicios.add(new Servicio(rs3.getDouble("COSTO"), rs3.getString("NOMBRE"), rs3.getInt("ID")));
+			//			}
+			//			habitacion = convertResultSetToHabitacion(rs, servicios);
 		}
 		return habitacion;
 	}
@@ -218,14 +219,14 @@ public class DAOHabitacion {
 				recursos.add(prepStmt3);
 				prepStmt3.executeQuery();
 			}
-			
+
 			String sql4 = String.format("INSERT INTO %1$s.OPERADORHABITACION (ID, ID_OPERADOR) VALUES (%2$d, '%3$s')", USUARIO, habitacion.getId(), idOperador);
 
 			PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
 			recursos.add(prepStmt4);
 			prepStmt4.executeQuery();
-			
-			
+
+
 			conn.commit();
 		}
 		catch(Exception e)
@@ -252,21 +253,66 @@ public class DAOHabitacion {
 	 */
 	public void deleteHabitacion(Habitacion habitacion) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.HABITACIONES WHERE ID = %2$d ", USUARIO, habitacion.getId());
+		
 
-		System.out.println(sql);
+		try {
+			conn.setAutoCommit(false);
+			
+			String sql5 = String.format("DELETE FROM %1$s.CONTRATOHABITACION WHERE ID_CONTRATO = %2$d ", USUARIO, habitacion.getId());
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+			System.out.println(sql5);
 
-		String sql2 = String.format("DELETE FROM %1$s.TIPOHABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
+			PreparedStatement prepStmt5 = conn.prepareStatement(sql5);
+			recursos.add(prepStmt5);
+			prepStmt5.executeQuery();
+			
+			
+			String sql4 = String.format("DELETE FROM %1$s.OPERADORHABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
 
-		System.out.println(sql2);
+			System.out.println(sql4);
 
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		prepStmt2.executeQuery();
+			PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
+			recursos.add(prepStmt4);
+			prepStmt4.executeQuery();
+			
+			
+			String sql3 = String.format("DELETE FROM %1$s.SERVICIOHABITACION WHERE ID_HABITACION = %2$d ", USUARIO, habitacion.getId());
+
+			System.out.println(sql3);
+
+			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			recursos.add(prepStmt3);
+			prepStmt3.executeQuery();
+			
+			
+			String sql2 = String.format("DELETE FROM %1$s.TIPOHABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
+
+			System.out.println(sql2);
+
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			prepStmt2.executeQuery();
+			
+			
+			String sql = String.format("DELETE FROM %1$s.HABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
+
+			System.out.println(sql);
+
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+
+			
+			conn.commit();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			conn.rollback();
+			throw e;
+
+		}
 	}
 
 	//----------------------------------------------------------------------------------------------------------------------------------

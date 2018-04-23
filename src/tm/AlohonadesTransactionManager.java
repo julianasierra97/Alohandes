@@ -1027,10 +1027,10 @@ public class AlohonadesTransactionManager {
 		{
 			throw new Exception("No se existe la habitacion que se quiere eliminar");
 		}
-		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
-		{
-			throw new Exception("La habitacion que se quiere eliminar esta reservada");
-		}
+//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
+//		{
+//			throw new Exception("La habitacion que se quiere eliminar esta reservada");
+//		}
 
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		try
@@ -1085,7 +1085,7 @@ public class AlohonadesTransactionManager {
 			habitacion = daoHabitacion.findHabitacionById(idHabitacion);
 			if(habitacion == null)
 			{
-				throw new Exception("El bebedor con el id = " + idHabitacion + " no se encuentra persistido en la base de datos.");				
+				throw new Exception("La habitacion con el id = " + idHabitacion + " no se encuentra persistido en la base de datos.");				
 			}
 		} 
 		catch (SQLException sqlException) {
@@ -1204,10 +1204,10 @@ public class AlohonadesTransactionManager {
 			throw new Exception("La habitacion a eliminar no existe");
 		}
 
-		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
-		{
-			throw new Exception("La habitacion tiene reservas.");
-		}
+//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
+//		{
+//			throw new Exception("La habitacion tiene reservas.");
+//		}
 
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		try
@@ -1263,10 +1263,10 @@ public class AlohonadesTransactionManager {
 
 		DAOVivienda daoVivienda = new DAOVivienda( );
 
-		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
-		{
-			throw new Exception("La vivienda a eliminar tiene reservas");
-		}
+//		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
+//		{
+//			throw new Exception("La vivienda a eliminar tiene reservas");
+//		}
 
 		try
 		{
