@@ -78,20 +78,20 @@ public class DAOUsuario {
 			System.out.println("numero1");
 			ResultSet rs2 = prepStmt2.executeQuery();
 
-			
-				ArrayList<Contrato> contratos = new ArrayList<Contrato>();
-				System.out.println("numero");
-				while(rs2.next())
-				{
-					System.out.println(rs2.getString("TIPO"));
 
-					Date fechaInicio = new Date(rs2.getString("FECHAINICIO"));
-					Date fechaFin = new Date(rs2.getString("FECHAFIN"));
-					String estado = rs2.getString("ESTADO");
-					contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA"), rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION"), estado));
-				}
-				usuarios.add(convertResultSetToUsuario(rs, contratos));
-			
+			ArrayList<Contrato> contratos = new ArrayList<Contrato>();
+			System.out.println("numero");
+			while(rs2.next())
+			{
+				System.out.println(rs2.getString("TIPO"));
+
+				Date fechaInicio = new Date(rs2.getString("FECHAINICIO"));
+				Date fechaFin = new Date(rs2.getString("FECHAFIN"));
+				String estado = rs2.getString("ESTADO");
+				contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA"), rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION"), estado));
+			}
+			usuarios.add(convertResultSetToUsuario(rs, contratos));
+
 		}
 		return usuarios;
 	}
@@ -111,31 +111,41 @@ public class DAOUsuario {
 		Usuario usuario = null;
 
 		//Primera sentencia
-		String sql = String.format("SELECT * FROM %1$s.USUARIO WHERE ID = '%2$d'", USUARIO, id); 
+		String sql = String.format("SELECT * FROM %1$s.USUARIO WHERE ID = '%2$s'", USUARIO, id); 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		ResultSet rs = prepStmt.executeQuery();
 
-		//Segunda sentencia
-		String sql2 = String.format("SELECT * FROM %1$s.CONTRATO WHERE ID_CLIENTE = '%2$s'", USUARIO, rs.getString("DOCUMENTO"));
 
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		ResultSet rs2 = prepStmt.executeQuery();
+		ArrayList<Contrato> contratos = new ArrayList<>();
 
-		if(rs.next()) {
-			ArrayList<Contrato> contratos = new ArrayList<>();
-			while(rs2.next())
-			{
-				
-				Date fechaInicio = new Date(rs2.getString("FECHAINICIO"));
-				Date fechaFin = new Date(rs2.getString("FECHAFIN"));
-				String estado = rs2.getString("ESTADO");
-				contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA") , rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION"), estado));
-			}
+		while(rs.next())
+		{
 			usuario = convertResultSetToUsuario(rs, contratos);
+
 		}
+
+
+		//		//Segunda sentencia
+		//		String sql2 = String.format("SELECT * FROM %1$s.CONTRATO WHERE ID_CLIENTE = '%2$s'", USUARIO, rs.getString("DOCUMENTO"));
+		//
+		//		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+		//		recursos.add(prepStmt2);
+		//		ResultSet rs2 = prepStmt.executeQuery();
+		//
+		//		if(rs.next()) {
+		//			ArrayList<Contrato> contratos = new ArrayList<>();
+		//			while(rs2.next())
+		//			{
+		//				
+		//				Date fechaInicio = new Date(rs2.getString("FECHAINICIO"));
+		//				Date fechaFin = new Date(rs2.getString("FECHAFIN"));
+		//				String estado = rs2.getString("ESTADO");
+		//				contratos.add(new Contrato(fechaInicio, fechaFin, rs2.getString("TIPO"), rs2.getDouble("COSTO"), rs2.getInt("ID"), rs2.getInt("ID_VIVIENDA") , rs2.getInt("ID_HABITACION"), rs2.getInt("NUMEROPERSONAS"), rs2.getString("ID_CLIENTE"), rs2.getDate("FECHA_CREACION"), estado));
+		//			}
+		//			usuario = convertResultSetToUsuario(rs, contratos);
+		//		}
 
 		return usuario;
 	}
@@ -155,7 +165,7 @@ public class DAOUsuario {
 			genero = 'M';
 		}
 
-		String sql = String.format("INSERT INTO %1$s.USUARIO (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, EDAD, GENERO, TIPO, APELLIDO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', %7$s, '%8$s', '%9$s', '%10$s', '%11$s')", 
+		String sql = String.format("INSERT INTO %1$s.USUARIO (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, EDAD, GENERO, TIPO, APELLIDO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', %7$d, '%8$s', '%9$s', '%10$s', '%11$s')", 
 				USUARIO, 
 				usuario.getDocumento(), 
 				usuario.getLogin(),
@@ -237,7 +247,7 @@ public class DAOUsuario {
 		String correo=resultSet.getString("CORREO");
 		String tipoDocumento = resultSet.getString("TIPODOCUMENTO");
 		Integer edad = resultSet.getInt("EDAD");
-		
+
 		Boolean genero = false;
 		if(resultSet.getString("GENERO").equals("H"))
 		{

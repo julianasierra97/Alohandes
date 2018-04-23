@@ -201,7 +201,7 @@ public class DAOVivienda {
 		try{
 			conn.setAutoCommit(false);
 
-			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$d, %3$d, '%2$s', '%2$s', '%2$s')", USUARIO, vivienda.getSeguro().getId(), vivienda.getSeguro().getCosto(), vivienda.getSeguro().isIncendio(), vivienda.getSeguro().isRobo(), vivienda.getSeguro().isInundaciones());
+			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$d, %3$d, '%4$s', '%5$s', '%6$s')", USUARIO, vivienda.getSeguro().getId(), vivienda.getSeguro().getCosto(), vivienda.getSeguro().isIncendio(), vivienda.getSeguro().isRobo(), vivienda.getSeguro().isInundaciones());
 			
 			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
 			recursos.add(prepStmt0);
