@@ -54,13 +54,12 @@ public class ViviendaService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/persona")
 	public Response addVivienda(@QueryParam("id_persona")String idPersona, Vivienda vivienda) {
 
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager( getPath( ) );
 
-			tm.agregarVivienda(vivienda, idPersona);
+			tm.agregarVivienda(vivienda, "3684564105351584");
 			
 			return Response.status( 200 ).entity( vivienda ).build( );			
 		}

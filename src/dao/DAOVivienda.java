@@ -201,11 +201,11 @@ public class DAOVivienda {
 		try{
 			conn.setAutoCommit(false);
 
-//			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$d, %3$d, '%2$s', '%2$s', '%2$s')", USUARIO, vivienda.getSeguro().getId(), vivienda.getSeguro().getCosto(), vivienda.getSeguro().isIncendio(), vivienda.getSeguro().isRobo(), vivienda.getSeguro().isInundaciones());
-//			
-//			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
-//			recursos.add(prepStmt0);
-//			prepStmt0.executeQuery();
+			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$d, %3$d, '%2$s', '%2$s', '%2$s')", USUARIO, vivienda.getSeguro().getId(), vivienda.getSeguro().getCosto(), vivienda.getSeguro().isIncendio(), vivienda.getSeguro().isRobo(), vivienda.getSeguro().isInundaciones());
+			
+			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+			recursos.add(prepStmt0);
+			prepStmt0.executeQuery();
 			
 			String sql = String.format("INSERT INTO %1$s.Vivienda(id,capacidad,tipo,direccion,numeroHabitaciones,costo,id_seguro,id_persona) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', %6$d, %7$d, %8$d, '%9$s') ", 
 					USUARIO, 
@@ -236,6 +236,7 @@ public class DAOVivienda {
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			conn.rollback();
 		}
 
