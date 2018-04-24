@@ -72,43 +72,52 @@ public class DAOContrato
 	public void addContratoHabitacion(Contrato contrato) throws SQLException, Exception {
 
 
+		conn.setAutoCommit(false);
 
 
-		contadorNumeroContratos++;
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
-		String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
-		String fechaCreacion = "'"+dateFormat.format(contrato.getFechaCreacion())+"'";
+		try {
+			contadorNumeroContratos++;
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
+			String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
+			String fechaCreacion = "'"+dateFormat.format(contrato.getFechaCreacion())+"'";
 
-		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMEROPERSONAS,ID_CLIENTE,FECHACREACION,TIPO,ESTADO) VALUES (%2$s, %3$s, '%4$s', '%5$s', '%6$s', '%7$s',%8$s,'%9$s','%10$s')", 
-				USUARIO,
-				fechaInicio,
-				fechaFin, 
-				(int)contrato.getCosto(),
-				contrato.getId(),
-				contrato.getNumeroDePersonas(),
-				contrato.getIdCliente(),
-				fechaCreacion,
-				contrato.getTipo(),
-				contrato.getEstado());
-		System.out.println(sql);
+			String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMEROPERSONAS,ID_CLIENTE,FECHACREACION,TIPO,ESTADO) VALUES (%2$s, %3$s, '%4$s', '%5$s', '%6$s', '%7$s',%8$s,'%9$s','%10$s')", 
+					USUARIO,
+					fechaInicio,
+					fechaFin, 
+					(int)contrato.getCosto(),
+					contrato.getId(),
+					contrato.getNumeroDePersonas(),
+					contrato.getIdCliente(),
+					fechaCreacion,
+					contrato.getTipo(),
+					contrato.getEstado());
+			System.out.println(sql);
 
-		PreparedStatement prepStmt6 = conn.prepareStatement(sql);
-		recursos.add(prepStmt6);
-		prepStmt6.executeQuery();
+			PreparedStatement prepStmt6 = conn.prepareStatement(sql);
+			recursos.add(prepStmt6);
+			prepStmt6.executeQuery();
 
-		String sql2 = String.format("INSERT INTO %1$s.CONTRATOHABITACION (ID_CONTRATO, ID_HABITACION) VALUES (%2$s, '%3$s')", 
-				USUARIO,
-				contadorNumeroContratos,
-				contrato.getIdHabitacion());
+			String sql2 = String.format("INSERT INTO %1$s.CONTRATOHABITACION (ID_CONTRATO, ID_HABITACION) VALUES (%2$s, '%3$s')", 
+					USUARIO,
+					contadorNumeroContratos,
+					contrato.getIdHabitacion());
 
-		System.out.println(sql2);
+			System.out.println(sql2);
 
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		prepStmt2.executeQuery();
-		cerrarRecursos();
-		contadorNumeroContratos++;
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			prepStmt2.executeQuery();
+			cerrarRecursos();
+			contadorNumeroContratos++;
+			conn.commit();
+
+		}
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
 
 
 
@@ -116,42 +125,54 @@ public class DAOContrato
 	}
 	public void addContratoVivienda(Contrato contrato) throws SQLException, Exception
 	{
+		conn.setAutoCommit(false);
 
-		contadorNumeroContratos++;
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
-		String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
-		String fechaCreacion = "'"+dateFormat.format(contrato.getFechaCreacion())+"'";
 
-		String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMEROPERSONAS,ID_CLIENTE,FECHACREACION,TIPO,ESTADO) VALUES (%2$s, %3$s, '%4$s', '%5$s', '%6$s', '%7$s',%8$s, '%9$s','%10$s')", 
-				USUARIO,
-				fechaInicio,
-				fechaFin, 
-				(int)contrato.getCosto(),
-				contrato.getId(),
-				contrato.getNumeroDePersonas(),
-				contrato.getIdCliente(),
-				fechaCreacion,
-				contrato.getTipo(),
-				contrato.getEstado());
-		System.out.println(sql);
+		try {
 
-		PreparedStatement prepStmt6 = conn.prepareStatement(sql);
-		recursos.add(prepStmt6);
-		prepStmt6.executeQuery();
+			contadorNumeroContratos++;
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			String fechaInicio = "'"+dateFormat.format(contrato.getFechaInicio())+"'";
+			String fechaFin = "'"+dateFormat.format(contrato.getFechaFin())+"'";
+			String fechaCreacion = "'"+dateFormat.format(contrato.getFechaCreacion())+"'";
 
-		String sql2 = String.format("INSERT INTO %1$s.CONTRATOVIVIENDA (ID_CONTRATO, ID_VIVIENDA) VALUES (%2$s, '%3$s')", 
-				USUARIO,
-				contadorNumeroContratos,
-				contrato.getIdVivienda());
+			String sql = String.format("INSERT INTO %1$s.CONTRATO (FECHAINICIO, FECHAFIN, COSTO, ID, NUMEROPERSONAS,ID_CLIENTE,FECHACREACION,TIPO,ESTADO) VALUES (%2$s, %3$s, '%4$s', '%5$s', '%6$s', '%7$s',%8$s, '%9$s','%10$s')", 
+					USUARIO,
+					fechaInicio,
+					fechaFin, 
+					(int)contrato.getCosto(),
+					contrato.getId(),
+					contrato.getNumeroDePersonas(),
+					contrato.getIdCliente(),
+					fechaCreacion,
+					contrato.getTipo(),
+					contrato.getEstado());
+			System.out.println(sql);
 
-		System.out.println(sql2);
+			PreparedStatement prepStmt6 = conn.prepareStatement(sql);
+			recursos.add(prepStmt6);
+			prepStmt6.executeQuery();
 
-		PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-		recursos.add(prepStmt2);
-		prepStmt2.executeQuery();
+			String sql2 = String.format("INSERT INTO %1$s.CONTRATOVIVIENDA (ID_CONTRATO, ID_VIVIENDA) VALUES (%2$s, '%3$s')", 
+					USUARIO,
+					contadorNumeroContratos,
+					contrato.getIdVivienda());
 
-		contadorNumeroContratos++;
+			System.out.println(sql2);
+
+			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			recursos.add(prepStmt2);
+			prepStmt2.executeQuery();
+
+			contadorNumeroContratos++;
+			conn.commit();
+		}
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
+
+
 
 	}
 	public int darUsoEnEsteAno(Contrato contrato) throws SQLException
@@ -169,16 +190,16 @@ public class DAOContrato
 		}
 		return rpta;
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public ArrayList<Contrato> getContratoByIdHabitacionEnFechas(int id, String fechaInicio, String fechaFin) throws SQLException
 	{
 		ArrayList<Contrato> contrato = new ArrayList<>();
 
-		
+
 
 		String sql = String.format("SELECT * FROM CONTRATO INNER JOIN CONTRATOHABITACION ON CONTRATO.ID= CONTRATOHABITACION.ID_CONTRATO WHERE ID_HABITACION =%3$s AND  '%2$s' < FECHAFIN AND  '%2$s' < FECHAINICIO AND ESTADO='Activo'",fechaInicio, fechaFin, id ); 
 
@@ -236,15 +257,68 @@ public class DAOContrato
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public void deleteContrato(Contrato contrato) throws SQLException, Exception {
+	public void deleteContratoHabitacion(Contrato contrato) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.CONTRATO WHERE ID = %2$d", USUARIO, contrato.getId());
 
-		System.out.println(sql);
+		conn.setAutoCommit(false);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+
+		try {
+			String sql0 = String.format("DELETE FROM %1$s.CONTRATOHABITACION WHERE ID_CONTRATO = %2$d AND ID_HABITACION=%3$d", USUARIO, contrato.getId(), contrato.getIdHabitacion());
+
+			System.out.println(sql0);
+
+			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+			recursos.add(prepStmt0);
+			prepStmt0.executeQuery();
+
+
+
+			String sql = String.format("DELETE FROM %1$s.CONTRATO WHERE ID = %2$d", USUARIO, contrato.getId());
+
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+			conn.commit();
+		}
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
+
+	}
+
+	public void deleteContratoVivienda(Contrato contrato) throws SQLException, Exception {
+
+		conn.setAutoCommit(false);
+		try
+		{
+			String sql0 = String.format("DELETE FROM %1$s.CONTRATOVIVIENDA WHERE ID_CONTRATO = %2$d AND ID_VIVIENDA=%3$d", USUARIO, contrato.getId(), contrato.getIdHabitacion());
+
+			System.out.println(sql0);
+
+			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+			recursos.add(prepStmt0);
+			prepStmt0.executeQuery();
+
+
+
+			String sql = String.format("DELETE FROM %1$s.CONTRATO WHERE ID = %2$d", USUARIO, contrato.getId());
+
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+			conn.commit();
+		}
+
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
 	}
 
 	/**
@@ -255,14 +329,41 @@ public class DAOContrato
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
 	public void cancelarReserva(Contrato contrato) throws SQLException, Exception {
+		conn.setAutoCommit(false);
+		try {
+			String sql = String.format("UPDATE CONTRATO SET COSTO='%1$s', ESTADO='%2$s' WHERE ID=%3$s ",(int) contrato.getCosto(), contrato.getEstado(),contrato.getId());
 
-		String sql = String.format("UPDATE CONTRATO SET COSTO='%1$s', ESTADO='%2$s' WHERE ID=%3$s ",(int) contrato.getCosto(), contrato.getEstado(),contrato.getId());
+			System.out.println(sql);
 
-		System.out.println(sql);
+			PreparedStatement prepStmt = conn.prepareStatement(sql.toString());
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+			conn.commit();
+		}
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
+	}
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql.toString());
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+	public void updateContrato(Contrato contrato) throws SQLException, Exception {
+
+		conn.setAutoCommit(false);
+		try{
+			String sql = String.format("UPDATE CONTRATO SET  WHERE ID=%3$s ",(int) contrato.getCosto(), contrato.getEstado(),contrato.getId());
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql.toString());
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+			conn.commit();
+		}
+
+		
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
 	}
 	/**
 	 * Metodo que obtiene la informacion del contrato en la Base de Datos que tiene el identificador dado por parametro<br/>
@@ -293,7 +394,7 @@ public class DAOContrato
 	{
 		String contrato = "Las mejores 20 ofertas son: \n";
 
-		
+
 
 
 		String sql = String.format("SELECT  COUNT(ID_VIVIENDA) AS CUENTA, ID_VIVIENDA FROM CONTRATOVIVIENDA INNER JOIN CONTRATO ON CONTRATOVIVIENDA.ID_CONTRATO=CONTRATO.ID GROUP BY ID_VIVIENDA ORDER BY COUNT(ID_VIVIENDA) DESC", USUARIO); 
@@ -305,10 +406,10 @@ public class DAOContrato
 		int contador=0;
 		while(rs.next() && contador<20) {
 			contrato+=rs.getInt("ID_VIVIENDA") +" con " + rs.getInt("CUENTA") +" contratos"+ "\n";
-		contador++;
+			contador++;
 		}
-		
-//
+
+		//
 
 		return contrato;
 	}
@@ -365,7 +466,7 @@ public class DAOContrato
 
 		String fechaFin = resultSet.getString("FECHAFIN");
 		String fif2 = fechaFin.substring(2, 10);
-		String [] array2 = fif.split("-");
+		String [] array2 = fif2.split("-");
 		int anho2 = Integer.parseInt(array2[0])+100;
 		int mes2 = Integer.parseInt(array2[1])-1;
 		int dia2 = Integer.parseInt(array2[2]);
@@ -408,7 +509,7 @@ public class DAOContrato
 
 		String fechaFin = resultSetContrato.getString("FECHAFIN");
 		String fif2 = fechaFin.substring(2, 10);
-		String [] array2 = fif.split("-");
+		String [] array2 = fif2.split("-");
 		int anho2 = Integer.parseInt(array2[0])+100;
 		int mes2 = Integer.parseInt(array2[1])-1;
 		int dia2 = Integer.parseInt(array2[2]);
@@ -426,11 +527,11 @@ public class DAOContrato
 		long id = Integer.parseInt(resultSetContrato.getString("ID"));
 
 
-		Integer vivienda = resultSetContrato.getInt("ID_VIVIENDA");
+		Integer habitacion = resultSetContrato.getInt("ID_HABITACION");
 
 
 
-		int numeroDePersonas = Integer.parseInt(resultSetContrato.getString("NUMERO_DE_PERSONAS"));
+		int numeroDePersonas = Integer.parseInt(resultSetContrato.getString("NUMEROPERSONAS"));
 		String idCliente = resultSetContrato.getString("ID_CLIENTE");
 		String estado = resultSetContrato.getString("ESTADO");
 

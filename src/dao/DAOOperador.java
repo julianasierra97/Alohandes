@@ -58,8 +58,8 @@ public class DAOOperador
 	 */
 	public void addOperador(Operador operador) throws SQLException, Exception {
 
-		
-		
+		conn.setAutoCommit(false);
+		try {
 		String sql = String.format("INSERT INTO %1$s.OPERADOR (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
 									USUARIO,  
 									operador.getDocumento(), 
@@ -74,6 +74,13 @@ public class DAOOperador
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
 		prepStmt.executeQuery();
+		conn.commit();
+		}
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
+		
 
 	}
 	//----------------------------------------------------------------------------------------------------------------------------------

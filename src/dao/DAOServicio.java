@@ -65,20 +65,32 @@ public class DAOServicio
 		 */
 		public void addServicio(Servicio servicio) throws SQLException, Exception {
 
+			
+			conn.setAutoCommit(false);
+			try {
+				numeroSeguros++;
 
-			numeroSeguros++;
+				String sql = String.format("INSERT INTO %1$s.SERVICIO (COSTO, NOMBRE, ID) VALUES (%2$s, '%3$s', '%4$s')", 
+						USUARIO,  
+						servicio.getCosto(), 
+						servicio.getNombre(),
+						numeroSeguros);
 
-			String sql = String.format("INSERT INTO %1$s.SERVICIO (COSTO, NOMBRE, ID) VALUES (%2$s, '%3$s', '%4$s')", 
-					USUARIO,  
-					servicio.getCosto(), 
-					servicio.getNombre(),
-					numeroSeguros);
+				System.out.println(sql);
 
-			System.out.println(sql);
+				PreparedStatement prepStmt = conn.prepareStatement(sql);
+				recursos.add(prepStmt);
+				prepStmt.executeQuery();
+			
+			conn.commit();
+			}
+			catch (Exception e) {
+				conn.rollback();
+				throw e;
+			}
+			
 
-			PreparedStatement prepStmt = conn.prepareStatement(sql);
-			recursos.add(prepStmt);
-			prepStmt.executeQuery();
+			
 
 		}
 		/**

@@ -65,37 +65,48 @@ public class DAOSeguro
 	public void addSeguro(Seguro seguro) throws SQLException, Exception {
 
 
-		numeroSeguros++;
-		char incendio='T';
-		if(seguro.isIncendio()==false)
-		{
-			incendio='F';
+		conn.setAutoCommit(false);
+		try {
+			numeroSeguros++;
+			char incendio='T';
+			if(seguro.isIncendio()==false)
+			{
+				incendio='F';
+			}
+			char inundaciones='T';
+			if(seguro.isInundaciones()==false)
+			{
+				inundaciones='F';
+			}
+			char robo='T';
+			if(seguro.isRobo())
+			{
+				robo='F';
+			}
+
+
+			String sql = String.format("INSERT INTO %1$s.SEGURO (COSTO, INCENDIO, ROBO, INUNDACIONES, ID) VALUES (%2$s, '%3$s', '%4$s', '%5$s')", 
+					USUARIO,  
+					seguro.getCosto(), 
+					incendio,
+					robo, 
+					inundaciones,
+					numeroSeguros);
+
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+		
+		conn.commit();
 		}
-		char inundaciones='T';
-		if(seguro.isInundaciones()==false)
-		{
-			inundaciones='F';
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
 		}
-		char robo='T';
-		if(seguro.isRobo())
-		{
-			robo='F';
-		}
-
-
-		String sql = String.format("INSERT INTO %1$s.SEGURO (COSTO, INCENDIO, ROBO, INUNDACIONES, ID) VALUES (%2$s, '%3$s', '%4$s', '%5$s')", 
-				USUARIO,  
-				seguro.getCosto(), 
-				incendio,
-				robo, 
-				inundaciones,
-				numeroSeguros);
-
-		System.out.println(sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+		
+		
 
 	}
 	/**

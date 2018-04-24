@@ -17,8 +17,8 @@ import javax.ws.rs.core.Response;
 import tm.AlohonadesTransactionManager;
 import vos.Contrato;
 
-@Path("RF9")
-public class RF9SERVICE {
+@Path("RF10")
+public class RF10SERVICE {
 	
 	//----------------------------------------------------------------------------------------------------------------------------------
 		// ATRIBUTOS
@@ -52,12 +52,12 @@ public class RF9SERVICE {
 		@PUT 
 		@Produces({ MediaType.TEXT_PLAIN})
 		@Consumes({ MediaType.APPLICATION_JSON})
-		public Response RF9(vos.RF9 rf9)
+		public Response RF9(vos.RF9 rf10)
 		{
 			try{
 				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				String rta = tm.desahabilitarOferta(rf9.getTipo(), rf9.getId());
+				String rta = tm.habilitarOferta(rf10.getTipo(), rf10.getId());
 				return Response.status(200).entity(rta).build();
 			}
 			catch(Exception e){

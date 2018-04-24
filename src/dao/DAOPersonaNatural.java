@@ -367,11 +367,7 @@ public class DAOPersonaNatural {
 	 */
 	public void addPersonaNatural(PersonaNatural persona) throws SQLException, Exception {
 
-		char genero = 'F';
-		if(persona.isGenero())
-		{
-			genero = 'M';
-		}
+		
 
 		conn.setAutoCommit(false);
 
@@ -380,6 +376,12 @@ public class DAOPersonaNatural {
 
 		//Segunda sentencia
 		try {
+			
+			char genero = 'F';
+			if(persona.isGenero())
+			{
+				genero = 'M';
+			}
 			String sql2 = String.format("INSERT INTO OPERADOR (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
 					USUARIO,  
 					persona.getDocumento(), 
@@ -412,6 +414,7 @@ public class DAOPersonaNatural {
 		catch(Exception e)
 		{
 			conn.rollback();
+			throw e;
 		}
 
 
@@ -442,13 +445,31 @@ public class DAOPersonaNatural {
 
 	public void deletePersonaNatural(PersonaNatural persona) throws SQLException, Exception{
 
-		String sql = String.format("DELETE FROM %1$s.PERSONANATURAL WHERE ID = '%2$d'", USUARIO, persona.getDocumento());
+		conn.setAutoCommit(false);
 
-		System.out.println(sql);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+
+
+		//Segunda sentencia
+		try {
+			String sql = String.format("DELETE FROM %1$s.PERSONANATURAL WHERE ID = '%2$d'", USUARIO, persona.getDocumento());
+
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+			
+			conn.commit();
+		}
+		catch(Exception e)
+		{
+			conn.rollback();
+		throw e;
+		}
+		
+		
+		
 	}
 
 

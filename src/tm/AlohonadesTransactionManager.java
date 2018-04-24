@@ -23,6 +23,8 @@ import dao.DAOOperador;
 import dao.DAOPersonaNatural;
 import dao.DAOUsuario;
 import dao.DAOVivienda;
+import dao.RF10DAO;
+import dao.RF9DAO;
 import dao.RFC1DAO;
 import dao.RFC3DAO;
 import dao.RFC4DAO;
@@ -202,7 +204,7 @@ public class AlohonadesTransactionManager {
 				}
 				else
 				{
-					if (!daoContrato.getContratoByIdHabitacionEnFechas(contrato.getIdHabitacion(), contrato.getFechaInicio(), contrato.getFechaFin()).isEmpty()) {
+					if (!daoContrato.getContratoByIdHabitacionEnFechas(contrato.getIdHabitacion(), contrato.getFechaInicio()+"", contrato.getFechaFin()+"").isEmpty()) {
 						throw new Exception("la habitacion que quieres reservar ya esta reservada");
 					}
 					else
@@ -1716,6 +1718,80 @@ public class AlohonadesTransactionManager {
 		finally {
 			try { 
 				dao9.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String desahabilitarOferta(String tipo, String id) throws Exception
+	{
+		String rta = "";
+		RF9DAO dao9 = new RF9DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao9.setConn(conn);
+			dao9.RF9(tipo, id);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao9.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	public String habilitarOferta(String tipo, String id) throws Exception
+	{
+		String rta = "";
+		RF10DAO dao10 = new RF10DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao10.setConn(conn);
+			dao10.RF10(tipo, id);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao10.cerrarRecursos();
 				if(this.conn!=null){
 					this.conn.close();					
 				}

@@ -140,6 +140,7 @@ public class RFC {
 		
 		@GET 
 		@Path("RFC9")
+		@Consumes()
 		@Produces({ MediaType.TEXT_PLAIN})
 		public Response RFC9( )
 		{

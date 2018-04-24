@@ -159,29 +159,43 @@ public class DAOUsuario {
 	 */
 	public void addUsuario(Usuario usuario) throws SQLException, Exception {
 
-		char genero = 'F';
-		if(usuario.isGenero())
-		{
-			genero = 'M';
+		
+		
+		conn.setAutoCommit(false);
+		try {
+			char genero = 'F';
+			if(usuario.isGenero())
+			{
+				genero = 'M';
+			}
+
+			String sql = String.format("INSERT INTO %1$s.USUARIO (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, EDAD, GENERO, TIPO, APELLIDO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', %7$d, '%8$s', '%9$s', '%10$s', '%11$s')", 
+					USUARIO, 
+					usuario.getDocumento(), 
+					usuario.getLogin(),
+					usuario.getContrasenha(), 
+					usuario.getCorreo(),
+					usuario.getTipoDocumento(),
+					usuario.getEdad(),
+					genero,
+					usuario.getTipo(),
+					usuario.getApellido(),
+					usuario.getNombre());
+			System.out.println(sql);
+
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+		
+		conn.commit();
 		}
-
-		String sql = String.format("INSERT INTO %1$s.USUARIO (DOCUMENTO, LOGIN, CONTRASENHA, CORREO, TIPODOCUMENTO, EDAD, GENERO, TIPO, APELLIDO, NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', %7$d, '%8$s', '%9$s', '%10$s', '%11$s')", 
-				USUARIO, 
-				usuario.getDocumento(), 
-				usuario.getLogin(),
-				usuario.getContrasenha(), 
-				usuario.getCorreo(),
-				usuario.getTipoDocumento(),
-				usuario.getEdad(),
-				genero,
-				usuario.getTipo(),
-				usuario.getApellido(),
-				usuario.getNombre());
-		System.out.println(sql);
-
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
+		
+		
+		
 
 	}
 
@@ -200,13 +214,24 @@ public class DAOUsuario {
 	 */
 	public void deleteUsuario(Usuario usuario) throws SQLException, Exception {
 
-		String sql = String.format("DELETE FROM %1$s.USUARIO WHERE ID = '%2$d'", USUARIO, usuario.getDocumento());
+		conn.setAutoCommit(false);
+		try {
+			String sql = String.format("DELETE FROM %1$s.USUARIO WHERE ID = '%2$d'", USUARIO, usuario.getDocumento());
 
-		System.out.println(sql);
+			System.out.println(sql);
 
-		PreparedStatement prepStmt = conn.prepareStatement(sql);
-		recursos.add(prepStmt);
-		prepStmt.executeQuery();
+			PreparedStatement prepStmt = conn.prepareStatement(sql);
+			recursos.add(prepStmt);
+			prepStmt.executeQuery();
+		
+		conn.commit();
+		}
+		catch (Exception e) {
+			conn.rollback();
+			throw e;
+		}
+		
+		
 	}
 
 	/**
