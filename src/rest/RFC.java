@@ -134,40 +134,9 @@ public class RFC {
 			}
 		}
 		
+	
 		
-		@GET 
-		@Path("RFC6/{id: \\\\d+}")
-		@Produces({ MediaType.TEXT_PLAIN})
-		public Response RFC6  (@QueryParam("id") String id)
-		{
-			//todo preguntar bien los path param
-			try{
-				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				String rta = tm.RFC6(id);
-				return Response.status(200).entity(rta).build();
-			}
-			catch(Exception e){
-				return Response.status(500).entity(doErrorMessage(e)).build();
-			}
-		}
-		
-		@GET 
-		@Path("RFC8")
-		@Produces({ MediaType.TEXT_PLAIN})
-		public Response RFC8( )
-		{
-			//todo preguntar bien los path param
-			try{
-				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
-
-				String rta = tm.RFC8();
-				return Response.status(200).entity(rta).build();
-			}
-			catch(Exception e){
-				return Response.status(500).entity(doErrorMessage(e)).build();
-			}
-		}
 		
 		@GET 
 		@Path("RFC9")
