@@ -659,7 +659,8 @@ public class AlohonadesTransactionManager {
 		if(habitacion.getTipo().equals(Habitacion.ESTANDAR) || 
 				habitacion.getTipo().equals(Habitacion.SEMI_SUITES) || 
 				habitacion.getTipo().equals(Habitacion.SUITES) ||
-				habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA))
+				habitacion.getTipo().equals(Habitacion.HABITACION_VIVIENDA_UNIVERSITARIA) ||
+				habitacion.getTipo().equals(Habitacion.HABITACION_HOSTAL))
 		{
 			agregarHabitacionEmpresa(habitacion, idOperador);
 		}
@@ -761,7 +762,7 @@ public class AlohonadesTransactionManager {
 			throw new Exception("La empresa que quiere agregar una habitacion debe existir");
 		}
 
-		if(habitacion.getTipo() == Habitacion.HABITACION_HOSTAL && !habitacion.isCompartida()){	
+		if(habitacion.getTipo().equals(Habitacion.HABITACION_HOSTAL) && !habitacion.isCompartida()){	
 			throw new Exception("No se puede agregar una habitacion de hostal que no sea compartida");
 		}
 
