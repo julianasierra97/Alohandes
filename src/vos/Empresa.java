@@ -145,6 +145,10 @@ public class Empresa extends Operador
 			@JsonProperty(value="tipoDocumento")String tipoDocumento, 
 			@JsonProperty(value="nombre")String nombre, 
 			@JsonProperty(value="correo")String correo
+//			,
+//			@JsonProperty(value="servicios")ArrayList<Servicio> servicios,
+//			@JsonProperty(value="habitaciones")ArrayList<Habitacion> habitaciones
+
 			)
 			
 	{

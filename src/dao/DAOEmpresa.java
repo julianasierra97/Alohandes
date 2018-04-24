@@ -65,8 +65,10 @@ public class DAOEmpresa {
 			String NUMREGISTROSUPERINTENDENCIA= empresa.getNumRegistroSuperintendencia()+"";
 			String NUMREGISTROCAMARACOMERCIO=empresa.getNumRegistroCamaraComercio()+"";
 			
-			
-			String sql0 = String.format("INSERT INTO %1$s.OPERADOR (DOCUMENTO,LOGIN,CONTRASENHA,CORREO,TIPODOCUMENTO,NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
+			try {
+				conn.setAutoCommit(false);
+				
+			String sql0 = String.format("INSERT INTO OPERADOR (DOCUMENTO,LOGIN,CONTRASENHA,CORREO,TIPODOCUMENTO,NOMBRE) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', '%6$s', '%7$s')", 
 					USUARIO,  
 					empresa.getDocumento(), 
 					empresa.getLogin(),
@@ -79,7 +81,7 @@ public class DAOEmpresa {
 			prepStmt0.executeQuery();
 			System.out.println(sql0);
 
-				String sql = String.format("INSERT INTO %1$s.EMPRESA (DIRECCION,NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s')", 
+				String sql = String.format("INSERT INTO EMPRESA (DIRECCION,NUMREGISTROSUPERINTENDENCIA,NUMREGISTROCAMARADECOMERCIO, ID) VALUES ('%2$s', '%3$s', '%4$s', '%5$s')", 
 						USUARIO,  
 						empresa.getUbicacion(), 
 						NUMREGISTROSUPERINTENDENCIA,
@@ -91,18 +93,27 @@ public class DAOEmpresa {
 				recursos.add(prepStmt);
 				prepStmt.executeQuery();
 				
-				String sql2 = String.format("INSERT INTO %1$s.TIPOEMPRESA (ID,TIPO) VALUES ('%2$s', '%3$s')", 
+				String sql2 = String.format("INSERT INTO TIPOEMPRESA (ID,TIPO) VALUES ('%2$s', '%3$s')", 
 						USUARIO,  empresa.getDocumento(),empresa.getTipo());
 				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
 				prepStmt2.executeQuery();
 				System.out.println(sql2);
 				
-				String sql3 = String.format("INSERT INTO %1$s.HORARIOEMPRESA (ID,HORARIOAPERTURA,HORARIOCIERRE) VALUES ('%2$s', '%3$s', '%4$s')", 
+				String sql3 = String.format("INSERT INTO HORARIOEMPRESA (ID,HORARIOAPERTURA,HORARIOCIERRE) VALUES ('%2$s', '%3$s', '%4$s')", 
 						USUARIO,  empresa.getDocumento(), empresa.getHorarioApertura(),empresa.getHorarioCierre());
 				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 				recursos.add(prepStmt3);
 				prepStmt3.executeQuery();
+				
+				conn.commit();
+			}
+			catch(Exception e)
+			{
+				conn.rollback();
+				e.printStackTrace();
+				throw e;
+			}
 			
 			
 

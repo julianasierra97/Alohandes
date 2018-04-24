@@ -238,6 +238,7 @@ public class DAOVivienda {
 		{
 			e.printStackTrace();
 			conn.rollback();
+			throw e;
 		}
 
 	}
