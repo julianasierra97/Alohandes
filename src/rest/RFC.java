@@ -3,10 +3,13 @@ package rest;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -96,16 +99,17 @@ public class RFC {
 			}
 		}
 		
-		@GET 
+		@POST
 		@Path("RFC4")
 		@Produces({ MediaType.TEXT_PLAIN})
-		public Response RFC4( )
+		@Consumes({ MediaType.APPLICATION_JSON})
+		public Response RFC4( vos.RFC4 rfc4)
 		{
 			//todo preguntar bien los path param
 			try{
 				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				String rta = tm.RFC4();
+				String rta = tm.RFC4(rfc4.getServicios(),rfc4.getFechaInicio(),rfc4.getFechaFin());
 				return Response.status(200).entity(rta).build();
 			}
 			catch(Exception e){
@@ -132,15 +136,15 @@ public class RFC {
 		
 		
 		@GET 
-		@Path("RFC6")
+		@Path("RFC6/{id: \\\\d+}")
 		@Produces({ MediaType.TEXT_PLAIN})
-		public Response RFC6( )
+		public Response RFC6  (@QueryParam("id") String id)
 		{
 			//todo preguntar bien los path param
 			try{
 				AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
 
-				String rta = tm.RFC6();
+				String rta = tm.RFC6(id);
 				return Response.status(200).entity(rta).build();
 			}
 			catch(Exception e){

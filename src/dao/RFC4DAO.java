@@ -69,19 +69,20 @@ public class RFC4DAO
 	 */
 	public String RFC4(String servicios, String fechaComienzo, String fechaFin) throws SQLException, Exception {
 
-		String rpta="Las ofertas que cumples con los parametros dados son: ";
+		String rpta="Las ofertas que cumplen con los parametros dados son: ";
 		
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String fecha1 = "'"+dateFormat.format(fechaComienzo)+"'";
 		
 		
-		String fecha2 = "'"+dateFormat.format(fechaFin)+"'";
+		
 		
 
 
 
-		String sql1 = String.format("WITH Q1 AS(SELECT %1$s.CONTRATO.ID AS %1$s.CONTRATO FROM %1$s.CONTRATO WHERE '%2$s' < FECHAINICIO AND FECHAFIN < '%2$s' OR FECHAINICIO > '%3$s' AND FECHAFIN > '%3$s')SELECT * FROM  %1$s.CONTRATOHABITACION LEFT OUTER JOIN Q1 ON %1$s.CONTRATOHABITACION.ID_CONTRATO  = Q1.CONTRATO WHERE Q1.CONTRATO IS NULL;",
-				USUARIO);
+		String sql1 = String.format("WITH Q1 AS(SELECT %1$s.CONTRATO.ID AS CONTRATO FROM %1$s.CONTRATO WHERE '%2$s' < FECHAINICIO AND FECHAFIN < '%2$s' OR FECHAINICIO > '%3$s' AND FECHAFIN > '%3$s')SELECT * FROM  %1$s.CONTRATOHABITACION LEFT OUTER JOIN Q1 ON %1$s.CONTRATOHABITACION.ID_CONTRATO  = Q1.CONTRATO WHERE Q1.CONTRATO IS NULL",
+				USUARIO,
+				fechaComienzo,
+				fechaFin);
 
 		System.out.println(sql1);
 
@@ -92,11 +93,13 @@ public class RFC4DAO
 		String[] losServicios= servicios.split(",");
 		while(rs1.next())
 		{
+			
+			String hab=rs1.getString("ID_HABITACION");
 
-			String sql2 = String.format("SELECT NOMBRE FROM %1$s.SERVICIOHABITACION LEFT OUTER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID= %1$s.SERVICIOHABITACION.ID_HABITACION  WHERE %1$s.SERVICIOHABITACION.ID_HABITACION='%2$s';" ,
+			String sql2 = String.format("SELECT NOMBRE FROM %1$s.SERVICIOHABITACION LEFT OUTER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID= %1$s.SERVICIOHABITACION.ID_HABITACION  WHERE %1$s.SERVICIOHABITACION.ID_HABITACION='%2$s'" ,
 
 					USUARIO,
-					rs1.getString("ID_HABITACION"));
+					hab);
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
 
@@ -118,34 +121,37 @@ public class RFC4DAO
 			}
 			if(losServicios.length==contador)
 			{
-				rpta+=rs1.getString("ID_HABITACION")+" ,";
+				rpta+=hab+" ,";
 			}
 
 
 		}
 
 
-		String sql3 = String.format("WITH Q1 AS(SELECT %1$s.CONTRATO.ID AS %1$s.CONTRATO FROM %1$s.CONTRATO WHERE '%2$s' < FECHAINICIO AND FECHAFIN < '%2$s' OR FECHAINICIO > '%3$s' AND FECHAFIN > '%3$s')SELECT * FROM  %1$s.CONTRATOHABITACION LEFT OUTER JOIN Q1 ON %1$s.CONTRATOHABITACION.ID_CONTRATO  = Q1.CONTRATO WHERE Q1.CONTRATO IS NULL;",
+		String sql3 = String.format("WITH Q1 AS(SELECT %1$s.CONTRATO.ID AS CONTRATO FROM %1$s.CONTRATO WHERE '%2$s' < FECHAINICIO AND FECHAFIN < '%2$s' OR FECHAINICIO > '%3$s' AND FECHAFIN > '%3$s')SELECT * FROM  %1$s.CONTRATOVIVIENDA LEFT OUTER JOIN Q1 ON %1$s.CONTRATOVIVIENDA.ID_CONTRATO  = Q1.CONTRATO WHERE Q1.CONTRATO IS NULL",
 				USUARIO,
 				fechaComienzo,
 				fechaFin);
-
+		
 		System.out.println(sql3);
 
 		PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 		recursos.add(prepStmt3);
 
-		ResultSet rs3=prepStmt1.executeQuery();
+		ResultSet rs3=prepStmt3.executeQuery();
+		
+		
 
 		while(rs3.next())
 		{
-			String sql2 = String.format("SELECT NOMBRE FROM %1$s.SERVICIOVIVIENDA LEFT OUTER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID= %1$s.SERVICIOVIVENDA.ID_VIVIENDA  WHERE %1$s.SERVICIOVIVIENDA.ID_VIVIENDA='%2$s';" ,
+			String viv=rs3.getString("ID_VIVIENDA");
+			String sql2 = String.format("SELECT NOMBRE FROM %1$s.SERVICIOVIVIENDA LEFT OUTER JOIN %1$s.SERVICIO ON %1$s.SERVICIO.ID= %1$s.SERVICIOVIVIENDA.ID_VIVIENDA  WHERE %1$s.SERVICIOVIVIENDA.ID_VIVIENDA='%2$s' GROUP BY NOMBRE" ,
 
 					USUARIO,
-					rs1.getString("ID_VIVIENDA"));
+					viv);
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
-
+System.out.println(sql2);
 
 			int contador=0;
 			ResultSet rs2=prepStmt2.executeQuery();
@@ -164,7 +170,7 @@ public class RFC4DAO
 			}
 			if(losServicios.length==contador)
 			{
-				rpta+=rs1.getString("ID_VIVIENDA")+" ,";
+				rpta+=viv+" ,";
 			}
 		}
 
