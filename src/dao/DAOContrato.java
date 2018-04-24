@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -168,15 +169,18 @@ public class DAOContrato
 		}
 		return rpta;
 	}
-	public ArrayList<Contrato> getContratoByIdHabitacionEnFechas(int id, Date fechaInicio, Date fechaFin) throws SQLException
+	
+	
+	
+	
+	
+	public ArrayList<Contrato> getContratoByIdHabitacionEnFechas(int id, String fechaInicio, String fechaFin) throws SQLException
 	{
 		ArrayList<Contrato> contrato = new ArrayList<>();
 
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String fecha1 = "'"+dateFormat.format(fechaInicio)+"'";
-		String fecha2 = "'"+dateFormat.format(fechaFin)+"'";
+		
 
-		String sql = String.format("SELECT * FROM CONTRATO INNER JOIN CONTRATOHABITACION ON CONTRATO.ID= CONTRATOHABITACION.ID_CONTRATO WHERE ID_HABITACION ='%3$s' AND  %2$s < FECHAFIN AND  %2$s< FECHAINICIO AND ESTADO='Activo'",fecha1, fecha2, id ); 
+		String sql = String.format("SELECT * FROM CONTRATO INNER JOIN CONTRATOHABITACION ON CONTRATO.ID= CONTRATOHABITACION.ID_CONTRATO WHERE ID_HABITACION =%3$s AND  '%2$s' < FECHAFIN AND  '%2$s' < FECHAINICIO AND ESTADO='Activo'",fechaInicio, fechaFin, id ); 
 
 		System.out.println(sql);
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -190,7 +194,7 @@ public class DAOContrato
 
 		return contrato;
 	}
-	public ArrayList<Contrato> getContratoByidViviendaEnFechas(Integer id, Date fechaInicio, Date fechaFin) throws SQLException
+	public ArrayList<Contrato> getContratoByidViviendaEnFechas(Integer id, String fechaInicio, String fechaFin) throws SQLException
 	{
 		ArrayList<Contrato> contrato = new ArrayList<>();
 

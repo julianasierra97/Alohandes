@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -1196,13 +1198,14 @@ public class AlohonadesTransactionManager {
 			throw new Exception("La habitacion no existe");
 		}
 
+		
 		DAOContrato daoContrato= new DAOContrato();
 		ArrayList<Contrato> contratos = new ArrayList<>();
 		try 
 		{
 			this.conn = darConexion();
 			daoContrato.setConn(conn);
-			contratos = daoContrato.getContratoByIdHabitacionEnFechas(idHabitacion, new Date(), new Date(Long.MAX_VALUE));
+			contratos = daoContrato.getContratoByIdHabitacionEnFechas(idHabitacion, "05/06/2017", "05/06/2100");
 
 		} 
 		catch (SQLException sqlException) {
@@ -1299,10 +1302,10 @@ public class AlohonadesTransactionManager {
 
 		DAOVivienda daoVivienda = new DAOVivienda( );
 
-		//		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
-		//		{
-		//			throw new Exception("La vivienda a eliminar tiene reservas");
-		//		}
+				if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
+				{
+					throw new Exception("La vivienda a eliminar tiene reservas");
+				}
 
 		try
 		{
@@ -1357,7 +1360,7 @@ public class AlohonadesTransactionManager {
 		{
 			this.conn = darConexion();
 			daoContrato.setConn(conn);
-			contratos = daoContrato.getContratoByidViviendaEnFechas(idHabitacion, new Date(), new Date(Long.MAX_VALUE));
+			contratos = daoContrato.getContratoByidViviendaEnFechas(idHabitacion, "05/06/2017", "05/06/2100");
 
 		} 
 		catch (SQLException sqlException) {
