@@ -74,7 +74,7 @@ public class ViviendaService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id: \\d+}")
-	public Response deleteVivienda(Vivienda vivienda, @PathParam("id") String id) {
+	public Response deleteVivienda(Vivienda vivienda, @PathParam("id") int id) {
 		
 	
 		try{

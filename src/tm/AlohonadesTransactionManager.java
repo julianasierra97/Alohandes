@@ -1300,7 +1300,7 @@ public class AlohonadesTransactionManager {
 		return null;
 	}
 
-	public void deleteVivienda(Vivienda vivienda, String id) throws Exception {
+	public void deleteVivienda(Vivienda vivienda, int id) throws Exception {
 
 
 		DAOVivienda daoVivienda = new DAOVivienda( );

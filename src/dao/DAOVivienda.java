@@ -140,49 +140,50 @@ public class DAOVivienda {
 		if(rs.next())
 		{
 
-			//Segudna sentencia
-			String sql2 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID_VIVIENDA = %2$d ", USUARIO, rs.getInt("ID"));
-
-			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-			recursos.add(prepStmt2);
-			ResultSet rs2 = prepStmt2.executeQuery();
-
-			//tercera sentencia
-			String sql3 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID = %2$d ", USUARIO, rs.getInt("ID_SEGURO"));
-
-			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt3.executeQuery();
-
-
-			if(rs.next()) {
-				ArrayList<Servicio> servicios = new ArrayList<>();
-				while(rs2.next())
-				{
-					servicios.add(new Servicio(rs2.getDouble("COSTO"), rs2.getString("NOMBRE"), rs2.getInt("ID")));
-				}
-				boolean incendio = false;
-				if(rs3.getString("INCENDIO").charAt(0) == 'T')
-				{
-					incendio = true;
-				}
-				boolean robo = false;
-				if(rs3.getString("ROBO").charAt(0) == 'T')
-				{
-					robo = true;
-				}
-				boolean inundaciones = false;
-				if(rs3.getString("INUNDACION").charAt(0) == 'T')
-				{
-					inundaciones = true;
-				}
-
-				Seguro seguro = new Seguro(rs3.getDouble("COSTO"), incendio, robo, inundaciones, rs3.getInt("ID"));
-				vivienda = convertResultSetToVivienda(rs, servicios, seguro);
-			}
+			//			//Segudna sentencia
+			//			String sql2 = String.format("SELECT * FROM SERVICIO WHERE ID_VIVIENDA = %2$d ", USUARIO, rs.getInt("ID"));
+			//
+			//			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			//			recursos.add(prepStmt2);
+			//			ResultSet rs2 = prepStmt2.executeQuery();
+			//
+			//			//tercera sentencia
+			//			String sql3 = String.format("SELECT * FROM %1$s.SEGURO WHERE ID = %2$d ", USUARIO, rs.getInt("ID_SEGURO"));
+			//
+			//			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			//			recursos.add(prepStmt3);
+			//			ResultSet rs3 = prepStmt3.executeQuery();
+			//
+			//
+			//			if(rs.next()) {
+			//				ArrayList<Servicio> servicios = new ArrayList<>();
+			//				while(rs2.next())
+			//				{
+			//					servicios.add(new Servicio(rs2.getDouble("COSTO"), rs2.getString("NOMBRE"), rs2.getInt("ID")));
+			//				}
+			//				boolean incendio = false;
+			//				if(rs3.getString("INCENDIO").charAt(0) == 'T')
+			//				{
+			//					incendio = true;
+			//				}
+			//				boolean robo = false;
+			//				if(rs3.getString("ROBO").charAt(0) == 'T')
+			//				{
+			//					robo = true;
+			//				}
+			//				boolean inundaciones = false;
+			//				if(rs3.getString("INUNDACION").charAt(0) == 'T')
+			//				{
+			//					inundaciones = true;
+			//				}
+			//
+			//				Seguro seguro = new Seguro(rs3.getDouble("COSTO"), incendio, robo, inundaciones, rs3.getInt("ID"));
+			vivienda = convertResultSetToVivienda(rs, new ArrayList<Servicio>(), null);
 		}
-
 		return vivienda;
+
+
+
 	}
 
 
@@ -202,11 +203,11 @@ public class DAOVivienda {
 			conn.setAutoCommit(false);
 
 			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$s, %3$s, '%4$s', '%5$s', '%6$s')", USUARIO, "1010200", "100000", "F", "T", "F");
-			
+
 			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
 			recursos.add(prepStmt0);
 			prepStmt0.executeQuery();
-			
+
 			String sql = String.format("INSERT INTO %1$s.Vivienda(id,capacidad,tipo,direccion,numeroHabitantes,costo,id_seguro,id_persona) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', %6$s, %7$s, %8$s, '%9$s') ", 
 					USUARIO, 
 					vivienda.getId(), 
@@ -250,21 +251,21 @@ public class DAOVivienda {
 	 * @throws SQLException SQLException Genera excepcion si hay error en la conexion o en la consulta SQL
 	 * @throws Exception Si se genera un error dentro del metodo.
 	 */
-	public void deleteVivienda(Vivienda vivienda, String idVivienda) throws SQLException, Exception {
+	public void deleteVivienda(Vivienda vivienda, int idVivienda) throws SQLException, Exception {
 
 		try {
 			conn.setAutoCommit(false);
-			
-			String sql2 = String.format("DELETE FROM %1$s.SERVICIOVIVIENDA WHERE ID_VIVIENDA = %2$d", USUARIO, idVivienda);
+
+			String sql2 = String.format("DELETE FROM SERVICIOVIVIENDA WHERE ID_VIVIENDA = %2$d", USUARIO, idVivienda);
 
 			System.out.println(sql2);
 
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
 			prepStmt2.executeQuery();
-			
-			
-			
+
+
+
 			String sql1 = String.format("DELETE FROM %1$s.CONTRATOVIVIENDA WHERE ID_VIVIENDA = %2$d", USUARIO, idVivienda);
 
 			System.out.println(sql1);
@@ -272,9 +273,9 @@ public class DAOVivienda {
 			PreparedStatement prepStmt1 = conn.prepareStatement(sql1);
 			recursos.add(prepStmt1);
 			prepStmt1.executeQuery();
-			
-			
-			
+
+
+
 			String sql = String.format("DELETE FROM %1$s.VIVIENDA WHERE ID = %2$d", USUARIO, idVivienda);
 
 			System.out.println(sql);
@@ -282,16 +283,16 @@ public class DAOVivienda {
 			PreparedStatement prepStmt = conn.prepareStatement(sql);
 			recursos.add(prepStmt);
 			prepStmt.executeQuery();
-			
+
 		}
-		
+
 		catch(Exception e)
 		{
 			conn.rollback();
 			e.printStackTrace();
 			throw e;
 		}
-		
+
 	}
 
 
@@ -334,9 +335,9 @@ public class DAOVivienda {
 
 		Integer id = resultSet.getInt("ID");
 		Integer capacidad = resultSet.getInt("CAPACIDAD");
-		String tipo =resultSet.getString("PRECIO");
+		String tipo =resultSet.getString("TIPO");
 		String direccion=resultSet.getString("DIRECCION");
-		Integer numeroDeHabitaciones = resultSet.getInt("NUMEROHABITACIONES");
+		Integer numeroDeHabitaciones = resultSet.getInt("NUMEROHABITANTES");
 		double costo = resultSet.getDouble("COSTO");
 		Vivienda vivienda  = new Vivienda(capacidad, tipo, numeroDeHabitaciones, costo, id, direccion, servicios, seguro);
 		return vivienda;

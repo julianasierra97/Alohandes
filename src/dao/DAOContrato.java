@@ -219,7 +219,7 @@ public class DAOContrato
 	{
 		ArrayList<Contrato> contrato = new ArrayList<>();
 
-		String sql = String.format("SELECT * FROM CONTRATO INNER JOIN CONTRATOVIVIENDA ON CONTRATO.ID= CONTRATOVIVIENDA.ID_CONTRATO WHERE ID_VIVIENDA ='%3$s' AND  %1$s < FECHAFIN AND  %2$s< FECHAINICIO AND ESTADO='Activo'", USUARIO, fechaInicio, fechaFin, id ); 
+		String sql = String.format("SELECT * FROM CONTRATO INNER JOIN CONTRATOVIVIENDA ON CONTRATO.ID= CONTRATOVIVIENDA.ID_CONTRATO WHERE ID_VIVIENDA =%4$d AND  '%2$s' < FECHAFIN AND  '%3$s' < FECHAINICIO AND ESTADO='Activo'", USUARIO, fechaInicio, fechaFin, id ); 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
