@@ -87,9 +87,6 @@ public class RF7DAO {
 		ResultSet rs2=prepStmt2.executeQuery();
 
 
-		
-		
-
 		if(rs1.next() && rs2.next())
 		{
 			cantidadTotal += rs1.getInt("CUENTA");
