@@ -42,12 +42,12 @@ public class RF10DAO
 	 * Atributo que genera la conexion a la base de datos
 	 */
 	private Connection conn;
-	
+
 	private DAOContrato daoContrato;
 	private RFC4DAO daoRFC4;
 	private AlohonadesTransactionManager tm;
 
-	
+
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS DE INICIALIZACION
@@ -58,7 +58,7 @@ public class RF10DAO
 	 */
 	public RF10DAO() {
 		recursos = new ArrayList<Object>();
-		
+
 	}
 
 	//----------------------------------------------------------------------------------------------------------------------------------
@@ -74,41 +74,57 @@ public class RF10DAO
 	public void RF10(String tipo, String id) throws SQLException, Exception {
 
 		conn.setAutoCommit(false);
-	
+
 		if(tipo.equals("Habitacion"))
 		{
-			
-			
-			String sql0 = String.format("SELECT ID FROM %1$s.OPERADORHABITACION WHERE ID_OPERADOR='%2$s'" ,
-					USUARIO,
-					id);
 
-			System.out.println(sql0);
 
-			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
-			recursos.add(prepStmt0);
-
-			ResultSet rs=prepStmt0.executeQuery();
-			while(rs.next())
+			try
 			{
-				String sql = String.format("UPDATE %1$s.HABITACION SET ESTADO =null WHERE %1$s.HABITACION.ID=%2$s" ,
+				String sql0 = String.format("SELECT ID FROM %1$s.OPERADORHABITACION WHERE ID_OPERADOR='%2$s'" ,
 						USUARIO,
-						rs.getString("ID"));
+						id);
 
-				System.out.println(sql);
+				System.out.println(sql0);
 
-				PreparedStatement prepStmt = conn.prepareStatement(sql);
-				recursos.add(prepStmt);
+				PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
+				recursos.add(prepStmt0);
 
-				prepStmt.executeQuery();
-			}
-			
-			
-					
+				ResultSet rs=prepStmt0.executeQuery();
 				
+				if(rs.wasNull())
+				{
+					throw new Exception ("No hay operadores con ese id");
+				}
+				while(rs.next())
+				{
+					String sql = String.format("UPDATE %1$s.HABITACION SET ESTADO =null WHERE %1$s.HABITACION.ID=%2$s" ,
+							USUARIO,
+							rs.getString("ID"));
+
+					System.out.println(sql);
+
+					PreparedStatement prepStmt = conn.prepareStatement(sql);
+					recursos.add(prepStmt);
+
+					prepStmt.executeQuery();
+
+				}
+
+
+
+
+
+				cerrarRecursos();
 			}
-			cerrarRecursos();
-		
+			catch (SQLException e) {
+				if(e.getMessage().equals("No hay lectura de datos"))
+				{
+					throw new Exception("No hay ningun operador con ese id registrado en la base de datos");
+				}
+			}
+		}
+
 		if(tipo.equals("Vivienda"))
 		{
 			String sql0 = String.format("SELECT ID FROM %1$s.OPERADORVIVIENDA WHERE ID_OPERADOR='%2$s'" ,
@@ -135,18 +151,20 @@ public class RF10DAO
 
 				prepStmt.executeQuery();
 			}
+
 		}
-		
-		
-
-
 	}
 
 
 
 
 
-	
+
+
+
+
+
+
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS AUXILIARES

@@ -79,6 +79,7 @@ public class RF9DAO
 		{
 			
 			
+			try {
 			String sql0 = String.format("SELECT ID FROM %1$s.OPERADORHABITACION WHERE ID_OPERADOR='%2$s'" ,
 					USUARIO,
 					id);
@@ -89,6 +90,12 @@ public class RF9DAO
 			recursos.add(prepStmt0);
 
 			ResultSet rs=prepStmt0.executeQuery();
+			if(rs.wasNull())
+			{
+				throw new Exception ("No hay operadores con ese id");
+			}
+			else
+			{
 			while(rs.next())
 			{
 				String sql = String.format("UPDATE %1$s.HABITACION SET ESTADO ='Dasabilitada' WHERE %1$s.HABITACION.ID=%2$s" ,
@@ -185,9 +192,16 @@ public class RF9DAO
 				
 			}
 			cerrarRecursos();
+			}
+			}catch (SQLException e) {
+				if (e.getMessage().equals("No hay lectura de datos")) {
+					throw new Exception("No hay un operador con ese id");
+				}
+			}
 		}
 		if(tipo.equals("Vivienda"))
 		{
+		
 			String sql0 = String.format("SELECT ID FROM %1$s.OPERADORVIVIENDA WHERE ID_OPERADOR='%2$s'" ,
 					USUARIO,
 					id);
@@ -305,38 +319,6 @@ public class RF9DAO
 
 
 
-	public String convertResultSetActualToString(ResultSet resultSet, ResultSet resultSet2) throws SQLException {
-		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
-		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
-		int numero= resultSet.getInt("GananciaActualHabitacion");
-		resultSet.getString("ID");
-
-		int numero2=resultSet2.getInt("GananciaActualVivienda");
-		resultSet.getString("ID");
-
-		numero+= numero2;
-		return "El usuario con el ID "+ 	resultSet.getString("ID")+ "gano "+ numero+""+ " en este año ";
-
-
-
-
-	}
-	public String convertResultSetPasadoToString(ResultSet resultSet, ResultSet resultSet2) throws SQLException {
-		//Requerimiento 1G: Complete el metodo con los atributos agregados previamente en la clase Bebedor. 
-		//						 Tenga en cuenta los nombres de las columnas de la Tabla en la Base de Datos (ID, NOMBRE, PRESUPUESTO, CIUDAD)
-		int numero= resultSet.getInt("GananciaPasadalHabitacion");
-		resultSet.getString("ID");
-
-		int numero2=resultSet2.getInt("GananciaPasadaVivienda");
-		resultSet.getString("ID");
-
-		numero+= numero2;
-		return "El usuario con el ID "+ 	resultSet.getString("ID")+ "gano "+ numero+""+ " en este año ";
-
-
-
-
-	}
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS AUXILIARES
