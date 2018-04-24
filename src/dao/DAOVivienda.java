@@ -201,13 +201,13 @@ public class DAOVivienda {
 		try{
 			conn.setAutoCommit(false);
 
-			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$d, %3$d, '%4$s', '%5$s', '%6$s')", USUARIO, vivienda.getSeguro().getId(), vivienda.getSeguro().getCosto(), vivienda.getSeguro().isIncendio(), vivienda.getSeguro().isRobo(), vivienda.getSeguro().isInundaciones());
+			String sql0 = String.format("INSERT INTO SEGURO(ID, COSTO, INCENDIO, ROBO, INUNDACIONES) VALUES(%2$s, %3$s, '%4$s', '%5$s', '%6$s')", USUARIO, "1010200", "100000", "F", "T", "F");
 			
 			PreparedStatement prepStmt0 = conn.prepareStatement(sql0);
 			recursos.add(prepStmt0);
 			prepStmt0.executeQuery();
 			
-			String sql = String.format("INSERT INTO %1$s.Vivienda(id,capacidad,tipo,direccion,numeroHabitaciones,costo,id_seguro,id_persona) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', %6$d, %7$d, %8$d, '%9$s') ", 
+			String sql = String.format("INSERT INTO %1$s.Vivienda(id,capacidad,tipo,direccion,numeroHabitantes,costo,id_seguro,id_persona) VALUES ('%2$s', '%3$s', '%4$s', '%5$s', %6$s, %7$s, %8$s, '%9$s') ", 
 					USUARIO, 
 					vivienda.getId(), 
 
@@ -216,7 +216,7 @@ public class DAOVivienda {
 					vivienda.getDireccion(),
 					vivienda.getNumeroDeHabitaciones(),
 					vivienda.getCosto(),
-					vivienda.getSeguro().getId(),
+					"1010200",
 					idPersona
 					);
 			System.out.println(sql);
@@ -226,7 +226,7 @@ public class DAOVivienda {
 			prepStmt.executeQuery();
 
 			for (Servicio servicio : vivienda.getServicios()) {
-				String sql2 = String.format("INSERT INTO %1$s.SERVICIOVIVIENDA(IDSERVICIO, ID_VIVIENDA, COSTO) VALUES (%2$d, %3$d, %4$d) ",USUARIO, servicio.getId(), vivienda.getId(), servicio.getCosto());
+				String sql2 = String.format("INSERT INTO %1$s.SERVICIOVIVIENDA(IDSERVICIO, ID_VIVIENDA, COSTO) VALUES (%2$s, %3$s, %4$s) ",USUARIO, servicio.getId(), vivienda.getId(), servicio.getCosto());
 				PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 				recursos.add(prepStmt2);
 				prepStmt2.executeQuery();
