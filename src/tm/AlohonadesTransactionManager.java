@@ -912,12 +912,12 @@ public class AlohonadesTransactionManager {
 					{
 						porcentajeRecargo=0.3;
 					}
-					
+
 					contrato.setCosto(contrato.getCosto()*porcentajeRecargo);
 					contrato.setEstado("Cancelado");
 					daocontrato.cancelarReserva(contrato);
 
-				
+
 
 
 				}
@@ -1063,10 +1063,10 @@ public class AlohonadesTransactionManager {
 		{
 			throw new Exception("No se existe la habitacion que se quiere eliminar");
 		}
-		//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
-		//		{
-		//			throw new Exception("La habitacion que se quiere eliminar esta reservada");
-		//		}
+		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
+		{
+			throw new Exception("La habitacion que se quiere eliminar esta reservada");
+		}
 
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		try
@@ -1240,10 +1240,10 @@ public class AlohonadesTransactionManager {
 			throw new Exception("La habitacion a eliminar no existe");
 		}
 
-		//		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
-		//		{
-		//			throw new Exception("La habitacion tiene reservas.");
-		//		}
+		if(getContratosByIdHabitacionEntreFechas(idHabitacion).size() != 0)
+		{
+			throw new Exception("La habitacion tiene reservas.");
+		}
 
 		DAOHabitacion daoHabitacion = new DAOHabitacion();
 		try
@@ -1438,7 +1438,7 @@ public class AlohonadesTransactionManager {
 			this.conn = darConexion();
 			daocontrato.setConn(conn);
 			contratos = daocontrato.selectTop20();
-  
+
 		} 
 		catch (SQLException sqlException) {
 			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
