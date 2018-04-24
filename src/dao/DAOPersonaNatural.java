@@ -200,25 +200,25 @@ public class DAOPersonaNatural {
 			ArrayList<Vivienda> viviendas = new ArrayList<>();
 
 			
-			String sql2 = String.format("select * from OPERADORHABITACION full outer join habitacion on habitacion.ID=OPERADORHABITACION.ID where ID_OPERADOR='%2$s'", USUARIO, id);
-
-			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
-			recursos.add(prepStmt2);
-			ResultSet rs2 = prepStmt2.executeQuery();
-			while(rs2.next())
-			{
-				habitaciones.add(habitacion.convertResultSetToHabitacion(rs2, new ArrayList<Servicio>()));
-			}
-			
-			String sql3 = String.format("select * from vivienda where ID_PERSONA='%2$s'", USUARIO, id);
-
-			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
-			recursos.add(prepStmt3);
-			ResultSet rs3 = prepStmt2.executeQuery();
-			while(rs3.next())
-			{
-				viviendas.add(vivienda.convertResultSetToVivienda(rs3, new ArrayList<Servicio>(), null));
-			}
+//			String sql2 = String.format("select * from OPERADORHABITACION full outer join habitacion on habitacion.ID=OPERADORHABITACION.ID where ID_OPERADOR='%2$s'", USUARIO, id);
+//
+//			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+//			recursos.add(prepStmt2);
+//			ResultSet rs2 = prepStmt2.executeQuery();
+//			while(rs2.next())
+//			{
+//				habitaciones.add(habitacion.convertResultSetToHabitacion(rs2, new ArrayList<Servicio>()));
+//			}
+//			
+//			String sql3 = String.format("select * from vivienda where ID_PERSONA='%2$s'", USUARIO, id);
+//
+//			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+//			recursos.add(prepStmt3);
+//			ResultSet rs3 = prepStmt2.executeQuery();
+//			while(rs3.next())
+//			{
+//				viviendas.add(vivienda.convertResultSetToVivienda(rs3, new ArrayList<Servicio>(), null));
+//			}
 			
 
 			persona = convertResultSetToPersonaNatural(rs1, habitaciones, viviendas);
