@@ -25,6 +25,7 @@ import dao.DAOUsuario;
 import dao.DAOVivienda;
 import dao.RF10DAO;
 import dao.RF9DAO;
+import dao.RFC10DAO;
 import dao.RFC1DAO;
 import dao.RFC3DAO;
 import dao.RFC4DAO;
@@ -33,6 +34,7 @@ import dao.RFC6DAO;
 import dao.RFC8DAO;
 import dao.RFC9DAO;
 import sun.security.util.DisabledAlgorithmConstraints;
+import vos.CondicionesRFC10;
 import vos.Contrato;
 import vos.Empresa;
 import vos.Habitacion;
@@ -1778,6 +1780,44 @@ public class AlohonadesTransactionManager {
 			this.conn = darConexion();
 			dao10.setConn(conn);
 			dao10.RF10(tipo, id);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao10.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return rta;
+	}
+	
+	
+	public String RFC10(String id, CondicionesRFC10 condiciones) throws Exception
+	{
+		String rta = "";
+		RFC10DAO dao10 = new RFC10DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao10.setConn(conn);
+			rta = dao10.RFC10(id, condiciones);
 
 		} 
 		catch (SQLException sqlException) {

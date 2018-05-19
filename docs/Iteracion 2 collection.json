@@ -1,0 +1,834 @@
+{
+	"info": {
+		"name": "ite2",
+		"_postman_id": "d8edc924-68d3-4ac5-bce0-332da2364a43",
+		"description": "RFC5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "RFC5",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RFC5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RFC5"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addHabitacion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\t\"capacidad\" : 10,\n\t\"tipo\": \"Estandar\",\n\t\"precio\": 25000,\n\t\"ubicacion\": \"Hola\",\n\t\"compartida\": false,\n\t\"servicios\": [{\n\t\t\"costo\": 250000,\n\t\t\"nombre\": \"Yacuzzi\",\n\t\t\"id\": 7\n\t}],\n\t\"id\": 100\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/habitaciones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"habitaciones"
+					]
+				},
+				"description": "Habitacion agregar "
+			},
+			"response": []
+		},
+		{
+			"name": "addVivienda ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\t\"capacidad\" : 10,\n\t\"tipo\": \"Apartamento\",\n\t\"numeroDeHabitaciones\": 2,\n\t\"costo\": 300000,\n\t\"direccion\": \"calle no importa\",\n\t\"servicios\": [{\n\t\t\"costo\": 250000,\n\t\t\"nombre\": \"Yacuzzi\",\n\t\t\"id\": 7\n\t},\n\t{\n\t\t\"costo\": 540000,\n\t\t\"nombre\": \"tv cable\",\n\t\t\"id\": 20\n\t}\n\t],\n\t\"seguro\":{\n\t\t\"id\": 100,\n\t\t\"incendio\": true,\n\t\t\"robo\": true,\n\t\t\"inundaciones\": true,\n\t\t\"costo\": 4000000\n\t},\n\t\"id\": 100\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/viviendas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"viviendas"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addUsuario",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"ubew0345\",\n    \"contrasenha\": \"O0Or2Fz7QSfgh\",\n    \"documento\": \"40179523\",\n    \"tipoDocumento\": \"Cedula\",\n    \"edad\": 36,\n    \"genero\": false,\n    \"nombre\": \"Udale\",\n    \"correo\": \"56w@uniandes.edu.co\",\n    \"tipo\": \"Estudiante\",\n    \"apellido\": \"Bew\",\n    \"contratos\": null,\n    \"padres\": null,\n    \"hijos\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/usuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"usuario"
+					]
+				},
+				"description": "add usuario"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete habitacion ",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": 1,\n\t\"capacidad\": 5,\n\t\"tipo\": \"Habitacion de Hotel\",\n\t\"ubicacion\": \"1762 Talisman Pass\",\n\t\"precio\": 86543\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/habitaciones/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"habitaciones",
+						"1"
+					]
+				},
+				"description": "Delete habitacon "
+			},
+			"response": []
+		},
+		{
+			"name": "RFC1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RFC/RFC1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RFC",
+						"RFC1"
+					]
+				},
+				"description": "RFC1"
+			},
+			"response": []
+		},
+		{
+			"name": "addHotel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ubicacion\": \"Calle me vale jopo\",\n\t\"tipo\": \"Hotel\",\n\t\"horarioApertura\": \"6:00\",\n\t\"horarioCierre\": \"18:00\",\n\t\"numRegistroSuperintendencia\": 123456789098,\n\t\"numRegistroCamaraComercio\": 1234567890098,\n\t\"login\": \"empresa.1\",\n\t\"contrasenha\": \"kitaruto\",\n\t\"documento\": 122233575,\n\t\"tipoDocumento\": \"NIT\",\n\t\"nombre\": \"Watchdogs\",\n\t\"correo\": \"hola@hotmail.com\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/empresa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"empresa"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addContrato",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 222233,\n  \"fechaInicio\": \"2018-01-01\",\n  \"fechaFin\": \"2018-12-01\",\n  \"tipo\": \"Reserva\",\n  \"costo\": 96737,\n  \"idCliente\": 40179523,\n  \"estado\": \"Activo\",\n  \"idHabitacion\": 21,\n  \"numeroDePersonas\": 1,\n  \"fechaCreacion\": \"2017-01-08\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/contrato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"contrato"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "cancelarReserva",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 222233,\n  \"fechaInicio\": \"2018-01-01\",\n  \"fechaFin\": \"2018-12-01\",\n  \"tipo\": \"Reserva\",\n  \"costo\": 96737,\n  \"idCliente\": 40179523,\n  \"estado\": \"Cancelado\",\n  \"idHabitacion\": 21,\n  \"numeroDePersonas\": 1,\n  \"fechaCreacion\": \"2017-01-08\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/contrato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"contrato"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "deleteViviendaFalla",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t{\n\t\"capacidad\" : 10,\n\t\"tipo\": \"Apartamento\",\n\t\"numeroDeHabitaciones\": 2,\n\t\"costo\": 300000,\n\t\"direccion\": \"calle no importa\",\n\t\"servicios\": [{\n\t\t\"costo\": 250000,\n\t\t\"nombre\": \"Yacuzzi\",\n\t\t\"id\": 7\n\t},\n\t{\n\t\t\"costo\": 540000,\n\t\t\"nombre\": \"tv cable\",\n\t\t\"id\": 20\n\t}\n\t],\n\t\"seguro\":{\n\t\t\"id\": 100,\n\t\t\"incendio\": true,\n\t\t\"robo\": true,\n\t\t\"inundaciones\": true,\n\t\t\"costo\": 4000000\n\t},\n\t\"id\": 100\n\t}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/viviendas/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"viviendas",
+						"7"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "deleteVivienda",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\t{\n\t\"capacidad\" : 10,\n\t\"tipo\": \"Apartamento\",\n\t\"numeroDeHabitaciones\": 2,\n\t\"costo\": 300000,\n\t\"direccion\": \"calle no importa\",\n\t\"servicios\": [{\n\t\t\"costo\": 250000,\n\t\t\"nombre\": \"Yacuzzi\",\n\t\t\"id\": 7\n\t},\n\t{\n\t\t\"costo\": 540000,\n\t\t\"nombre\": \"tv cable\",\n\t\t\"id\": 20\n\t}\n\t],\n\t\"seguro\":{\n\t\t\"id\": 100,\n\t\t\"incendio\": true,\n\t\t\"robo\": true,\n\t\t\"inundaciones\": true,\n\t\t\"costo\": 4000000\n\t},\n\t\"id\": 7\n\t}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/viviendas/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"viviendas",
+						"7"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RFC2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RFC/RFC2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RFC",
+						"RFC2"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RFC3",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RFC/RFC3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RFC",
+						"RFC3"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RFC4",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addHostalFalla",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ubicacion\": \"Calle me vale jopo\",\n\t\"tipo\": \"Hostal\",\n\t\"horarioApertura\": \"\",\n\t\"horarioCierre\": \"\",\n\t\"numRegistroSuperintendencia\": 123456789098,\n\t\"numRegistroCamaraComercio\": 1234567890098,\n\t\"login\": \"hostal1\",\n\t\"contrasenha\": \"kitaruto\",\n\t\"documento\": 122233575,\n\t\"tipoDocumento\": \"NIT\",\n\t\"nombre\": \"Watchdogs\",\n\t\"correo\": \"hola@hotmail.com\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/empresa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"empresa"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addHostal",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ubicacion\": \"carrera 15\",\n\t\"tipo\": \"Hostal\",\n\t\"horarioApertura\": \"6:00\",\n\t\"horarioCierre\": \"18:00\",\n\t\"numRegistroSuperintendencia\": 123456789095,\n\t\"numRegistroCamaraComercio\": 123456789004,\n\t\"login\": \"hostal2\",\n\t\"contrasenha\": \"kitaruto\",\n\t\"documento\": 122233576,\n\t\"tipoDocumento\": \"NIT\",\n\t\"nombre\": \"Wattchdogs\",\n\t\"correo\": \"holaa@hotmail.com\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/empresa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"empresa"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addPersonaNatural",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"jc.pulidooo\",\n\t\"contrasenha\": \"loquesea\",\n\t\"documento\": \"1233454576784\",\n\t\"tipoDocumento\": \"Cedula\",\n\t\"nombre\": \"Andres\",\n\t\"tipo\": \"Profesor\",\n\t\"edad\": 25,\n\t\"genero\": true,\n\t\"correo\": \"a.dres@uniandes.edu.co\",\n\t\"apellido\": \"Garcia\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/personaNatural",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"personaNatural"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addPersonaNaturalFalla",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"jc.pulidooo\",\n\t\"contrasenha\": \"loquesea\",\n\t\"documento\": \"1233454576784\",\n\t\"tipoDocumento\": \"Cedula\",\n\t\"nombre\": \"Andres\",\n\t\"tipo\": \"Profesor\",\n\t\"edad\": 25,\n\t\"genero\": true,\n\t\"correo\": \"a.dres\",\n\t\"apellido\": \"Garcia\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/personaNatural",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"personaNatural"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addHabitacionFalla",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"capacidad\" : 10,\n\t\"tipo\": \"Habitacion de Hostal\",\n\t\"precio\": 25000,\n\t\"ubicacion\": \"Hola\",\n\t\"compartida\": false,\n\t\"servicios\": [{\n\t\t\"costo\": 250000,\n\t\t\"nombre\": \"Yacuzzi\",\n\t\t\"id\": 7\n\t}],\n\t\"id\": 100\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/habitaciones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"habitaciones"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addViviendaFalla",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\t\"capacidad\" : 10,\n\t\"tipo\": \"Apartamento\",\n\t\"numeroDeHabitaciones\": 2,\n\t\"costo\": 300000,\n\t\"direccion\": \"calle no importa\",\n\t\"servicios\": \n\t[{\n\t\t\"costo\": 250000,\n\t\t\"nombre\": \"Yacuzzi\",\n\t\t\"id\": 7\n\t},\n\t{\n\t\t\"costo\": 540000,\n\t\t\"nombre\": \"tv cable\",\n\t\t\"id\": 20\n\t}],\n\t\"seguro\":{\n\t\t\"id\": 100,\n\t\t\"incendio\": true,\n\t\t\"robo\": true,\n\t\t\"inundaciones\": true,\n\t\t\"costo\": 4000000\n\t},\n\t\"id\": 100\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/viviendas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"viviendas"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addUsuarioFalla",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"ubew0345\",\n    \"contrasenha\": \"O0Or2Fz7QSfgh\",\n    \"documento\": \"40179523\",\n    \"tipoDocumento\": \"Cedula\",\n    \"edad\": 36,\n    \"genero\": false,\n    \"nombre\": \"Udale\",\n    \"correo\": \"56w@hotmail.com\",\n    \"tipo\": \"Estudiante\",\n    \"apellido\": \"Bew\",\n    \"contratos\": null,\n    \"padres\": null,\n    \"hijos\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/usuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"usuario"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "addContratoFalla",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 222233,\n  \"fechaInicio\": \"2018-01-01\",\n  \"fechaFin\": \"2018-12-01\",\n  \"tipo\": \"Reserva\",\n  \"costo\": 96737,\n  \"idCliente\": 40179523,\n  \"estado\": \"Activo\",\n  \"idHabitacion\": 21,\n  \"numeroDePersonas\": 1,\n  \"fechaCreacion\": \"2017-01-08\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/contrato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"contrato"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "cancelarReservaFalla",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 1232122321,\n  \"fechaInicio\": \"2018-01-01\",\n  \"fechaFin\": \"2018-12-01\",\n  \"tipo\": \"Reserva\",\n  \"costo\": 96737,\n  \"idCliente\": 40179523,\n  \"estado\": \"Activo\",\n  \"idHabitacion\": 21,\n  \"numeroDePersonas\": 1,\n  \"fechaCreacion\": \"2017-01-08\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/contrato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"contrato"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "cancelarReservaFalla2",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 100000,\n  \"fechaInicio\": \"2018-01-01\",\n  \"fechaFin\": \"2018-12-01\",\n  \"tipo\": \"Contrato\",\n  \"costo\": 96737,\n  \"idCliente\": 40179523,\n  \"estado\": \"Activo\",\n  \"idHabitacion\": 21,\n  \"numeroDePersonas\": 1,\n  \"fechaCreacion\": \"2017-01-08\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/contrato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"contrato"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "FR10 Falla",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\"id\":\"9925\",\n\"tipo\":\"Habitacion\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RF10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RF10"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RF9Falla ",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\"id\":\"9937845\",\n\"tipo\":\"Habitacion\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RF9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RF9"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RF9 ",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\"id\":\"9932118103411345\",\n\"tipo\":\"Habitacion\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RF9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RF9"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RF10",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n\"id\":\"9932118103411345\",\n\"tipo\":\"Habitacion\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/Alohandes/rest/RF10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"Alohandes",
+						"rest",
+						"RF10"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
