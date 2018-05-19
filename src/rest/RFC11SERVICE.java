@@ -2,9 +2,7 @@ package rest;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -12,12 +10,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import oracle.jdbc.proxy.annotation.Post;
 import tm.AlohonadesTransactionManager;
 import vos.CondicionesRFC10;
 
-@Path( "RFC10" )
-public class RFC10Service {
+@Path( "RFC11" )
+
+public class RFC11SERVICE {
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// ATRIBUTOS
@@ -52,13 +50,12 @@ public class RFC10Service {
 	@Path("{id}")
 	@Consumes({ MediaType.APPLICATION_JSON})
 	@Produces({ MediaType.TEXT_PLAIN})
-	public Response RF10(@PathParam( "id" ) String id, CondicionesRFC10 condicion)
+	public Response RF11(@PathParam( "id" ) String id,CondicionesRFC10 condicion)
 	{
-		
 		try{
 			AlohonadesTransactionManager tm = new AlohonadesTransactionManager(getPath());
-
-			String rta = tm.RFC10(id, condicion);
+			System.out.println("Entro 1");
+			String rta = tm.RFC11(id, condicion);
 			return Response.status(200).entity(rta).build();
 		}
 		catch(Exception e){
@@ -66,5 +63,4 @@ public class RFC10Service {
 			return Response.status(500).entity(doErrorMessage(e)).build();
 		}
 	}
-
 }

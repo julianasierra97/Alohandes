@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import vos.Habitacion;
 import vos.Servicio;
@@ -66,7 +67,7 @@ public class DAOHabitacion {
 		//Aclaracion: Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
 		//Primera sentencia
 
-		String sql = String.format("SELECT habitacion.escompartida as escompartida, HABITACION.id as ID, HABITACION.capacidad as capacidad, HABITACION.UBICACION as ubicacion, HABITACION.PRECIO, TIPOHABITACION.TIPO from HABITACION, TIPOHABITACION where HABITACION.ID = TIPOHABITACION.ID", USUARIO);
+		String sql = String.format("SELECT habitacion.escompartida as escompartida, HABITACION.id as ID, HABITACION.capacidad as capacidad, HABITACION.UBICACION as ubicacion, HABITACION.PRECIO, TIPOHABITACION.TIPO from HABITACION, TIPOHABITACION, OPERADORHABITACION where HABITACION.ID = TIPOHABITACION.ID", USUARIO);
 
 
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
@@ -253,11 +254,11 @@ public class DAOHabitacion {
 	 */
 	public void deleteHabitacion(Habitacion habitacion) throws SQLException, Exception {
 
-		
+
 
 		try {
 			conn.setAutoCommit(false);
-			
+
 			String sql5 = String.format("DELETE FROM %1$s.CONTRATOHABITACION WHERE ID_CONTRATO = %2$d ", USUARIO, habitacion.getId());
 
 			System.out.println(sql5);
@@ -265,8 +266,8 @@ public class DAOHabitacion {
 			PreparedStatement prepStmt5 = conn.prepareStatement(sql5);
 			recursos.add(prepStmt5);
 			prepStmt5.executeQuery();
-			
-			
+
+
 			String sql4 = String.format("DELETE FROM %1$s.OPERADORHABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
 
 			System.out.println(sql4);
@@ -274,8 +275,8 @@ public class DAOHabitacion {
 			PreparedStatement prepStmt4 = conn.prepareStatement(sql4);
 			recursos.add(prepStmt4);
 			prepStmt4.executeQuery();
-			
-			
+
+
 			String sql3 = String.format("DELETE FROM %1$s.SERVICIOHABITACION WHERE ID_HABITACION = %2$d ", USUARIO, habitacion.getId());
 
 			System.out.println(sql3);
@@ -283,8 +284,8 @@ public class DAOHabitacion {
 			PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
 			recursos.add(prepStmt3);
 			prepStmt3.executeQuery();
-			
-			
+
+
 			String sql2 = String.format("DELETE FROM %1$s.TIPOHABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
 
 			System.out.println(sql2);
@@ -292,8 +293,8 @@ public class DAOHabitacion {
 			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
 			recursos.add(prepStmt2);
 			prepStmt2.executeQuery();
-			
-			
+
+
 			String sql = String.format("DELETE FROM %1$s.HABITACION WHERE ID = %2$d ", USUARIO, habitacion.getId());
 
 			System.out.println(sql);
@@ -303,7 +304,7 @@ public class DAOHabitacion {
 			recursos.add(prepStmt);
 			prepStmt.executeQuery();
 
-			
+
 			conn.commit();
 		}
 		catch(Exception e)
@@ -362,11 +363,56 @@ public class DAOHabitacion {
 		Integer capacidad = resultSet.getInt("CAPACIDAD");
 		String tipo = resultSet.getString("TIPO");
 		double precio =resultSet.getDouble("PRECIO");
-		String ubicacion=resultSet.getString("UBICACION");
 		Integer id = resultSet.getInt("ID");
-		Habitacion habitacion = new Habitacion(capacidad, tipo, precio, ubicacion, compartida, servicios, id);
+		Habitacion habitacion = new Habitacion(capacidad, tipo, precio, "", compartida, servicios, id);
 
 		return habitacion;
+	}
+
+
+
+	public List<Habitacion> darHabitacionesPorIdUsuario(String idUsuario) throws SQLException {
+		ArrayList<Habitacion> habitaciones = new ArrayList<>();
+
+		//Aclaracion: Por simplicidad, solamente se obtienen los primeros 50 resultados de la consulta
+		//Primera sentencia
+
+		String sql = String.format("SELECT habitacion.escompartida as escompartida, HABITACION.id as ID, HABITACION.capacidad as capacidad, HABITACION.PRECIO, TIPOHABITACION.TIPO from HABITACION, TIPOHABITACION, OPERADORHABITACION where HABITACION.ID = TIPOHABITACION.ID AND OPERADORHABITACION.ID_OPERADOR='%2$s' AND OPERADORHABITACION.ID=HABITACION.ID", USUARIO,idUsuario);
+
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while(rs.next())
+		{
+			//			//Segunda rentencia
+			//			String sql2 = String.format("SELECT * FROM %1$s.SERVICIOHABITACION WHERE ID_HABITACION = %2$d", USUARIO, rs.getInt("ID"));
+			//
+			//			PreparedStatement prepStmt2 = conn.prepareStatement(sql2);
+			//			recursos.add(prepStmt2);
+			//			ResultSet rs2 = prepStmt.executeQuery();
+
+
+
+			//				//tercera sentencia
+			//				String sql3 = String.format("SELECT * FROM %1$s.SERVICIO WHERE ID = %2$d", USUARIO, rs2.getInt("ID"));
+			//
+			//				PreparedStatement prepStmt3 = conn.prepareStatement(sql3);
+			//				recursos.add(prepStmt3);
+			//				ResultSet rs3 = prepStmt.executeQuery();
+			//				ArrayList<Servicio> servicios = new ArrayList<>();
+			//
+			//				while(rs3.next())
+			//				{
+			//					servicios.add(new Servicio(rs3.getDouble("COSTO"), rs3.getString("NOMBRE"), rs3.getInt("ID")));
+			//				}
+
+			habitaciones.add(convertResultSetToHabitacion(rs, null));
+
+		}
+
+		return habitaciones;
 	}
 
 }

@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 import vos.CondicionesRFC10;
 
-public class RFC10DAO {
-
+public class RFC11DAO {
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// CONSTANTES
@@ -44,7 +43,7 @@ public class RFC10DAO {
 	/**
 	 * Metodo constructor de la clase DAOBebedor <br/>
 	 */
-	public RFC10DAO() {
+	public RFC11DAO() {
 		recursos = new ArrayList<Object>();
 
 	}
@@ -53,7 +52,7 @@ public class RFC10DAO {
 	// METODOS DE COMUNICACION CON LA BASE DE DATOS
 	//----------------------------------------------------------------------------------------------------------------------------------
 
-	public String RFC10(String id, CondicionesRFC10 condiciones) throws SQLException
+	public String RFC11(String id, CondicionesRFC10 condiciones) throws SQLException
 	{
 		String respuesta = "Los clientes son: \n";
 
@@ -68,12 +67,13 @@ public class RFC10DAO {
 		if(tipo.equalsIgnoreCase(("Vivienda")))
 		{
 
-			sql = String.format("SELECT * FROM USUARIO WHERE USUARIO.DOCUMENTO IN (SELECT ID_CLIENTE FROM CONTRATO WHERE ID IN ( SELECT ID_CONTRATO FROM CONTRATOVIVIENDA WHERE ID_VIVIENDA = %1$d ) AND FECHAINICIO BETWEEN '%2$s' AND '%3$s' ) ORDER BY '%4$s'",
+			sql = String.format("SELECT * FROM USUARIO WHERE USUARIO.DOCUMENTO NOT IN (SELECT ID_CLIENTE FROM CONTRATO WHERE ID IN ( SELECT ID_CONTRATO FROM CONTRATOVIVIENDA WHERE ID_VIVIENDA = %1$d ) AND FECHAINICIO BETWEEN '%2$s' AND '%3$s' ) ORDER BY '%4$s'",
 					idAlojamiento,
 					fechaInicio,
 					fechaFin,
 					condicion
 					);
+			System.out.println("Entro 3");
 		}
 		else if(tipo.equalsIgnoreCase("Habitacion"))
 		{
@@ -84,28 +84,28 @@ public class RFC10DAO {
 					condicion
 					);
 		}
-		
-		
+
 		PreparedStatement prepStmt = conn.prepareStatement(sql);
 		recursos.add(prepStmt);
-		
+
 		ResultSet rs=prepStmt.executeQuery();
-		
+
 		while(rs.next())
 		{
+			System.out.println("Entro 4");
 			respuesta += "Nombre: " + rs.getString("Nombre") + "\n"
-			+ "Apellido" + rs.getString("Apellido")+ "\n"
-			+ "Documento: " + rs.getString("Documento")+ "\n"
-			+ "Correo: " + rs.getString("Correo")+ "\n"
-			+ "Login: " + rs.getString("Correo")+ "\n";
+					+ "Apellido" + rs.getString("Apellido")+ "\n"
+					+ "Documento: " + rs.getString("Documento")+ "\n"
+					+ "Correo: " + rs.getString("Correo")+ "\n"
+					+ "Login: " + rs.getString("Correo")+ "\n";
 		}
 
 
-		
+		System.out.println(respuesta);
 		return respuesta;
 	}
-	
-	
+
+
 
 	//----------------------------------------------------------------------------------------------------------------------------------
 	// METODOS AUXILIARES
@@ -134,6 +134,4 @@ public class RFC10DAO {
 				}
 		}
 	}
-
-
 }

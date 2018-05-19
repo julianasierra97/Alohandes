@@ -20,13 +20,16 @@ public class CondicionesRFC10 {
 	@JsonProperty(value = "tipo")
 	private String tipo;
 	
+	@JsonProperty(value = "admin")
+	private Boolean admin;
 	
 	public CondicionesRFC10(
 			@JsonProperty(value="fechaInicio")String fechaInicio,
 			@JsonProperty(value="fechaFin")String fechaFin, 
 			@JsonProperty(value="condicion")String condicion,
 			@JsonProperty(value="idAlojamiento")Integer idAlojamiento,
-			@JsonProperty(value = "tipo")String tipo
+			@JsonProperty(value = "tipo")String tipo,
+			@JsonProperty(value = "admin")Boolean admin
 			) {
 		super();
 		this.fechaInicio = fechaInicio;
@@ -34,6 +37,17 @@ public class CondicionesRFC10 {
 		this.condicion = condicion;
 		this.idAlojamiento = idAlojamiento;
 		this.tipo = tipo;
+		this.admin = admin;
+	}
+
+
+	public Boolean getAdmin() {
+		return admin;
+	}
+
+
+	public void setAdmin(Boolean admin) {
+		this.admin = admin;
 	}
 
 

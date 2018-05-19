@@ -16,6 +16,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
+import com.sun.org.apache.xalan.internal.xsltc.dom.ArrayNodeListIterator;
+
 import dao.DAOContrato;
 import dao.DAOEmpresa;
 import dao.DAOHabitacion;
@@ -26,6 +28,7 @@ import dao.DAOVivienda;
 import dao.RF10DAO;
 import dao.RF9DAO;
 import dao.RFC10DAO;
+import dao.RFC11DAO;
 import dao.RFC1DAO;
 import dao.RFC3DAO;
 import dao.RFC4DAO;
@@ -1203,7 +1206,7 @@ public class AlohonadesTransactionManager {
 			throw new Exception("La habitacion no existe");
 		}
 
-		
+
 		DAOContrato daoContrato= new DAOContrato();
 		ArrayList<Contrato> contratos = new ArrayList<>();
 		try 
@@ -1307,10 +1310,10 @@ public class AlohonadesTransactionManager {
 
 		DAOVivienda daoVivienda = new DAOVivienda( );
 
-				if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
-				{
-					throw new Exception("La vivienda a eliminar tiene reservas");
-				}
+		if(getContratosByIdVivienda(vivienda.getId()).size() != 0)
+		{
+			throw new Exception("La vivienda a eliminar tiene reservas");
+		}
 
 		try
 		{
@@ -1733,7 +1736,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String desahabilitarOferta(String tipo, String id) throws Exception
 	{
 		String rta = "";
@@ -1770,7 +1773,7 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
+
 	public String habilitarOferta(String tipo, String id) throws Exception
 	{
 		String rta = "";
@@ -1807,11 +1810,40 @@ public class AlohonadesTransactionManager {
 		}
 		return rta;
 	}
-	
-	
+
+
 	public String RFC10(String id, CondicionesRFC10 condiciones) throws Exception
 	{
 		String rta = "";
+		Integer idAlojamiento = condiciones.getIdAlojamiento();
+		if(!condiciones.getAdmin())
+		{
+			if(condiciones.getTipo().equalsIgnoreCase("Habitacion"))
+			{
+				Operador operador = getOperadorById(id);
+				if(operador == null)
+				{
+					throw new Exception("La persona con el id especificado no existe");
+				}
+				if(verificarHabitacionIdOperador(id, idAlojamiento).isEmpty()) {
+					throw new Exception("El usuario especificado, no puede consultar informacion acerca de este alojamiento");
+				}
+			}
+		}
+		else if(condiciones.getTipo().equalsIgnoreCase("Vivienda"))
+		{
+			PersonaNatural persona = getPersonaNaturalById(id);
+			if(persona == null)
+			{
+				throw new Exception("El operador con el id especificado no existe");
+			}
+			if(verificarViviendaIdPersona(id, idAlojamiento).isEmpty())
+			{
+				throw new Exception("El usuario especificado no puede consultar informacion acerca de este alojamiento");
+			}
+
+		}
+
 		RFC10DAO dao10 = new RFC10DAO();
 		try 
 		{
@@ -1843,7 +1875,231 @@ public class AlohonadesTransactionManager {
 				throw exception;
 			}
 		}
+
 		return rta;
+	}
+
+
+	private Operador getOperadorById(String id) throws Exception {
+		// TODO Auto-generated method stub
+		DAOOperador daoOperador = new DAOOperador();
+		Operador operador = null;
+		try 
+		{
+			this.conn = darConexion();
+			daoOperador.setConn(conn);
+			operador = daoOperador.getOperadorById(id);
+			if(operador == null)
+			{
+				throw new Exception("La empresa con el id = " + id + " no se encuentra persistido en la base de datos.");				
+			}
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daoOperador.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return operador;
+	}
+
+	public String RFC11(String id, CondicionesRFC10 condiciones) throws Exception
+	{
+		String rta = "";
+		Integer idAlojamiento = condiciones.getIdAlojamiento();
+		if(!condiciones.getAdmin())
+		{
+			if(condiciones.getTipo().equalsIgnoreCase("Habitacion"))
+			{
+				Operador operador = getOperadorById(id);
+				if(operador == null)
+				{
+					throw new Exception("La persona con el id especificado no existe");
+				}
+				if(verificarHabitacionIdOperador(id, idAlojamiento).isEmpty()) {
+					throw new Exception("El usuario especificado, no puede consultar informacion acerca de este alojamiento");
+				}
+			}
+		}
+		else if(condiciones.getTipo().equalsIgnoreCase("Vivienda"))
+		{
+			System.out.println("Entro 2");
+			PersonaNatural persona = getPersonaNaturalById(id);
+			if(persona == null)
+			{
+				throw new Exception("El operador con el id especificado no existe");
+			}
+			if(verificarViviendaIdPersona(id, idAlojamiento).isEmpty())
+			{
+				throw new Exception("El usuario especificado no puede consultar informacion acerca de este alojamiento");
+			}
+
+		}
+
+		RFC11DAO dao11 = new RFC11DAO();
+		try 
+		{
+			this.conn = darConexion();
+			dao11.setConn(conn);
+			rta = dao11.RFC11(id, condiciones);
+
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				dao11.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+
+		return rta;	
+	}
+
+
+
+	private List<Vivienda> verificarViviendaIdPersona(String id, Integer idAlojamiento) throws SQLException {
+		List<Vivienda> viviendas = new ArrayList<>();
+
+		DAOVivienda daoVivienda = new DAOVivienda();
+		try 
+		{
+			this.conn = darConexion();
+			daoVivienda.setConn(conn);
+			viviendas = daoVivienda.darViviendasPorIdUsuario(id);
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daoVivienda.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return viviendas;
+
+	}
+
+	private List<Habitacion> verificarHabitacionIdOperador(String id, Integer idAlojamiento) throws SQLException {
+		List<Habitacion> habitaciones = new ArrayList<>();
+
+		DAOHabitacion daoHabitacion = new DAOHabitacion();
+		try 
+		{
+			this.conn = darConexion();
+			daoHabitacion.setConn(conn);
+			habitaciones = daoHabitacion.darHabitacionesPorIdUsuario(id);
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daoHabitacion.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return habitaciones;
+
+	}
+
+
+	private Usuario findUsuarioById(String id) throws Exception {
+
+		Usuario usuario = null;
+
+		DAOUsuario daoUsuario = new DAOUsuario();
+		try 
+		{
+			this.conn = darConexion();
+			daoUsuario.setConn(conn);
+			usuario = daoUsuario.findUsuarioById(id);
+		} 
+		catch (SQLException sqlException) {
+			System.err.println("[EXCEPTION] SQLException:" + sqlException.getMessage());
+			sqlException.printStackTrace();
+			throw sqlException;
+		} 
+		catch (Exception exception) {
+			System.err.println("[EXCEPTION] General Exception:" + exception.getMessage());
+			exception.printStackTrace();
+			throw exception;
+		} 
+		finally {
+			try { 
+				daoUsuario.cerrarRecursos();
+				if(this.conn!=null){
+					this.conn.close();					
+				}
+			}
+			catch (SQLException exception) {
+				System.err.println("[EXCEPTION] SQLException While Closing Resources:" + exception.getMessage());
+				exception.printStackTrace();
+				throw exception;
+			}
+		}
+		return usuario;
 	}
 
 

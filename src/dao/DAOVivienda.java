@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import vos.Habitacion;
 import vos.Seguro;
@@ -353,6 +354,30 @@ public class DAOVivienda {
 		ResultSet rs = prepStmt.executeQuery();
 		rs.next();
 		return rs.getString("ID_PERSONA") + "";
+	}
+
+	public List<Vivienda> darViviendasPorIdUsuario(String id) throws SQLException {
+		List<Vivienda> viviendas = new ArrayList<>();
+		String sql = String.format("SELECT ID, CAPACIDAD, TIPO, DIRECCION, NUMEROHABITANTES, COSTO FROM VIVIENDA WHERE ID_persona = '%2$s'", USUARIO, id);
+
+		PreparedStatement prepStmt = conn.prepareStatement(sql);
+		recursos.add(prepStmt);
+		ResultSet rs = prepStmt.executeQuery();
+
+		while(rs.next())
+		{
+			Integer capacidad = rs.getInt("CAPACIDAD");
+			String tipo = rs.getString("TIPO");
+			Integer numeroDeHabitaciones = rs.getInt("NUMEROHABITANTES");
+			Double costo = rs.getDouble("COSTO");
+			String direccion = rs.getString("DIRECCION");
+			Integer idV = rs.getInt("ID");
+			
+			Vivienda vivienda = new Vivienda(capacidad, tipo, numeroDeHabitaciones, costo, idV, direccion, new ArrayList<Servicio>(), null);
+			viviendas.add(vivienda);
+
+		}
+		return viviendas;
 	}
 
 
